@@ -1,0 +1,1224 @@
+*****************************
+Cabal-1.16.0
+*****************************
+Distribution.Compiler
+  = orphans         :   0 of  10
+Distribution.InstalledPackageInfo
+  = orphans         :   0 of   3
+Distribution.License
+  = orphans         :   0 of   4
+Distribution.Make
+  = orphans         :   0 of   0
+Distribution.ModuleName
+  = orphans         :   0 of   5
+Distribution.Package
+  = orphans         :   0 of  20
+Distribution.PackageDescription
+  = orphans         :   0 of  72
+Distribution.PackageDescription.Configuration
+  = orphans         :   0 of   6
+Distribution.PackageDescription.Parse
+  = orphans         :   0 of   1
+Distribution.PackageDescription.Check
+  = orphans         :   0 of   1
+Distribution.PackageDescription.PrettyPrint
+  = orphans         :   0 of   0
+Distribution.ParseUtils
+  = orphans         :   0 of   6
+Distribution.ReadE
+  = orphans         :   0 of   1
+Distribution.Simple
+  = orphans         :   0 of   0
+Distribution.Simple.Build
+  = orphans         :   0 of   0
+Distribution.Simple.Build.Macros
+  = orphans         :   0 of   0
+Distribution.Simple.Build.PathsModule
+  = orphans         :   0 of   0
+Distribution.Simple.BuildPaths
+  = orphans         :   0 of   0
+Distribution.Simple.Bench
+  = orphans         :   0 of   0
+Distribution.Simple.Command
+  = orphans         :   0 of   1
+Distribution.Simple.Compiler
+  = orphans         :   0 of  11
+Distribution.Simple.Configure
+  = orphans         :   0 of   0
+Distribution.Simple.GHC
+  = orphans         :   0 of   0
+Distribution.Simple.LHC
+  = orphans         :   0 of   0
+Distribution.Simple.Haddock
+  = orphans         :   0 of   6
+Distribution.Simple.Hpc
+  = orphans         :   0 of   0
+Distribution.Simple.Hugs
+  = orphans         :   0 of   0
+Distribution.Simple.Install
+  = orphans         :   0 of   0
+Distribution.Simple.InstallDirs
+  = orphans         :   0 of  14
+Distribution.Simple.JHC
+  = orphans         :   0 of   0
+Distribution.Simple.LocalBuildInfo
+  = orphans         :   0 of  10
+Distribution.Simple.NHC
+  = orphans         :   0 of   0
+Distribution.Simple.PackageIndex
+  = orphans         :   0 of   3
+Distribution.Simple.PreProcess
+  = orphans         :   0 of   0
+Distribution.Simple.PreProcess.Unlit
+  = orphans         :   0 of   0
+Distribution.Simple.Program
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Ar
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Builtin
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Db
+  = orphans         :   0 of   2
+Distribution.Simple.Program.GHC
+  = orphans         :   0 of   6
+Distribution.Simple.Program.HcPkg
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Hpc
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Ld
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Run
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Script
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Types
+  = orphans         :   0 of   6
+Distribution.Simple.Register
+  = orphans         :   0 of   0
+Distribution.Simple.Setup
+  = orphans         :   0 of  36
+Distribution.Simple.SrcDist
+  = orphans         :   0 of   0
+Distribution.Simple.Test
+  = orphans         :   0 of   9
+Distribution.Simple.UHC
+  = orphans         :   0 of   0
+Distribution.Simple.UserHooks
+  = orphans         :   0 of   0
+Distribution.Simple.Utils
+  = orphans         :   0 of   0
+Distribution.System
+  = orphans         :   0 of  15
+Distribution.TestSuite
+  = orphans         :   0 of   9
+Distribution.Text
+  = orphans         :   0 of   2
+Distribution.Verbosity
+  = orphans         :   0 of   6
+Distribution.Version
+  = orphans         :   0 of  14
+Distribution.Compat.ReadP
+  = orphans         :   0 of   4
+Language.Haskell.Extension
+  = orphans         :   0 of  14
+Distribution.GetOpt
+  = orphans         :   0 of   0
+Distribution.Compat.Exception
+  = orphans         :   0 of   0
+Distribution.Compat.CopyFile
+  = orphans         :   0 of   0
+Distribution.Compat.TempFile
+  = orphans         :   0 of   0
+Distribution.Simple.GHC.IPI641
+  = orphans         :   0 of   1
+Distribution.Simple.GHC.IPI642
+  = orphans         :   0 of   3
+Paths_Cabal
+  = orphans         :   0 of   0
+
+
+*****************************
+bytestring-0.10.0.2
+*****************************
+Data.ByteString
+  = orphans         :   0 of   0
+Data.ByteString.Char8
+  = orphans         :   0 of   0
+Data.ByteString.Unsafe
+  = orphans         :   0 of   0
+Data.ByteString.Internal
+  = orphans         :   0 of   9
+Data.ByteString.Lazy
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Char8
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Internal
+  = orphans         :   0 of   9
+Data.ByteString.Lazy.Builder
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Builder.Extras
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Builder.ASCII
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Builder.Internal
+  = orphans         :   0 of   4
+Data.ByteString.Lazy.Builder.BasicEncoding
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Builder.BasicEncoding.Extras
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Builder.BasicEncoding.Internal
+  = orphans         :   0 of   4
+Data.ByteString.Lazy.Builder.BasicEncoding.Binary
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Builder.BasicEncoding.ASCII
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Builder.BasicEncoding.Internal.Floating
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Builder.BasicEncoding.Internal.UncheckedShifts
+  = orphans         :   0 of   0
+Data.ByteString.Lazy.Builder.BasicEncoding.Internal.Base16
+  = orphans         :   0 of   0
+
+
+*****************************
+text-1.2.0.4
+*****************************
+Data.Text
+  * Data.Data.Data [Just Data.Text.Internal.Text]
+  * GHC.Classes.Eq [Just Data.Text.Internal.Text]
+  * Data.String.IsString [Just Data.Text.Internal.Text]
+  * Data.Monoid.Monoid [Just Data.Text.Internal.Text]
+  * Control.DeepSeq.NFData [Just Data.Text.Internal.Text]
+  * GHC.Classes.Ord [Just Data.Text.Internal.Text]
+  * GHC.Read.Read [Just Data.Text.Internal.Text]
+  * GHC.Show.Show [Just Data.Text.Internal.Text]
+  = orphans         :   8 of   8
+Data.Text.Array
+  = orphans         :   0 of   0
+Data.Text.Encoding
+  = orphans         :   0 of   9
+Data.Text.Encoding.Error
+  = orphans         :   0 of   5
+Data.Text.Foreign
+  = orphans         :   0 of   9
+Data.Text.IO
+  = orphans         :   0 of   0
+Data.Text.Internal
+  = orphans         :   0 of   1
+Data.Text.Internal.Builder
+  = orphans         :   0 of   5
+Data.Text.Internal.Builder.Functions
+  = orphans         :   0 of   0
+Data.Text.Internal.Builder.Int.Digits
+  = orphans         :   0 of   0
+Data.Text.Internal.Builder.RealFloat.Functions
+  = orphans         :   0 of   0
+Data.Text.Internal.Encoding.Fusion
+  = orphans         :   0 of   0
+Data.Text.Internal.Encoding.Fusion.Common
+  = orphans         :   0 of   0
+Data.Text.Internal.Encoding.Utf16
+  = orphans         :   0 of   0
+Data.Text.Internal.Encoding.Utf32
+  = orphans         :   0 of   0
+Data.Text.Internal.Encoding.Utf8
+  = orphans         :   0 of   0
+Data.Text.Internal.Functions
+  = orphans         :   0 of   0
+Data.Text.Internal.Fusion
+  = orphans         :   0 of   0
+Data.Text.Internal.Fusion.CaseMapping
+  = orphans         :   0 of   0
+Data.Text.Internal.Fusion.Common
+  = orphans         :   0 of   0
+Data.Text.Internal.Fusion.Size
+  = orphans         :   0 of   3
+Data.Text.Internal.Fusion.Types
+  = orphans         :   0 of   2
+Data.Text.Internal.IO
+  = orphans         :   0 of   0
+Data.Text.Internal.Lazy
+  = orphans         :   0 of   1
+Data.Text.Internal.Lazy.Encoding.Fusion
+  = orphans         :   0 of   0
+Data.Text.Internal.Lazy.Fusion
+  = orphans         :   0 of   0
+Data.Text.Internal.Lazy.Search
+  = orphans         :   0 of   0
+Data.Text.Internal.Private
+  = orphans         :   0 of   0
+Data.Text.Internal.Read
+  = orphans         :   0 of   3
+Data.Text.Internal.Search
+  = orphans         :   0 of   0
+Data.Text.Internal.Unsafe
+  = orphans         :   0 of   0
+Data.Text.Internal.Unsafe.Char
+  = orphans         :   0 of   0
+Data.Text.Internal.Unsafe.Shift
+  = orphans         :   0 of   4
+Data.Text.Lazy
+  * Data.Data.Data [Just Data.Text.Internal.Lazy.Text]
+  * GHC.Classes.Eq [Just Data.Text.Internal.Lazy.Text]
+  * Data.String.IsString [Just Data.Text.Internal.Lazy.Text]
+  * Data.Monoid.Monoid [Just Data.Text.Internal.Lazy.Text]
+  * Control.DeepSeq.NFData [Just Data.Text.Internal.Lazy.Text]
+  * GHC.Classes.Ord [Just Data.Text.Internal.Lazy.Text]
+  * GHC.Read.Read [Just Data.Text.Internal.Lazy.Text]
+  * GHC.Show.Show [Just Data.Text.Internal.Lazy.Text]
+  = orphans         :   8 of   8
+Data.Text.Lazy.Builder
+  = orphans         :   0 of   0
+Data.Text.Lazy.Builder.Int
+  = orphans         :   0 of   0
+Data.Text.Lazy.Builder.RealFloat
+  = orphans         :   0 of   3
+Data.Text.Lazy.Encoding
+  = orphans         :   0 of   0
+Data.Text.Lazy.IO
+  = orphans         :   0 of   0
+Data.Text.Lazy.Internal
+  = orphans         :   0 of   0
+Data.Text.Lazy.Read
+  = orphans         :   0 of   0
+Data.Text.Read
+  = orphans         :   0 of   0
+Data.Text.Unsafe
+  = orphans         :   0 of   0
+
+
+*****************************
+QuickCheck-2.7.5
+*****************************
+Test.QuickCheck
+  = orphans         :   0 of   0
+Test.QuickCheck.Arbitrary
+  = orphans         :   0 of  66
+Test.QuickCheck.Gen
+  = orphans         :   0 of   3
+Test.QuickCheck.Gen.Unsafe
+  = orphans         :   0 of   0
+Test.QuickCheck.Monadic
+  = orphans         :   0 of   5
+Test.QuickCheck.Modifiers
+  = orphans         :   0 of  97
+Test.QuickCheck.Property
+  = orphans         :   0 of  10
+Test.QuickCheck.Test
+  = orphans         :   0 of   3
+Test.QuickCheck.Text
+  = orphans         :   0 of   1
+Test.QuickCheck.Poly
+  = orphans         :   0 of  30
+Test.QuickCheck.State
+  = orphans         :   0 of   0
+Test.QuickCheck.Random
+  = orphans         :   0 of   3
+Test.QuickCheck.Exception
+  = orphans         :   0 of   0
+Test.QuickCheck.Function
+  = orphans         :   0 of  26
+Test.QuickCheck.All
+  = orphans         :   0 of   0
+
+
+*****************************
+hashable-1.2.0.10
+*****************************
+Data.Hashable
+  = orphans         :   0 of   0
+Data.Hashable.Generic
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.:*:]
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.:+:]
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.K1]
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.M1]
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.U1]
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.V1]
+  = orphans         :   6 of  10
+Data.Hashable.RandomSource
+  = orphans         :   0 of   0
+Data.Hashable.Class
+  = orphans         :   0 of  34
+
+
+*****************************
+vector-0.10.0.1
+*****************************
+Data.Vector.Internal.Check
+  = orphans         :   0 of   1
+Data.Vector.Fusion.Util
+  = orphans         :   0 of   4
+Data.Vector.Fusion.Stream.Size
+  = orphans         :   0 of   3
+Data.Vector.Fusion.Stream.Monadic
+  = orphans         :   0 of   1
+Data.Vector.Fusion.Stream
+  * GHC.Classes.Eq [Just Data.Vector.Fusion.Stream.Monadic.Stream]
+  * GHC.Classes.Ord [Just Data.Vector.Fusion.Stream.Monadic.Stream]
+  = orphans         :   2 of   2
+Data.Vector.Generic.Mutable
+  = orphans         :   0 of   0
+Data.Vector.Generic.Base
+  = orphans         :   0 of   0
+Data.Vector.Generic.New
+  = orphans         :   0 of   0
+Data.Vector.Generic
+  = orphans         :   0 of   0
+Data.Vector.Primitive.Mutable
+  = orphans         :   0 of   3
+Data.Vector.Primitive
+  = orphans         :   0 of   9
+Data.Vector.Storable.Internal
+  = orphans         :   0 of   0
+Data.Vector.Storable.Mutable
+  = orphans         :   0 of   3
+Data.Vector.Storable
+  = orphans         :   0 of   9
+Data.Vector.Unboxed.Base
+  = orphans         :   0 of  68
+Data.Vector.Unboxed.Mutable
+  = orphans         :   0 of   0
+Data.Vector.Unboxed
+  * GHC.Classes.Eq [Just Data.Vector.Unboxed.Base.Vector]
+  * Data.Monoid.Monoid [Just Data.Vector.Unboxed.Base.Vector]
+  * GHC.Classes.Ord [Just Data.Vector.Unboxed.Base.Vector]
+  * GHC.Read.Read [Just Data.Vector.Unboxed.Base.Vector]
+  * GHC.Show.Show [Just Data.Vector.Unboxed.Base.Vector]
+  = orphans         :   5 of   5
+Data.Vector.Mutable
+  = orphans         :   0 of   2
+Data.Vector
+  = orphans         :   0 of  16
+
+
+*****************************
+Cabal-1.20.0.0
+*****************************
+Distribution.Compat.CreatePipe
+  = orphans         :   0 of   0
+Distribution.Compat.Environment
+  = orphans         :   0 of   0
+Distribution.Compat.Exception
+  = orphans         :   0 of   0
+Distribution.Compat.ReadP
+  = orphans         :   0 of   8
+Distribution.Compiler
+  = orphans         :   0 of  12
+Distribution.InstalledPackageInfo
+  = orphans         :   0 of   3
+Distribution.License
+  = orphans         :   0 of   6
+Distribution.Make
+  = orphans         :   0 of   0
+Distribution.ModuleName
+  = orphans         :   0 of   7
+Distribution.Package
+  = orphans         :   0 of  30
+Distribution.PackageDescription
+  = orphans         :   0 of 112
+Distribution.PackageDescription.Check
+  = orphans         :   0 of   2
+Distribution.PackageDescription.Configuration
+  = orphans         :   0 of   6
+Distribution.PackageDescription.Parse
+  = orphans         :   0 of   3
+Distribution.PackageDescription.PrettyPrint
+  = orphans         :   0 of   0
+Distribution.PackageDescription.Utils
+  = orphans         :   0 of   0
+Distribution.ParseUtils
+  = orphans         :   0 of  10
+Distribution.ReadE
+  = orphans         :   0 of   1
+Distribution.Simple
+  = orphans         :   0 of   0
+Distribution.Simple.Bench
+  = orphans         :   0 of   0
+Distribution.Simple.Build
+  = orphans         :   0 of   0
+Distribution.Simple.Build.Macros
+  = orphans         :   0 of   0
+Distribution.Simple.Build.PathsModule
+  = orphans         :   0 of   0
+Distribution.Simple.BuildPaths
+  = orphans         :   0 of   0
+Distribution.Simple.BuildTarget
+  = orphans         :   0 of  21
+Distribution.Simple.CCompiler
+  = orphans         :   0 of   3
+Distribution.Simple.Command
+  = orphans         :   0 of   1
+Distribution.Simple.Compiler
+  = orphans         :   0 of  11
+Distribution.Simple.Configure
+  = orphans         :   0 of   1
+Distribution.Simple.GHC
+  = orphans         :   0 of   0
+Distribution.Simple.Haddock
+  = orphans         :   0 of   6
+Distribution.Simple.HaskellSuite
+  = orphans         :   0 of   0
+Distribution.Simple.Hpc
+  = orphans         :   0 of   0
+Distribution.Simple.Hugs
+  = orphans         :   0 of   0
+Distribution.Simple.Install
+  = orphans         :   0 of   0
+Distribution.Simple.InstallDirs
+  = orphans         :   0 of  14
+Distribution.Simple.JHC
+  = orphans         :   0 of   0
+Distribution.Simple.LHC
+  = orphans         :   0 of   0
+Distribution.Simple.LocalBuildInfo
+  = orphans         :   0 of  13
+Distribution.Simple.NHC
+  = orphans         :   0 of   0
+Distribution.Simple.PackageIndex
+  = orphans         :   0 of   3
+Distribution.Simple.PreProcess
+  = orphans         :   0 of   0
+Distribution.Simple.PreProcess.Unlit
+  = orphans         :   0 of   0
+Distribution.Simple.Program
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Ar
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Builtin
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Db
+  = orphans         :   0 of   2
+Distribution.Simple.Program.Find
+  = orphans         :   0 of   0
+Distribution.Simple.Program.GHC
+  = orphans         :   0 of   8
+Distribution.Simple.Program.HcPkg
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Hpc
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Ld
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Run
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Script
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Strip
+  = orphans         :   0 of   0
+Distribution.Simple.Program.Types
+  = orphans         :   0 of   6
+Distribution.Simple.Register
+  = orphans         :   0 of   0
+Distribution.Simple.Setup
+  = orphans         :   0 of  38
+Distribution.Simple.SrcDist
+  = orphans         :   0 of   0
+Distribution.Simple.Test
+  = orphans         :   0 of   0
+Distribution.Simple.Test.ExeV10
+  = orphans         :   0 of   0
+Distribution.Simple.Test.LibV09
+  = orphans         :   0 of   0
+Distribution.Simple.Test.Log
+  = orphans         :   0 of   9
+Distribution.Simple.UHC
+  = orphans         :   0 of   0
+Distribution.Simple.UserHooks
+  = orphans         :   0 of   0
+Distribution.Simple.Utils
+  = orphans         :   0 of   0
+Distribution.System
+  = orphans         :   0 of  21
+Distribution.TestSuite
+  = orphans         :   0 of   9
+Distribution.Text
+  = orphans         :   0 of   2
+Distribution.Verbosity
+  = orphans         :   0 of   6
+Distribution.Version
+  * Data.Data.Data [Just Data.Version.Version]
+  = orphans         :   1 of  17
+Language.Haskell.Extension
+  = orphans         :   0 of  20
+Distribution.Compat.CopyFile
+  = orphans         :   0 of   0
+Distribution.Compat.TempFile
+  = orphans         :   0 of   0
+Distribution.GetOpt
+  = orphans         :   0 of   0
+Distribution.Simple.GHC.IPI641
+  = orphans         :   0 of   1
+Distribution.Simple.GHC.IPI642
+  = orphans         :   0 of   3
+Paths_Cabal
+  = orphans         :   0 of   0
+
+
+*****************************
+haddock-2.13.2.1
+*****************************
+Documentation.Haddock
+  = orphans         :   0 of   0
+Haddock
+  = orphans         :   0 of   0
+Haddock.Interface
+  = orphans         :   0 of   0
+Haddock.Interface.Rename
+  = orphans         :   0 of   3
+Haddock.Interface.Create
+  = orphans         :   0 of   0
+Haddock.Interface.AttachInstances
+  = orphans         :   0 of   2
+Haddock.Interface.LexParseRn
+  = orphans         :   0 of   0
+Haddock.Interface.ParseModuleHeader
+  = orphans         :   0 of   0
+Haddock.Lex
+  = orphans         :   0 of   3
+Haddock.Parse
+  = orphans         :   0 of   0
+Haddock.Utils
+  = orphans         :   0 of   0
+Haddock.Backends.Xhtml
+  = orphans         :   0 of   0
+Haddock.Backends.Xhtml.Decl
+  = orphans         :   0 of   0
+Haddock.Backends.Xhtml.DocMarkup
+  = orphans         :   0 of   0
+Haddock.Backends.Xhtml.Layout
+  = orphans         :   0 of   0
+Haddock.Backends.Xhtml.Names
+  = orphans         :   0 of   0
+Haddock.Backends.Xhtml.Themes
+  = orphans         :   0 of   0
+Haddock.Backends.Xhtml.Types
+  = orphans         :   0 of   0
+Haddock.Backends.Xhtml.Utils
+  = orphans         :   0 of   0
+Haddock.Backends.LaTeX
+  = orphans         :   0 of   0
+Haddock.Backends.HaddockDB
+  = orphans         :   0 of   0
+Haddock.Backends.Hoogle
+  = orphans         :   0 of   1
+Haddock.ModuleTree
+  = orphans         :   0 of   0
+Haddock.Types
+  * Control.DeepSeq.NFData [Just Module.ModuleName]
+  * Control.DeepSeq.NFData [Just Name.Name]
+  * Control.DeepSeq.NFData [Just OccName.OccName]
+  = orphans         :   3 of  24
+Haddock.Doc
+  = orphans         :   0 of   0
+Haddock.Version
+  = orphans         :   0 of   0
+Haddock.InterfaceFile
+  * Binary.Binary [Just Haddock.Types.Doc]
+  * Binary.Binary [Just Haddock.Types.DocName]
+  * Binary.Binary [Just Haddock.Types.DocOption]
+  * Binary.Binary [Just Haddock.Types.Example]
+  * Binary.Binary [Just Haddock.Types.HaddockModInfo]
+  * Binary.Binary [Just Haddock.Types.Hyperlink]
+  * Binary.Binary [Just Haddock.Types.InstalledInterface]
+  * Binary.Binary [Just Data.Map.Base.Map]
+  = orphans         :   8 of   9
+Haddock.Options
+  = orphans         :   0 of   1
+Haddock.GhcUtils
+  * Data.Foldable.Foldable [Just SrcLoc.GenLocated]
+  * Name.NamedThing [Just HsDecls.ConDecl]
+  * Name.NamedThing [Just HsDecls.TyClDecl]
+  * Data.Traversable.Traversable [Just SrcLoc.GenLocated]
+  = orphans         :   4 of   6
+Haddock.Convert
+  = orphans         :   0 of   0
+Paths_haddock
+  = orphans         :   0 of   0
+
+
+*****************************
+text-0.11.3.1
+*****************************
+Data.Text
+  * Data.Data.Data [Just Data.Text.Internal.Text]
+  * GHC.Classes.Eq [Just Data.Text.Internal.Text]
+  * Data.String.IsString [Just Data.Text.Internal.Text]
+  * Data.Monoid.Monoid [Just Data.Text.Internal.Text]
+  * Control.DeepSeq.NFData [Just Data.Text.Internal.Text]
+  * GHC.Classes.Ord [Just Data.Text.Internal.Text]
+  * GHC.Read.Read [Just Data.Text.Internal.Text]
+  * GHC.Show.Show [Just Data.Text.Internal.Text]
+  = orphans         :   8 of   8
+Data.Text.Array
+  = orphans         :   0 of   0
+Data.Text.Encoding
+  = orphans         :   0 of   0
+Data.Text.Encoding.Error
+  = orphans         :   0 of   5
+Data.Text.Foreign
+  = orphans         :   0 of   9
+Data.Text.IO
+  = orphans         :   0 of   0
+Data.Text.Internal
+  = orphans         :   0 of   1
+Data.Text.Lazy
+  * Data.Data.Data [Just Data.Text.Lazy.Internal.Text]
+  * GHC.Classes.Eq [Just Data.Text.Lazy.Internal.Text]
+  * Data.String.IsString [Just Data.Text.Lazy.Internal.Text]
+  * Data.Monoid.Monoid [Just Data.Text.Lazy.Internal.Text]
+  * Control.DeepSeq.NFData [Just Data.Text.Lazy.Internal.Text]
+  * GHC.Classes.Ord [Just Data.Text.Lazy.Internal.Text]
+  * GHC.Read.Read [Just Data.Text.Lazy.Internal.Text]
+  * GHC.Show.Show [Just Data.Text.Lazy.Internal.Text]
+  = orphans         :   8 of   8
+Data.Text.Lazy.Builder
+  = orphans         :   0 of   0
+Data.Text.Lazy.Builder.Int
+  = orphans         :   0 of   0
+Data.Text.Lazy.Builder.RealFloat
+  = orphans         :   0 of   3
+Data.Text.Lazy.Encoding
+  = orphans         :   0 of   0
+Data.Text.Lazy.IO
+  = orphans         :   0 of   0
+Data.Text.Lazy.Internal
+  = orphans         :   0 of   1
+Data.Text.Lazy.Read
+  = orphans         :   0 of   1
+Data.Text.Read
+  = orphans         :   0 of   1
+Data.Text.Unsafe
+  = orphans         :   0 of   0
+Data.Text.Encoding.Fusion
+  = orphans         :   0 of   0
+Data.Text.Encoding.Fusion.Common
+  = orphans         :   0 of   0
+Data.Text.Encoding.Utf16
+  = orphans         :   0 of   0
+Data.Text.Encoding.Utf32
+  = orphans         :   0 of   0
+Data.Text.Encoding.Utf8
+  = orphans         :   0 of   0
+Data.Text.Fusion
+  = orphans         :   0 of   0
+Data.Text.Fusion.CaseMapping
+  = orphans         :   0 of   0
+Data.Text.Fusion.Common
+  = orphans         :   0 of   0
+Data.Text.Fusion.Internal
+  = orphans         :   0 of   2
+Data.Text.Fusion.Size
+  = orphans         :   0 of   3
+Data.Text.IO.Internal
+  = orphans         :   0 of   0
+Data.Text.Lazy.Builder.Functions
+  = orphans         :   0 of   0
+Data.Text.Lazy.Builder.Int.Digits
+  = orphans         :   0 of   0
+Data.Text.Lazy.Builder.Internal
+  = orphans         :   0 of   5
+Data.Text.Lazy.Builder.RealFloat.Functions
+  = orphans         :   0 of   0
+Data.Text.Lazy.Encoding.Fusion
+  = orphans         :   0 of   0
+Data.Text.Lazy.Fusion
+  = orphans         :   0 of   0
+Data.Text.Lazy.Search
+  = orphans         :   0 of   0
+Data.Text.Private
+  = orphans         :   0 of   0
+Data.Text.Search
+  = orphans         :   0 of   0
+Data.Text.Unsafe.Base
+  = orphans         :   0 of   0
+Data.Text.UnsafeChar
+  = orphans         :   0 of   0
+Data.Text.UnsafeShift
+  = orphans         :   0 of   4
+Data.Text.Util
+  = orphans         :   0 of   0
+
+
+*****************************
+aeson-0.6.1.0
+*****************************
+Data.Aeson
+  = orphans         :   0 of   0
+Data.Aeson.Encode
+  = orphans         :   0 of   0
+Data.Aeson.Generic
+  = orphans         :   0 of   0
+Data.Aeson.Parser
+  = orphans         :   0 of   0
+Data.Aeson.Types
+  = orphans         :   0 of   0
+Data.Aeson.TH
+  = orphans         :   0 of   0
+Data.Aeson.Types.Generic
+  * Data.Aeson.Types.Class.GFromJSON [Just GHC.Generics.:*:]
+  * Data.Aeson.Types.Class.GFromJSON [Just GHC.Generics.:+:]
+  * Data.Aeson.Types.Class.GFromJSON [Just GHC.Generics.K1]
+  * Data.Aeson.Types.Class.GFromJSON [Just GHC.Generics.M1]
+  * Data.Aeson.Types.Class.GFromJSON [Just GHC.Generics.M1]
+  * Data.Aeson.Types.Class.GFromJSON [Just GHC.Generics.U1]
+  * Data.Aeson.Types.Class.GToJSON [Just GHC.Generics.:*:]
+  * Data.Aeson.Types.Class.GToJSON [Just GHC.Generics.:+:]
+  * Data.Aeson.Types.Class.GToJSON [Just GHC.Generics.K1]
+  * Data.Aeson.Types.Class.GToJSON [Just GHC.Generics.M1]
+  * Data.Aeson.Types.Class.GToJSON [Just GHC.Generics.M1]
+  * Data.Aeson.Types.Class.GToJSON [Just GHC.Generics.U1]
+  = orphans         :  12 of  37
+Data.Aeson.Functions
+  = orphans         :   0 of   0
+Data.Aeson.Parser.Internal
+  = orphans         :   0 of   0
+Data.Aeson.Types.Class
+  = orphans         :   0 of 116
+Data.Aeson.Types.Internal
+  = orphans         :   0 of  22
+
+
+*****************************
+semigroups-0.9.2
+*****************************
+Data.Semigroup
+  = orphans         :   0 of  83
+Data.List.NonEmpty
+  = orphans         :   0 of  11
+
+
+*****************************
+HTTP-4000.2.8
+*****************************
+Network.BufferType
+  = orphans         :   0 of   4
+Network.Stream
+  = orphans         :   0 of   3
+Network.StreamDebugger
+  = orphans         :   0 of   1
+Network.StreamSocket
+  * Network.Stream.Stream [Just Network.Socket.Types.Socket]
+  = orphans         :   1 of   1
+Network.TCP
+  = orphans         :   0 of   7
+Network.HTTP
+  = orphans         :   0 of   0
+Network.HTTP.Headers
+  = orphans         :   0 of   3
+Network.HTTP.Base
+  = orphans         :   0 of   8
+Network.HTTP.Stream
+  = orphans         :   0 of   0
+Network.HTTP.Auth
+  = orphans         :   0 of   4
+Network.HTTP.Cookie
+  = orphans         :   0 of   3
+Network.HTTP.Proxy
+  = orphans         :   0 of   0
+Network.HTTP.HandleStream
+  = orphans         :   0 of   0
+Network.Browser
+  = orphans         :   0 of   6
+Network.HTTP.Base64
+  = orphans         :   0 of   0
+Network.HTTP.MD5Aux
+  = orphans         :   0 of   6
+Network.HTTP.Utils
+  = orphans         :   0 of   0
+Paths_HTTP
+  = orphans         :   0 of   0
+
+
+*****************************
+yaml-0.8.4
+*****************************
+Text.Libyaml
+  = orphans         :   0 of  24
+Data.Yaml
+  = orphans         :   0 of   6
+
+
+*****************************
+conduit-1.0.7.3
+*****************************
+Data.Conduit
+  = orphans         :   0 of   4
+Data.Conduit.Binary
+  = orphans         :   0 of   0
+Data.Conduit.Text
+  = orphans         :   0 of   4
+Data.Conduit.List
+  = orphans         :   0 of   0
+Data.Conduit.Lazy
+  = orphans         :   0 of   0
+Data.Conduit.Internal
+  = orphans         :   0 of  32
+Data.Conduit.Util
+  = orphans         :   0 of   0
+System.PosixFile
+  = orphans         :   0 of   4
+
+
+*****************************
+conduit-1.1.2.1
+*****************************
+Data.Conduit
+  = orphans         :   0 of  10
+Data.Conduit.List
+  = orphans         :   0 of   0
+Data.Conduit.Internal
+  = orphans         :   0 of  31
+Data.Conduit.Lift
+  = orphans         :   0 of   0
+
+
+*****************************
+yaml-0.8.8.2
+*****************************
+Text.Libyaml
+  = orphans         :   0 of  24
+Data.Yaml
+  = orphans         :   0 of   6
+Data.Yaml.Aeson
+  = orphans         :   0 of   0
+Data.Yaml.Builder
+  = orphans         :   0 of   5
+Data.Yaml.Parser
+  = orphans         :   0 of  15
+
+
+*****************************
+network-2.4.1.2
+*****************************
+Network
+  = orphans         :   0 of   2
+Network.BSD
+  = orphans         :   0 of  15
+Network.Socket
+  * GHC.Show.Show [Just Network.Socket.Types.SockAddr]
+  = orphans         :   1 of  16
+Network.Socket.ByteString
+  = orphans         :   0 of   0
+Network.Socket.ByteString.Lazy
+  = orphans         :   0 of   0
+Network.Socket.Internal
+  = orphans         :   0 of   0
+Network.URI
+  = orphans         :   0 of  10
+Network.Socket.ByteString.IOVec
+  = orphans         :   0 of   1
+Network.Socket.ByteString.MsgHdr
+  = orphans         :   0 of   1
+Network.Socket.ByteString.Internal
+  = orphans         :   0 of   0
+Network.Socket.Types
+  * Foreign.Storable.Storable [Just (,,,)]
+  = orphans         :   1 of  28
+
+
+*****************************
+syb-0.4.0
+*****************************
+Data.Generics
+  = orphans         :   0 of   0
+Data.Generics.Basics
+  = orphans         :   0 of   0
+Data.Generics.Instances
+  * Data.Data.Data [Just (->)]
+  * Data.Data.Data [Just Data.Data.DataType]
+  * Data.Data.Data [Just GHC.IO.Handle.Types.Handle]
+  * Data.Data.Data [Just GHC.Types.IO]
+  * Data.Data.Data [Just GHC.IORef.IORef]
+  * Data.Data.Data [Just GHC.MVar.MVar]
+  * Data.Data.Data [Just GHC.ST.ST]
+  * Data.Data.Data [Just GHC.Conc.Sync.STM]
+  * Data.Data.Data [Just GHC.Stable.StablePtr]
+  * Data.Data.Data [Just GHC.Conc.Sync.TVar]
+  * Data.Data.Data [Just GHC.Conc.Sync.ThreadId]
+  * Data.Data.Data [Just Data.Typeable.Internal.TyCon]
+  * Data.Data.Data [Just Data.Typeable.Internal.TypeRep]
+  * Data.Typeable.Internal.Typeable [Just Data.Data.DataType]
+  = orphans         :  14 of  14
+Data.Generics.Aliases
+  = orphans         :   0 of   0
+Data.Generics.Schemes
+  = orphans         :   0 of   0
+Data.Generics.Text
+  = orphans         :   0 of   0
+Data.Generics.Twins
+  = orphans         :   0 of   0
+Data.Generics.Builders
+  = orphans         :   0 of   0
+Generics.SYB
+  = orphans         :   0 of   0
+Generics.SYB.Basics
+  = orphans         :   0 of   0
+Generics.SYB.Instances
+  = orphans         :   0 of   0
+Generics.SYB.Aliases
+  = orphans         :   0 of   0
+Generics.SYB.Schemes
+  = orphans         :   0 of   0
+Generics.SYB.Text
+  = orphans         :   0 of   0
+Generics.SYB.Twins
+  = orphans         :   0 of   0
+Generics.SYB.Builders
+  = orphans         :   0 of   0
+
+
+*****************************
+scientific-0.2.0.2
+*****************************
+Data.Scientific
+  = orphans         :   0 of  15
+
+
+*****************************
+hashable-1.2.2.0
+*****************************
+Data.Hashable
+  = orphans         :   0 of   0
+Data.Hashable.Class
+  = orphans         :   0 of  34
+Data.Hashable.Generic
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.:*:]
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.:+:]
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.K1]
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.M1]
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.U1]
+  * Data.Hashable.Class.GHashable [Just GHC.Generics.V1]
+  = orphans         :   6 of  10
+
+
+*****************************
+attoparsec-0.10.4.0
+*****************************
+Data.Attoparsec
+  = orphans         :   0 of   0
+Data.Attoparsec.ByteString
+  = orphans         :   0 of   0
+Data.Attoparsec.ByteString.Char8
+  * Data.String.IsString [Just Data.Attoparsec.Internal.Types.Parser]
+  = orphans         :   1 of   1
+Data.Attoparsec.ByteString.Lazy
+  = orphans         :   0 of   3
+Data.Attoparsec.Char8
+  = orphans         :   0 of   0
+Data.Attoparsec.Combinator
+  = orphans         :   0 of   0
+Data.Attoparsec.Lazy
+  = orphans         :   0 of   0
+Data.Attoparsec.Number
+  = orphans         :   0 of  10
+Data.Attoparsec.Text
+  = orphans         :   0 of   0
+Data.Attoparsec.Text.Lazy
+  = orphans         :   0 of   3
+Data.Attoparsec.Types
+  = orphans         :   0 of   0
+Data.Attoparsec.Zepto
+  = orphans         :   0 of   6
+Data.Attoparsec.ByteString.FastSet
+  = orphans         :   0 of   3
+Data.Attoparsec.ByteString.Internal
+  = orphans         :   0 of   0
+Data.Attoparsec.Internal
+  = orphans         :   0 of   0
+Data.Attoparsec.Internal.Types
+  = orphans         :   0 of  14
+Data.Attoparsec.Text.FastSet
+  = orphans         :   0 of   3
+Data.Attoparsec.Text.Internal
+  * Data.String.IsString [Just Data.Attoparsec.Internal.Types.Parser]
+  = orphans         :   1 of   1
+
+
+*****************************
+hlint-1.8.49
+*****************************
+Language.Haskell.HLint
+  = orphans         :   0 of   0
+Paths_hlint
+  = orphans         :   0 of   0
+Apply
+  = orphans         :   0 of   0
+CmdLine
+  = orphans         :   0 of   1
+HLint
+  = orphans         :   0 of   3
+Idea
+  = orphans         :   0 of   3
+Settings
+  = orphans         :   0 of  10
+Report
+  = orphans         :   0 of   0
+Proof
+  = orphans         :   0 of   2
+Test
+  = orphans         :   0 of   1
+Util
+  = orphans         :   0 of   0
+Parallel
+  = orphans         :   0 of   0
+HSE.All
+  = orphans         :   0 of   0
+HSE.Bracket
+  = orphans         :   0 of   3
+HSE.Evaluate
+  = orphans         :   0 of   0
+HSE.Match
+  = orphans         :   0 of  19
+HSE.NameMatch
+  = orphans         :   0 of   1
+HSE.Type
+  = orphans         :   0 of   0
+HSE.Util
+  = orphans         :   0 of   0
+Hint.All
+  = orphans         :   0 of   0
+Hint.Bracket
+  = orphans         :   0 of   0
+Hint.Duplicate
+  = orphans         :   0 of   0
+Hint.Extensions
+  = orphans         :   0 of   0
+Hint.Import
+  = orphans         :   0 of   0
+Hint.Lambda
+  = orphans         :   0 of   0
+Hint.List
+  = orphans         :   0 of   0
+Hint.ListRec
+  = orphans         :   0 of   5
+Hint.Match
+  = orphans         :   0 of   0
+Hint.Monad
+  = orphans         :   0 of   0
+Hint.Naming
+  = orphans         :   0 of   0
+Hint.Pragma
+  = orphans         :   0 of   0
+Hint.Structure
+  = orphans         :   0 of   0
+Hint.Type
+  = orphans         :   0 of   0
+Hint.Util
+  = orphans         :   0 of   0
+
+
+========= TOTALS =========
+
+Cabal-1.16.0
+  orphan modules    :   0 of  67
+  orphan instances  :   0 of 301
+  mods w/o instances:  31 of  67
+
+bytestring-0.10.0.2
+  orphan modules    :   0 of  19
+  orphan instances  :   0 of  26
+  mods w/o instances:   4 of  19
+
+text-1.2.0.4
+  orphan modules    :   2 of  43
+  orphan instances  :  16 of  61
+  mods w/o instances:  13 of  43
+
+QuickCheck-2.7.5
+  orphan modules    :   0 of  15
+  orphan instances  :   0 of 244
+  mods w/o instances:  10 of  15
+
+hashable-1.2.0.10
+  orphan modules    :   1 of   4
+  orphan instances  :   6 of  44
+  mods w/o instances:   2 of   4
+
+vector-0.10.0.1
+  orphan modules    :   2 of  19
+  orphan instances  :   7 of 126
+  mods w/o instances:  13 of  19
+
+Cabal-1.20.0.0
+  orphan modules    :   1 of  78
+  orphan instances  :   1 of 415
+  mods w/o instances:  34 of  78
+
+haddock-2.13.2.1
+  orphan modules    :   3 of  31
+  orphan instances  :  15 of  49
+  mods w/o instances:   8 of  31
+
+text-0.11.3.1
+  orphan modules    :   2 of  41
+  orphan instances  :  16 of  51
+  mods w/o instances:  13 of  41
+
+aeson-0.6.1.0
+  orphan modules    :   1 of  11
+  orphan instances  :  12 of 175
+  mods w/o instances:   3 of  11
+
+semigroups-0.9.2
+  orphan modules    :   0 of   2
+  orphan instances  :   0 of  94
+  mods w/o instances:   2 of   2
+
+HTTP-4000.2.8
+  orphan modules    :   1 of  18
+  orphan instances  :   1 of  46
+  mods w/o instances:  11 of  18
+
+yaml-0.8.4
+  orphan modules    :   0 of   2
+  orphan instances  :   0 of  30
+  mods w/o instances:   2 of   2
+
+conduit-1.0.7.3
+  orphan modules    :   0 of   8
+  orphan instances  :   0 of  44
+  mods w/o instances:   4 of   8
+
+conduit-1.1.2.1
+  orphan modules    :   0 of   4
+  orphan instances  :   0 of  41
+  mods w/o instances:   2 of   4
+
+yaml-0.8.8.2
+  orphan modules    :   0 of   5
+  orphan instances  :   0 of  50
+  mods w/o instances:   4 of   5
+
+network-2.4.1.2
+  orphan modules    :   2 of  11
+  orphan instances  :   2 of  73
+  mods w/o instances:   7 of  11
+
+syb-0.4.0
+  orphan modules    :   1 of  16
+  orphan instances  :  14 of  14
+  mods w/o instances:   1 of  16
+
+scientific-0.2.0.2
+  orphan modules    :   0 of   1
+  orphan instances  :   0 of  15
+  mods w/o instances:   1 of   1
+
+hashable-1.2.2.0
+  orphan modules    :   1 of   3
+  orphan instances  :   6 of  44
+  mods w/o instances:   2 of   3
+
+attoparsec-0.10.4.0
+  orphan modules    :   2 of  18
+  orphan instances  :   2 of  44
+  mods w/o instances:   9 of  18
+
+hlint-1.8.49
+  orphan modules    :   0 of  34
+  orphan instances  :   0 of  48
+  mods w/o instances:  10 of  34
+
+TOTAL
+  orphan modules    :  19 of 450
+  orphan instances  :  98 of 2035
+  mods w/o instances: 186 of 450
