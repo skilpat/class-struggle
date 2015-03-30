@@ -6,12 +6,12 @@ import qualified Data.Foldable as F
 import qualified Data.List as L
 import qualified Data.Map.Strict as M
 import qualified Data.Traversable as T
-import Distribution.Package(PackageName(..))
+-- import Distribution.Package(PackageName(..))
 import DynFlags
 import Finder
 import GHC
 import GHC.Paths
-import GhcMonad(liftIO)
+-- import GhcMonad(liftIO)
 import HscTypes
 import IfaceSyn
 import LoadIface

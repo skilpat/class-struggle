@@ -18,7 +18,18 @@ cabal-version:       >=1.10
 executable orphans
   main-is:             Main.hs
   -- other-modules:       
-  other-extensions:    OverloadedStrings, RecordWildCards, NoMonomorphismRestriction, ExtendedDefaultRules, ScopedTypeVariables, DeriveDataTypeable, ViewPatterns, FlexibleInstances, UndecidableInstances, OverlappingInstances, GeneralizedNewtypeDeriving, StandaloneDeriving
+  other-extensions:    OverloadedStrings,
+                       RecordWildCards,
+                       NoMonomorphismRestriction,
+                       ExtendedDefaultRules,
+                       ScopedTypeVariables,
+                       DeriveDataTypeable,
+                       ViewPatterns,
+                       FlexibleInstances,
+                       UndecidableInstances,
+                       OverlappingInstances,
+                       GeneralizedNewtypeDeriving,
+                       StandaloneDeriving
   build-depends:       base >=4.6 && <4.7,
                        containers >=0.5 && <0.6,
                        ghc-paths >=0.1 && <0.2,
