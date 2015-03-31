@@ -2,6 +2,7 @@ module Main where
 
 import Data.List
 import ReadOrphans
+import World
 
 main = stats $ hackageMostDownloadedPkgs `union` haskellPlatformPkgs
 
