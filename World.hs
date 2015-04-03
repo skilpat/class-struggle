@@ -1,9 +1,6 @@
 module World where
 
 import Control.Monad
-import qualified Data.List as L
-import qualified Data.Maybe as M
-import qualified Data.Set as S
 
 -- GHC imports
 import InstEnv
@@ -35,23 +32,24 @@ import UniqFM
 
 -- | The world of a module that extends other worlds and adds at least one
 --   instance.
-data NewWorld = NewWorld { nw_exts :: MultiWorlds
-                         , nw_mod  :: Module
-                         , nw_ienv :: WorldInstEnv }
+data Island = Island { wi_exts :: Islands
+                     , wi_mod  :: Module
+                     , wi_ienv :: IslandInstEnv }
 
-instance Eq NewWorld where
-  NewWorld {nw_mod = mod1} == NewWorld {nw_mod = mod2} = mod1 == mod2
+instance Eq Island where
+  Island {wi_mod = mod1} == Island {wi_mod = mod2} = mod1 == mod2
 
-instance Ord NewWorld where
-  compare NewWorld {nw_mod = mod1} NewWorld {nw_mod = mod2} = compare mod1 mod2
+instance Ord Island where
+  compare Island {wi_mod = mod1}
+          Island {wi_mod = mod2} = compare mod1 mod2
 
 -- | Multiple worlds merged together, represented as a map from a Module name
---   to the NewWorld defined by that module. This representation only works
+--   to the Island defined by that module. This representation only works
 --   in the absence of holes, since each Module name would uniquely determine
 --   a set of instances.
-type MultiWorlds = UniqFM NewWorld
+type Islands = UniqFM Island
 
-data World = World MultiWorlds
+data World = World { w_wimap :: Islands }
 
 -- --| A merged collection of multiple worlds.
 -- data MergedWorlds
@@ -60,49 +58,73 @@ data World = World MultiWorlds
 --                                        --   set of worlds.
 
 -- | A mapping from Class names to a list of instances for that class.
-type WorldInstEnv = UniqFM [ClsInst]
+type IslandInstEnv = UniqFM [ClsInst]
 
 -- | The initial, empty world.
 emptyWorld :: World
 emptyWorld = World emptyUFM
 
+-- | Merge two worlds.
+merge :: World -> World -> Maybe World
+merge w1 w2 = do
+  -- Make sure they're mergeable.
+  guard $ mergeable w1 w2
+  -- If a Module appears in two worlds, then we assume that it points to the
+  -- exact same Island in both worlds. So to merge two worlds we simply add
+  -- the Island maps and take the RHS in case a Mod is mapped by both (which
+  -- is what plusUFM does).
+  let wimap = plusUFM (w_wimap w1) (w_wimap w2)
+  return $ World wimap
 
+-- | Merge together a list of worlds.
 mergeList :: [World] -> Maybe World
 mergeList ws = do
-
-
+  -- Make sure they're mergeable.
   guard $ mergeableList ws
-  return $ World $ S.unions [nws | World nws <- ws]
+  -- If a Module appears in two worlds, then we assume that it points to the
+  -- exact same Island in both worlds. So to merge two worlds we simply add
+  -- the Island maps and take the RHS in case a Mod is mapped by both (which
+  -- is what plusUFM does).
+  let wimaps = map w_wimap ws
+  let wimap_all = foldl plusUFM emptyUFM wimaps
+  return $ World wimap_all
 
 
+-- | All pairs (xi,xj) of a list xs such that i < j.
+pairs :: [a] -> [(a,a)]
+pairs xs = [ (x1, x2)
+           | (i1, x1) <- zip [0..] xs
+           , (i2, x2) <- zip [0..] xs
+           , i1 < i2 ]
+
+
+-- | Check whether the list of worlds is mergeable together, by checking each
+--   pair. (Note that mergeability is reflexive and symmetric, so we don't
+--   simply check *every* pair in the list.)
 mergeableList :: [World] -> Bool
-mergeableList ws = True
+mergeableList ws = and [ mergeable w1 w2 | (w1, w2) <- pairs ws ]
 
 mergeable :: World -> World -> Bool
-mergeable (World nwmap1) (World nwmap2) =
-  and [ mergeableInstEnvs ienv1 ienv2
-      | ienv1 <- nw_ienv $ M.fromJust $ lookupUFM nwmap1
-      , ]
-  -- for every Module in w1 and not in w2, check that its NewWorld's env is
-  -- mergeable with that of every module in w2
+mergeable (World wimap1) (World wimap2) =
+  -- For every Module/Island in w1 and not in w2,
+  -- and for every Module/Island in w2 and not in w1,
+  -- check that their instance envs are
+  -- mergeable with each other.
+  and [ mergeableInstEnvs (wi_ienv wi1) (wi_ienv wi2)
+      | wi1 <- eltsUFM wimap1minus2
+      , wi2 <- eltsUFM wimap2minus1 ]
   where
-    -- Map for Modules in LHS but not RHS.
-    nwmap = minusUFM nwmap1 nwmap2
+    -- Map for Modules/Islands in LHS but not RHS.
+    wimap1minus2 = minusUFM wimap1 wimap2
+    -- Map for Modules/Islands in RHS but not LHS.
+    wimap2minus1 = minusUFM wimap2 wimap1
 
-
-  -- and [ mergeable' nw1 nw2 | nw1 <- S.tonws1
-  --                          , nw2 <- nws2 ]
-
-mergeableInstEnvs :: WorldInstEnv -> WorldInstEnv -> Bool
-mergeableInstEnvs ienv1 ienv2 =
-  and [ mergeableInstLists is1 is2
-        | c <- classes
-        , let is1 = M.fromMaybe [] $ lookupUFM ienv1 c
-        , let is2 = M.fromMaybe [] $ lookupUFM ienv2 c ]
-  where
-    -- We only need to check for mergeability for instances of classes that
-    -- appear in both sides.
-    classes = L.intersect (keysUFM ienv1) (keysUFM ienv2)
+    mergeableInstEnvs :: IslandInstEnv -> IslandInstEnv -> Bool
+    mergeableInstEnvs ienv1 ienv2 =
+      and [ mergeableInstLists is1 is2
+            -- Gather the insts in each side, but only for classes that have
+            -- instances in both sides; other classes' instances are fine.
+            | (is1, is2) <- eltsUFM $ intersectUFM_C (,) ienv1 ienv2 ]
 
     -- Just check that every pair of instances is mergeable. Each pair comes
     -- from the same class.
@@ -111,7 +133,7 @@ mergeableInstEnvs ienv1 ienv2 =
       and [mergeableInsts i1 i2 | i1 <- insts1, i2 <- insts2]
 
 
-
+-- | Determine whether two instances are mergeable, i.e., non-overlapping.
 mergeableInsts :: ClsInst -> ClsInst -> Bool
 mergeableInsts inst1 inst2
   -- If the classes are different, they're mergeable.
@@ -146,20 +168,33 @@ mergeableInsts inst1 inst2
     tvs2 = is_tvs inst2
 
 
+-- | Create a new world given a list of worlds to extend, the name of
+--   this module, and this module's locally defined instances.
+newWorld :: [World] -> Module -> [ClsInst] -> Maybe World
+newWorld ws m local_insts = do
+  -- First merge the extended worlds into a single parent world.
+  pw <- mergeList ws
+
+  -- Organize the list of local instances into an IslandInstEnv.
+  -- We assume that this list is internally mergeable.
+  let f :: IslandInstEnv -> ClsInst -> IslandInstEnv
+      f ienv inst = addToUFM_C (++) ienv (is_cls inst) [inst]
+  let local_ienv = foldl f emptyUFM local_insts
+
+  -- Create an Island.
+  let island = Island { wi_exts = w_wimap pw
+                      , wi_mod  = m
+                      , wi_ienv = local_ienv }
+
+  -- Parent world shouldn't have an Island for Module m. If it does,
+  -- since we assume all Islands from the same Module are the same, we
+  -- don't need to check anything. Just extend the parent world's island
+  -- map with this island.
+  let wimap_new = addToUFM (w_wimap pw) m island
+  return $ World wimap_new
 
 
--- --| Merge some worlds together, if possible. The result stores the original list
--- --  as well as a minimal list of worlds that represents the same instances.
--- mergeWorlds :: [World] -> Maybe World
--- mergeWorlds ws0 = go ws0 ws0
---   where
---     go ws0 []     = Just $ Worlds ws0 []
---     go ws0 ((MergedWorld worlds):ws') = do
---       worlds' <- go ws0 
-
-
--- insertWorld :: World -> Worlds -> Maybe Worlds
--- insertWorld w (Worlds _ ws) = do
-
-
-
+worldInstCount :: World -> Int
+worldInstCount (World wimap) = sum [ length insts
+                                   | wi <- eltsUFM wimap
+                                   , insts <- eltsUFM (wi_ienv wi) ]
