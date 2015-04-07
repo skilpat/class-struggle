@@ -1,3 +1,4 @@
+{-# LANGUAGE StandaloneDeriving #-}
 module World where
 
 import Control.Monad
@@ -19,6 +20,9 @@ import UniqFM
 -- deriving instance Outputable World
 -- deriving instance Binary World
 -- deriving instance Data World
+
+
+data 
 
 
 -- --| A world representing a set of instances. In the absence of holes/signatures,

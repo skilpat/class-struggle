@@ -19,7 +19,9 @@ executable orphans
   main-is:             Main.hs
   other-modules:       ReadOrphans,
                        World,
-                       ReadWorlds
+                       ReadWorlds,
+                       Moduleish,
+                       Util
   other-extensions:    OverloadedStrings,
                        RecordWildCards,
                        NoMonomorphismRestriction,

@@ -17,7 +17,7 @@ import TcRnMonad
 import UniqFM
 import UniqSet
 
-import ReadOrphans hiding (processPkg, processAllPkgs, processMod)
+import Util
 import World
 
 
@@ -157,7 +157,7 @@ processMod mod = do
   lift $ liftIO $ putStrLn $ showSDoc dflags $ text "  -" <+> ppr (moduleName mod)
 
   -- Read the interface.
-  iface  <- lift $ ifaceForMod mod
+  iface  <- lift $ ifaceForMod mod False
 
   -- Get the worlds of imports, after recursively process them first.
   let imps = modImports mod iface
