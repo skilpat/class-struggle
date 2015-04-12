@@ -1,4 +1,4 @@
-module Util where
+module ReadUtils where
 
 import Control.Monad
 import qualified Data.Map as M

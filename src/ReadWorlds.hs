@@ -21,7 +21,7 @@ import LoadIface
 import Maybes
 
 import Moduleish
-import Util
+import ReadUtils
 import World
 
 -- | A context that maps a Moduleish to its typechecked interface and world.

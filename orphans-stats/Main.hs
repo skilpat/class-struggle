@@ -2,10 +2,10 @@ module Main where
 
 import Data.List
 import ReadOrphans
-import World
-import ReadWorlds
-import Moduleish
-import Util
+--import World
+--import ReadWorlds
+--import Moduleish
+--import Util
 
 main = stats $ hackageMostDownloadedPkgs `union` haskellPlatformPkgs
 

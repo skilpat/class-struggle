@@ -24,7 +24,7 @@ import UniqFM
 -- import Unsafe.Coerce
 
 import Moduleish
-import Util
+import ReadUtils
 
 
 stats :: [String] -> IO TotalOrphStats

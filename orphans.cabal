@@ -15,9 +15,11 @@ build-type:          Simple
 extra-source-files:  README.md
 cabal-version:       >=1.10
 
-executable orphans
-  main-is:             Main.hs
-  -- other-modules:       
+library
+  exposed-modules:     Moduleish,
+                       ReadWorlds,
+                       ReadUtils,
+                       World
   other-extensions:    StandaloneDeriving
   build-depends:       base >=4.7 && <4.8,
                        containers >=0.5 && <0.6,
@@ -26,5 +28,19 @@ executable orphans
                        filepath >=1.3 && <1.4,
                        ghc-paths >=0.1 && <0.2,
                        ghc
-  -- hs-source-dirs:      
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+
+executable orphans-stats
+  main-is:             Main.hs
+  other-modules:       Main,
+                       ReadOrphans
+  other-extensions:    StandaloneDeriving
+  build-depends:       base >=4.7 && <4.8,
+                       containers >=0.5 && <0.6,
+                       mtl >=2.1 && <2.2,
+                       ghc-paths >=0.1 && <0.2,
+                       ghc,
+                       orphans
+  hs-source-dirs:      orphans-stats
   default-language:    Haskell2010
