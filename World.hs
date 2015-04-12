@@ -2,42 +2,25 @@
 module World where
 
 import Control.Monad
+import Data.List
+  ( sort )
 
 -- GHC imports
 import InstEnv
 import Module
--- import NameSet
-import Unify(tcUnifyTys,BindFlag(BindMe))
+import Outputable
+import Unify
+  ( tcUnifyTys, BindFlag(BindMe) )
 import UniqFM
--- import VarSet(mkVarSet)
 
--- --| A world is just a set of modules that define instances.
--- newtype World = World ModuleSet
+import Moduleish
 
--- deriving instance Eq World
--- deriving instance Ord World
--- deriving instance Uniquable World
--- deriving instance Outputable World
--- deriving instance Binary World
--- deriving instance Data World
-
-
-data 
-
-
--- --| A world representing a set of instances. In the absence of holes/signatures,
--- --  a world can be represented, more or less, as a set of module names.
--- data World
---   -- = InitWorld              -- ^ The empty world with no instances.
---   = MergedWorld Worlds     -- ^ A set of merged worlds.
---   | NewWorld Worlds Module -- ^ A new world for a module that extends other
---                            --   worlds and defines at least one instance.
 
 
 -- | The world of a module that extends other worlds and adds at least one
 --   instance.
 data Island = Island { wi_exts :: Islands
-                     , wi_mod  :: Module
+                     , wi_mod  :: Moduleish
                      , wi_ienv :: IslandInstEnv }
 
 instance Eq Island where
@@ -47,19 +30,26 @@ instance Ord Island where
   compare Island {wi_mod = mod1}
           Island {wi_mod = mod2} = compare mod1 mod2
 
--- | Multiple worlds merged together, represented as a map from a Module name
---   to the Island defined by that module. This representation only works
---   in the absence of holes, since each Module name would uniquely determine
---   a set of instances.
+instance Outputable Island where
+  ppr wi = sep [ ppr (wi_mod wi)
+               , parens (int (islandInstCount wi)) ]
+
+
+-- | Multiple worlds merged together, represented as a map from a Moduleish
+--   to the Island defined by that module source file.
 type Islands = UniqFM Island
+
+pprIslands :: Islands -> SDoc
+pprIslands wimap = sep [ braces listSDoc
+                       , parens (int (islandsInstCount wimap)) ]
+  where
+    islandSDocs = map ppr $ sort $ eltsUFM wimap
+    listSDoc = sep $ punctuate (text ", ") $ islandSDocs
+
+
 
 data World = World { w_wimap :: Islands }
 
--- --| A merged collection of multiple worlds.
--- data MergedWorlds
---   = MergedWorlds { ws_orig  :: [World] -- ^ Original list of worlds.
---                  , ws_canon :: [World] -- ^ Canonical representation of same
---                                        --   set of worlds.
 
 -- | A mapping from Class names to a list of instances for that class.
 type IslandInstEnv = UniqFM [ClsInst]
@@ -73,11 +63,14 @@ merge :: World -> World -> Maybe World
 merge w1 w2 = do
   -- Make sure they're mergeable.
   guard $ mergeable w1 w2
-  -- If a Module appears in two worlds, then we assume that it points to the
+  -- If a Moduleish appears in two worlds, then we assume that it points to the
   -- exact same Island in both worlds. So to merge two worlds we simply add
   -- the Island maps and take the RHS in case a Mod is mapped by both (which
   -- is what plusUFM does).
   let wimap = plusUFM (w_wimap w1) (w_wimap w2)
+
+
+
   return $ World wimap
 
 -- | Merge together a list of worlds.
@@ -97,8 +90,8 @@ mergeList ws = do
 -- | All pairs (xi,xj) of a list xs such that i < j.
 pairs :: [a] -> [(a,a)]
 pairs xs = [ (x1, x2)
-           | (i1, x1) <- zip [0..] xs
-           , (i2, x2) <- zip [0..] xs
+           | (i1, x1) <- zip ([0..] :: [Int]) xs
+           , (i2, x2) <- zip ([0..] :: [Int]) xs
            , i1 < i2 ]
 
 
@@ -112,9 +105,8 @@ mergeable :: World -> World -> Bool
 mergeable (World wimap1) (World wimap2) =
   -- For every Module/Island in w1 and not in w2,
   -- and for every Module/Island in w2 and not in w1,
-  -- check that their instance envs are
-  -- mergeable with each other.
-  and [ mergeableInstEnvs (wi_ienv wi1) (wi_ienv wi2)
+  -- check that the two Islands are mergeable with each other.
+  and [ mergeableIslands wi1 wi2
       | wi1 <- eltsUFM wimap1minus2
       , wi2 <- eltsUFM wimap2minus1 ]
   where
@@ -122,6 +114,13 @@ mergeable (World wimap1) (World wimap2) =
     wimap1minus2 = minusUFM wimap1 wimap2
     -- Map for Modules/Islands in RHS but not LHS.
     wimap2minus1 = minusUFM wimap2 wimap1
+
+    mergeableIslands :: Island -> Island -> Bool
+    mergeableIslands (Island {wi_mod = mish1, wi_ienv = ienv1})
+                     (Island {wi_mod = mish2, wi_ienv = ienv2})
+      | similarish mish1 mish2 = True     -- guaranteed by the type checker!
+      | otherwise              = mergeableInstEnvs ienv1 ienv2
+
 
     mergeableInstEnvs :: IslandInstEnv -> IslandInstEnv -> Bool
     mergeableInstEnvs ienv1 ienv2 =
@@ -172,33 +171,53 @@ mergeableInsts inst1 inst2
     tvs2 = is_tvs inst2
 
 
--- | Create a new world given a list of worlds to extend, the name of
+-- | Create a new world given a list of worlds to extend, the Moduleish for
 --   this module, and this module's locally defined instances.
-newWorld :: [World] -> Module -> [ClsInst] -> Maybe World
-newWorld ws m local_insts = do
+newWorld :: [World] -> Moduleish -> [ClsInst] -> Maybe World
+newWorld ws mish local_insts = do
   -- First merge the extended worlds into a single parent world.
   pw <- mergeList ws
 
-  -- Organize the list of local instances into an IslandInstEnv.
-  -- We assume that this list is internally mergeable.
-  let f :: IslandInstEnv -> ClsInst -> IslandInstEnv
-      f ienv inst = addToUFM_C (++) ienv (is_cls inst) [inst]
-  let local_ienv = foldl f emptyUFM local_insts
+  -- If the list of locally defined instances is empty, then just return
+  -- this merged world.
+  if null local_insts
+    then return pw
+    else do
 
-  -- Create an Island.
-  let island = Island { wi_exts = w_wimap pw
-                      , wi_mod  = m
-                      , wi_ienv = local_ienv }
+      -- Organize the list of local instances into an IslandInstEnv.
+      -- We assume that this list is internally mergeable.
+      let f :: IslandInstEnv -> ClsInst -> IslandInstEnv
+          f ienv inst = addToUFM_C (++) ienv (is_cls inst) [inst]
+      let local_ienv = foldl f emptyUFM local_insts
 
-  -- Parent world shouldn't have an Island for Module m. If it does,
-  -- since we assume all Islands from the same Module are the same, we
-  -- don't need to check anything. Just extend the parent world's island
-  -- map with this island.
-  let wimap_new = addToUFM (w_wimap pw) m island
-  return $ World wimap_new
+      -- Create an Island.
+      let island = Island { wi_exts = w_wimap pw
+                          , wi_mod  = mish
+                          , wi_ienv = local_ienv }
 
+      -- Parent world shouldn't have an Island for Moduleish mish. If it does,
+      -- since we assume all Islands from the same Moduleish are the same, we
+      -- don't need to check anything. Just extend the parent world's island
+      -- map with this island.
+      let wimap_new = addToUFM (w_wimap pw) mish island
+      return $ World wimap_new
+
+
+lookupIsland :: World -> Moduleish -> Maybe Island
+lookupIsland (World wimap) mish = lookupUFM wimap mish
+
+islandInsts :: Island -> [ClsInst]
+islandInsts wi = concat $ eltsUFM (wi_ienv wi)
+
+islandInstCount :: Island -> Int
+islandInstCount wi =
+  sum [ length insts
+      -- for each unique class's list of instances
+      | insts <- eltsUFM (wi_ienv wi) ]
+
+islandsInstCount :: Islands -> Int
+islandsInstCount wimap =
+  sum [ islandInstCount wi | wi <- eltsUFM wimap ]
 
 worldInstCount :: World -> Int
-worldInstCount (World wimap) = sum [ length insts
-                                   | wi <- eltsUFM wimap
-                                   , insts <- eltsUFM (wi_ienv wi) ]
+worldInstCount (World wimap) = islandsInstCount wimap

@@ -23,17 +23,23 @@ die() { echo >&2 -e "\nRUN ERROR: $@\n"; printResults; exit 1; }
 run() { $*; code=$?; [ $code -ne 0 ] && die "command [$*] failed with error code $code"; }
 printResults() { echo "!!!!! ALL COPIED FILES BELOW !!!!!!"; echo "$ALL_COPIED_FILES"; }
 
+
 # get the list of packages in the global repos
 GLOBAL_PKGS=`ghc-pkg --simple-output list`
 #GLOBAL_PKGS="Cabal-1.18.1.5 array-0.5.0.0 base-4.7.0.2"
 
 for PKG in $GLOBAL_PKGS
 do
+
+  # FOR NOW, it seems only base has recursive modules, so just skip all other
+  # packages!
+  [[ ! $PKG =~ ^base-[0-9] ]] && continue
+
   # skip builtin packages that aren't in hackage
-  [[ $PKG =~ ^bin-package-db-[0-9] ]] && continue
-  [[ $PKG =~ ^ghc-[0-9]            ]] && continue
-  [[ $PKG =~ ^integer-gmp-[0-9]    ]] && continue
-  [[ $PKG =~ ^rts-[0-9]            ]] && continue
+  # [[ $PKG =~ ^bin-package-db-[0-9] ]] && continue
+  # [[ $PKG =~ ^ghc-[0-9]            ]] && continue
+  # [[ $PKG =~ ^integer-gmp-[0-9]    ]] && continue
+  # [[ $PKG =~ ^rts-[0-9]            ]] && continue
 
   echo "Preparing $PKG..."
 

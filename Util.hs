@@ -24,6 +24,10 @@ import LoadIface
 import Maybes
 import Module
 import Text.Printf
+import TcIface
+  ( typecheckIface )
+
+import Moduleish
 
 
 type PkgModMap = M.Map PackageId [Module]
@@ -57,22 +61,30 @@ type FileExt = String   -- Filename extension
 type BaseName = String  -- Basename of file
 
 
-ifaceForMod :: Module -> Bool -> Ghc ModIface
-ifaceForMod mod is_boot = do
+-- | Find and read the ModIface for the given Moduleish. Basically, if it's
+--   a boot file, load the .hi-boot file; otherwise, load the .hi file.
+readIfaceForMish :: Moduleish -> Ghc ModIface
+readIfaceForMish mish = do
   hsc_env <- getSession
-  dflags  <- getSessionDynFlags
-  mod_loc <- findModLocation mod
-  printSDoc $ text "mod_loc:" <+> ppr mod_loc
 
   -- computation that reads iface in typechecking monad
   let tcIface = do
-        res <- readIface mod (ml_hi_file mod_loc) is_boot
+        res <- findAndReadIface (ppr mish) (mish_mod mish) (mish_boot mish)
         return $ case res of
-          Maybes.Succeeded mod_iface -> mod_iface
-          Maybes.Failed _            -> error $ "lookup failed for module " ++ moduleNameString (moduleName mod)
+          Maybes.Succeeded (mod_iface, _) -> mod_iface
+          Maybes.Failed _ -> error $ "lookup failed for module " ++ show mish
 
   -- initialize iface computation in typechecking monad and lift to Ghc monad
   liftIO $ initTcForLookup hsc_env tcIface
+
+
+-- | A loaded ModIface needs to be "typechecked" in order to get its instances
+--   in the right format. So do that.
+readInstsFromIface :: ModIface -> Ghc [ClsInst]
+readInstsFromIface iface = do
+  hsc_env <- getSession
+  mod_details <- liftIO $ initTcForLookup hsc_env $ typecheckIface iface
+  return $ md_insts mod_details
 
 
 

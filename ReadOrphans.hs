@@ -34,7 +34,7 @@ stats req_pkgs = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
     -- we have to call 'setSessionDynFlags' before doing
     -- everything else
     dflags <- getSessionDynFlags
-    let dflags' = dopt_set dflags Opt_HideAllPackages
+    let dflags' = gopt_set dflags Opt_HideAllPackages
     setSessionDynFlags $ dflags' { ghcMode      = OneShot
                                  , hscTarget    = HscNothing
                                  --, thisPackage  = stringToPackageId "containers-0.5.0.0"
@@ -215,7 +215,7 @@ processPkg pid mods = do
 processMod :: Module -> Ghc ModOrphStats
 processMod mod = do
   dflags <- getSessionDynFlags
-  iface  <- ifaceForMod mod False
+  iface  <- readIfaceForMish $ mkModuleish mod
   let insts = mi_insts iface
 
   -- TODO: family instances!
