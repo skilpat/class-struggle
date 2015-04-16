@@ -76,11 +76,15 @@ do
   PKG_GLOBAL_LIB_DIR=`ghc-pkg --simple-output field $PKG library-dirs`
 
   # if there are .hi-boot files here, then copy
-  if [ -n `find dist/build -name '*.hi-boot'` ]; then
+  if [ -n "$(find dist/build -name '*.hi-boot')" ]; then
 
     # copy all .hi-boot files in local build to libdir for this (global) package
     echo "Copying .hi-boot files for $PKG to $PKG_GLOBAL_LIB_DIR..."
-    COPIED_FILES=$(run rsync -i --prune-empty-dirs -r --include="*.hi-boot" --include="*/" --exclude="*" dist/build/ $PKG_GLOBAL_LIB_DIR/ | sed -E "s|.+ (.+)|$PKG_GLOBAL_LIB_DIR/\1|")
+    RSYNC_OUT=$(rsync -i --prune-empty-dirs -r --include="*.hi-boot" --include="*/" --exclude="*" dist/build/ $PKG_GLOBAL_LIB_DIR/) ||
+    if [ "$?" -ne 0 ]; then echo "!! Failed to copy boot files from '$PKG_LOCAL_DIR/dist/build' to '$PKG_GLOBAL_LIB_DIR'"; printResults; exit 1; fi
+
+    # get the list of files copied over
+    COPIED_FILES=$(echo "$RSYNC_OUT" | sed -E  "s|.+ (.+)|$PKG_GLOBAL_LIB_DIR/\1|")
 
     # -------------------------------------------------
     # TODO: test whether copy was successful!

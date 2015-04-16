@@ -1,4 +1,3 @@
-{-# LANGUAGE StandaloneDeriving #-}
 module World where
 
 import Control.Monad
@@ -30,25 +29,20 @@ instance Ord Island where
   compare Island {wi_mod = mod1}
           Island {wi_mod = mod2} = compare mod1 mod2
 
-instance Outputable Island where
-  ppr wi = sep [ ppr (wi_mod wi)
-               , parens (int (islandInstCount wi)) ]
-
 
 -- | Multiple worlds merged together, represented as a map from a Moduleish
 --   to the Island defined by that module source file.
 type Islands = UniqFM Island
 
-pprIslands :: Islands -> SDoc
-pprIslands wimap = sep [ braces listSDoc
-                       , parens (int (islandsInstCount wimap)) ]
-  where
-    islandSDocs = map ppr $ sort $ eltsUFM wimap
-    listSDoc = sep $ punctuate (text ", ") $ islandSDocs
+
+-- | Describes how a World was created: either the merging of some other worlds
+--   with no additional instances, or the extension of other worlds with an
+--   Island.
+data Origin = MergedWorlds [World] | NewWorld [World] Island
 
 
-
-data World = World { w_wimap :: Islands }
+data World = World { w_wimap  :: Islands
+                   , w_origin :: Origin }
 
 
 -- | A mapping from Class names to a list of instances for that class.
@@ -56,7 +50,7 @@ type IslandInstEnv = UniqFM [ClsInst]
 
 -- | The initial, empty world.
 emptyWorld :: World
-emptyWorld = World emptyUFM
+emptyWorld = World emptyUFM (MergedWorlds [])
 
 -- | Merge two worlds.
 merge :: World -> World -> Maybe World
@@ -71,7 +65,7 @@ merge w1 w2 = do
 
 
 
-  return $ World wimap
+  return $ World wimap (MergedWorlds [w1, w2])
 
 -- | Merge together a list of worlds.
 mergeList :: [World] -> Maybe World
@@ -84,7 +78,7 @@ mergeList ws = do
   -- is what plusUFM does).
   let wimaps = map w_wimap ws
   let wimap_all = foldl plusUFM emptyUFM wimaps
-  return $ World wimap_all
+  return $ World wimap_all (MergedWorlds ws)
 
 
 -- | All pairs (xi,xj) of a list xs such that i < j.
@@ -102,7 +96,7 @@ mergeableList :: [World] -> Bool
 mergeableList ws = and [ mergeable w1 w2 | (w1, w2) <- pairs ws ]
 
 mergeable :: World -> World -> Bool
-mergeable (World wimap1) (World wimap2) =
+mergeable (World wimap1 _) (World wimap2 _) =
   -- For every Module/Island in w1 and not in w2,
   -- and for every Module/Island in w2 and not in w1,
   -- check that the two Islands are mergeable with each other.
@@ -181,7 +175,7 @@ newWorld ws mish local_insts = do
   -- If the list of locally defined instances is empty, then just return
   -- this merged world.
   if null local_insts
-    then return pw
+    then return $ World (w_wimap pw) (MergedWorlds ws)
     else do
 
       -- Organize the list of local instances into an IslandInstEnv.
@@ -200,14 +194,21 @@ newWorld ws mish local_insts = do
       -- don't need to check anything. Just extend the parent world's island
       -- map with this island.
       let wimap_new = addToUFM (w_wimap pw) mish island
-      return $ World wimap_new
+      return $ World wimap_new (NewWorld ws island)
+
 
 
 lookupIsland :: World -> Moduleish -> Maybe Island
-lookupIsland (World wimap) mish = lookupUFM wimap mish
+lookupIsland (World wimap _) mish = lookupUFM wimap mish
 
 islandInsts :: Island -> [ClsInst]
 islandInsts wi = concat $ eltsUFM (wi_ienv wi)
+
+islandsInsts :: Islands -> [ClsInst]
+islandsInsts wimap = concat [ islandInsts wi | wi <- eltsUFM wimap ]
+
+worldInsts :: World -> [ClsInst]
+worldInsts (World wimap _) = islandsInsts wimap
 
 islandInstCount :: Island -> Int
 islandInstCount wi =
@@ -216,8 +217,23 @@ islandInstCount wi =
       | insts <- eltsUFM (wi_ienv wi) ]
 
 islandsInstCount :: Islands -> Int
-islandsInstCount wimap =
-  sum [ islandInstCount wi | wi <- eltsUFM wimap ]
+islandsInstCount wimap = sum [ islandInstCount wi | wi <- eltsUFM wimap ]
 
 worldInstCount :: World -> Int
-worldInstCount (World wimap) = islandsInstCount wimap
+worldInstCount (World wimap _) = islandsInstCount wimap
+
+
+
+
+
+
+instance Outputable Island where
+  ppr wi = sep [ ppr (wi_mod wi)
+               , parens (int (islandInstCount wi)) ]
+
+pprIslands :: Islands -> SDoc
+pprIslands wimap = sep [ braces listSDoc
+                       , parens (int (islandsInstCount wimap)) ]
+  where
+    islandSDocs = map ppr $ sort $ eltsUFM wimap
+    listSDoc = sep $ punctuate (text ", ") $ islandSDocs

@@ -234,3 +234,13 @@ updateCtxPkgs pid = do
 
 ctxHasPkg :: Ctx -> PackageId -> Bool
 ctxHasPkg Ctx {ctx_pkgs = pids} pid = elementOfUniqSet pid pids
+
+
+lookupWorld :: Ctx -> String -> Maybe World
+lookupWorld Ctx {ctx_map = cmap} lookup_str = do
+  let (pstr, ':':mstr) = span (/= ':') lookup_str
+  let pid = stringToPackageId pstr
+  let mname = mkModuleName mstr
+  let mish = mkModule pid mname
+  (_, _, w) <- lookupUFM cmap mish
+  return w
