@@ -193,7 +193,7 @@ processMod mish = do
         let island = fromJust $ lookupIsland w mish
         lift $ printSDoc $ ppr island
         F.forM_ (islandInsts island) $ \inst ->
-          lift $ printSDoc $ text "    -" <+> ppr inst
+          lift $ printSDoc $ text "    -" <+> pprInstanceHdr inst
       
       -- Store the iface and newly created world for this module.
       updateCtxMap mish iface w

@@ -3,6 +3,8 @@ module World where
 import Control.Monad
 import Data.List
   ( sort )
+import Data.Maybe
+  ( isNothing, isJust )
 
 -- GHC imports
 import InstEnv
@@ -201,11 +203,33 @@ newWorld ws mish local_insts = do
 lookupIsland :: World -> Moduleish -> Maybe Island
 lookupIsland (World wimap _) mish = lookupUFM wimap mish
 
+
+-- | If the given island comes from a boot file, get the island corresponding
+--   to its implementation, if it exists. Otherwise, Nothing. When this
+--   evaluates to Nothing then the given Island indeed contributes to the total
+--   instances known to a containing world.
+islandImplementation :: Islands -> Island -> Maybe Island
+islandImplementation wimap wi
+  | mish_boot mish = lookupUFM wimap $ mish { mish_boot = False }
+  | otherwise      = Nothing
+  where
+    mish = wi_mod wi
+
+islandIsOverridden :: Islands -> Island -> Bool
+islandIsOverridden wimap wi = isJust $ islandImplementation wimap wi
+
+
 islandInsts :: Island -> [ClsInst]
 islandInsts wi = concat $ eltsUFM (wi_ienv wi)
 
 islandsInsts :: Islands -> [ClsInst]
-islandsInsts wimap = concat [ islandInsts wi | wi <- eltsUFM wimap ]
+islandsInsts wimap =
+  concat [ islandInsts wi
+         | wi <- eltsUFM wimap
+         -- Ignore this island if its module is the boot
+         -- file of another island's module.
+         , not (islandIsOverridden wimap wi) ]
+
 
 worldInsts :: World -> [ClsInst]
 worldInsts (World wimap _) = islandsInsts wimap
@@ -217,7 +241,12 @@ islandInstCount wi =
       | insts <- eltsUFM (wi_ienv wi) ]
 
 islandsInstCount :: Islands -> Int
-islandsInstCount wimap = sum [ islandInstCount wi | wi <- eltsUFM wimap ]
+islandsInstCount wimap =
+  sum [ islandInstCount wi
+      | wi <- eltsUFM wimap
+      -- Ignore this island if its module is the boot
+      -- file of another island's module.
+      , not (islandIsOverridden wimap wi) ]
 
 worldInstCount :: World -> Int
 worldInstCount (World wimap _) = islandsInstCount wimap
@@ -228,8 +257,12 @@ worldInstCount (World wimap _) = islandsInstCount wimap
 
 
 instance Outputable Island where
-  ppr wi = sep [ ppr (wi_mod wi)
+  ppr wi = sep [ pprMish
                , parens (int (islandInstCount wi)) ]
+    where
+      mish = wi_mod wi
+      pprMish | mish_boot mish = text "--" <+> ppr mish
+              | otherwise      = ppr mish
 
 pprIslands :: Islands -> SDoc
 pprIslands wimap = sep [ braces listSDoc
