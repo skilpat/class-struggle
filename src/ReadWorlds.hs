@@ -2,7 +2,7 @@ module ReadWorlds where
 
 import Control.Monad.State hiding (liftIO)
 import Data.Monoid
-import qualified Data.Map.Strict as M
+import qualified Data.Map as M
 import qualified Data.Foldable as F
 
 import DynFlags
@@ -41,77 +41,38 @@ instance Monoid Ctx where
               , ctx_pkgs   = pkgs2 } =
     Ctx { ctx_map = plusUFM map1 map2
         , ctx_pkgs   = unionUniqSets pkgs1 pkgs2 }
-
-instance Outputable Ctx where
-  ppr ctx = text "ctx saw packages:" <+> ppr (uniqSetToList (ctx_pkgs ctx))
-            $+$ pprCtxEntries ctx []
-
-
-pprCtxEntries :: Ctx -> [String] -> SDoc
-pprCtxEntries ctx mods = sep $ catMaybes maybeEntryDocs
-  where
-    maybeEntryDocs = [ pprEntry mish w | (mish, _, w) <- eltsUFM (ctx_map ctx) ]
-    
-    pprEntry mish w
-      | shouldPrint mish = Just $ ppr mish <+> text "->" <+> pprIslands (w_wimap w)
-      | otherwise        = Nothing
-
-    shouldPrint mish
-      | null mods                   = True
-      | mishModStr mish `elem` mods = True
-      | otherwise                   = False
-
-
--- | Given a list of module names and a Ctx, print out the World of any modules
---   whose names occur in the list.
-printCtx :: [String] -> Ctx -> IO ()
-printCtx mods ctx = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
-  runGhc (Just libdir) $ printSDoc $ pprCtxEntries ctx mods
         
 
-buildCtx :: [String] -> IO Ctx
-buildCtx pkgs = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
+-- | Build a Ctx mapping modules to worlds and interfaces, given an absolute
+--   path to a cabal sandbox conf and a list of package names (minus versions)
+--   to check.
+buildCtx :: String -> [String] -> IO Ctx
+buildCtx sandbox_path req_pkgs = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
   runGhc (Just libdir) $ do
 
-    -- we have to call 'setSessionDynFlags' before doing
-    -- everything else
+    -- Try to use a sandbox pkg db, if one is passed in.
+    updateDynFlags [ "-hide-all-packages"
+                   , "-no-user-package-db"
+                   , "-package-db " ++ sandbox_path ]
+    -- unless (null sandbox_path) $
+    --        updateDynFlags [ "-no-user-package-db"
+    --                       , "-package-db " ++ sandbox_path ]
+
     dflags <- getSessionDynFlags
-    let dflags' = gopt_set dflags Opt_HideAllPackages
-    setSessionDynFlags $ dflags' { ghcMode      = OneShot
-                                 , hscTarget    = HscNothing
-                                 --, thisPackage  = stringToPackageId "containers-0.5.0.0"
-                                 -- , packageFlags = map ExposePackage pkgs
-                                 }
+    setSessionDynFlags $ dflags { ghcMode       = OneShot
+                                , hscTarget     = HscNothing
+                                }
     setTargets []
     -- setTargets =<< sequence [guessTarget "Test.hs" Nothing]
     load LoadAllTargets
-    hscEnv <- getSession
-    dflags <- getSessionDynFlags
 
-    -- let pkgModMap = currentPkgModMap dflags requestedPkgs
-    -- let mods = concat $ M.elems pkgModMap
+    -- Start doing stuff.
+    pkg_mod_map <- currentPkgModMap req_pkgs
 
-    -- liftIO $ putStrLn $ showSDoc dflags $ ppr pkgModMap
-    -- liftIO $ putStrLn ""
+    -- liftIO $ putStrLn "LOADED PACKAGES:"
+    -- printPkgs
+    let pids = M.keys pkg_mod_map
 
-    -- forM_ mods $ \mod -> do
-    --   liftIO $ putStrLn $ showSDoc dflags $ pprModule mod
-    --   -- Found modLoc _ <- liftIO $ findModLocation hscEnv mod
-    --   modLoc <- findModLocation mod
-    --   let hiFile = ml_hi_file modLoc
-    --   let tcInstances = do
-    --         res <- readIface mod hiFile False
-    --         return $ case res of
-    --           Maybes.Succeeded modIface -> Just $ mi_insts modIface
-    --           Maybes.Failed _ -> Nothing
-    --   mbInsts <- liftIO $ initTcForLookup hscEnv tcInstances
-    --   liftIO $ putStrLn $ case mbInsts of
-    --     Just []    -> "  no instances"
-    --     Just insts -> showSDoc dflags $ vcat $ map pprInstanceWithOrphan insts
-    --     Nothing    -> "! lookup failed"
-    --   liftIO $ putStrLn ""
-
-    let pkg_mod_map = currentPkgModMap dflags pkgs
     ctx <- execStateT (processAllPkgs pkg_mod_map) mempty :: Ghc Ctx
     --liftIO $ putStrLn $ showSDoc dflags $ ppr ctx
     return ctx
@@ -124,21 +85,20 @@ processAllPkgs pkg_mod_map = F.sequence_ $ M.mapWithKey processPkg pkg_mod_map
 processPkg :: PackageId -> [Module] -> CtxM ()
 processPkg pid mods = do
   ctx <- get
-  dflags <- lift getSessionDynFlags
 
-  -- Check whether already done.
-  if ctxHasPkg ctx pid
-    then return ()
-    else do
+  -- -- Check whether already done.
+  -- if ctxHasPkg ctx pid
+  --   then return ()
+  --   else do
 
-      -- If not, process each of its mods. Since we are processing this package
-      -- from the outside, we are looking for *non-boot* modules to process,
-      -- hence the `mkModuleish` call.
-      lift $ liftIO $ putStrLn $ showSDoc dflags $ text "*" <+> ppr pid
-      mapM_ (processIfMissing . mkModuleish) mods
+  -- If not, process each of its mods. Since we are processing this package
+  -- from the outside, we are looking for *non-boot* modules to process,
+  -- hence the `mkModuleish` call.
+  lift $ printSDoc $ text "*" <+> ppr pid
+  mapM_ (processIfMissing . mkModuleish) mods
 
-      -- Record this package as done.
-      updateCtxPkgs pid
+  -- -- Record this package as done.
+  -- updateCtxPkgs pid
 
 
 
@@ -163,7 +123,7 @@ lookupAndProcess mish = do
 
 processMod :: Moduleish -> CtxM ()
 processMod mish = do
-  let modsToPrint = [] -- ["Data.Type.Coercion"]
+  let modsToPrint = ["Test1.Left","Test1.Right"]
   let maybeDo m
         | mishModStr mish `elem` modsToPrint = m
         | otherwise                          = return ()
@@ -173,27 +133,28 @@ processMod mish = do
 
   -- Get the worlds of imports, after recursively processing them first.
   let imp_mishes = importedMishes (mish_mod mish) iface
-  imp_worlds <- mapM (fmap snd . lookupAndProcess) imp_mishes
+  imp_worlds <- return [] -- mapM (fmap snd . lookupAndProcess) imp_mishes
 
   -- Type check the interface so that the instances are in the right format.
   insts <- lift $ readInstsFromIface iface
 
   -- Print module name and instances found.
+  lift $ printSDoc $ text "  -" <+> ppr mish
   maybeDo $ do
-    lift $ printSDoc $ text "  -" <+> ppr mish
     F.forM_ insts $ \inst ->
       lift $ printSDoc $ text "    -" <+> ppr inst
 
   -- TODO: family instances!
 
+  -- Try to create a new world.
   case newWorld imp_worlds mish insts of
     Just w  -> do
-      maybeDo $ do
-        lift $ printSDoc $ text "new world's island ..."
-        let island = fromJust $ lookupIsland w mish
-        lift $ printSDoc $ ppr island
-        F.forM_ (islandInsts island) $ \inst ->
-          lift $ printSDoc $ text "    -" <+> pprInstanceHdr inst
+      -- maybeDo $ do
+      --   lift $ printSDoc $ text "new world's island ..."
+      --   let island = fromJust $ lookupIsland w mish
+      --   lift $ printSDoc $ ppr island
+      --   F.forM_ (islandInsts island) $ \inst ->
+      --     lift $ printSDoc $ text "    -" <+> pprInstanceHdr inst
       
       -- Store the iface and newly created world for this module.
       updateCtxMap mish iface w
@@ -244,3 +205,35 @@ lookupWorld Ctx {ctx_map = cmap} lookup_str = do
   let mish = mkModule pid mname
   (_, _, w) <- lookupUFM cmap mish
   return w
+
+
+
+
+
+--- PRINTING -----------------
+
+instance Outputable Ctx where
+  ppr ctx = text "ctx saw packages:" <+> ppr (uniqSetToList (ctx_pkgs ctx))
+            $+$ pprCtxEntries ctx []
+
+
+pprCtxEntries :: Ctx -> [String] -> SDoc
+pprCtxEntries ctx mods = sep $ catMaybes maybeEntryDocs
+  where
+    maybeEntryDocs = [ pprEntry mish w | (mish, _, w) <- eltsUFM (ctx_map ctx) ]
+    
+    pprEntry mish w
+      | shouldPrint mish = Just $ ppr mish <+> text "->" <+> pprIslands (w_wimap w)
+      | otherwise        = Nothing
+
+    shouldPrint mish
+      | null mods                   = True
+      | mishModStr mish `elem` mods = True
+      | otherwise                   = False
+
+
+-- | Given a list of module names and a Ctx, print out the World of any modules
+--   whose names occur in the list.
+printCtx :: [String] -> Ctx -> IO ()
+printCtx mods ctx = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
+  runGhc (Just libdir) $ printSDoc $ pprCtxEntries ctx mods

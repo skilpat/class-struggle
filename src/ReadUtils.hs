@@ -1,7 +1,11 @@
 module ReadUtils where
 
 import Control.Monad
+import Data.Char
+  ( isDigit )
 import qualified Data.Map as M
+import Data.List
+  ( sortBy )
 import System.Directory
 import System.FilePath
 
@@ -23,6 +27,8 @@ import IfaceSyn
 import LoadIface
 import Maybes
 import Module
+import SrcLoc
+  ( noLoc )
 import Text.Printf
 import TcIface
   ( typecheckIface )
@@ -32,21 +38,71 @@ import Moduleish
 
 type PkgModMap = M.Map PackageId [Module]
 
-currentPkgModMap :: DynFlags -> [String] -> PkgModMap
-currentPkgModMap dflags req_pkgs =
-    M.fromList $ [ (pkgIdFromIpi ipi, map (mkMod ipi) (allModsFromIpi ipi))
-                 | ipi <- ipis
-                 , pkgNameFromIpi ipi `elem` req_pkgs
-                 ]
+currentPkgModMap :: [String] -> Ghc PkgModMap
+currentPkgModMap req_pkgs = do
+  dflags <- getSessionDynFlags
+
+  -- Installed packages
+  let ipis = eltsUFM $ pkgIdMap $ pkgState dflags
+
+  -- Generate association list for map
+  liftIO $ putStrLn "Reading current package mod map..."
+  let mkEntry ipi = do
+        let pid = pkgIdFromIpi ipi
+        let mods = map (mkMod ipi) (allModsFromIpi ipi)
+        let keep = pkgIdName pid `elem` req_pkgs
+        let keepstr = if keep then "> " else "  "
+        printSDoc $ text keepstr <> ppr pid <+> parens (int (length mods))
+        return (pid, (mods, keep))
+  assocs <- mapM mkEntry ipis
+  let pkg_mod_map_with_keep = M.fromList assocs
+
+  -- Filter out any packages that aren't in the required list.
+  let f (mods, keep)
+        | keep      = Just mods
+        | otherwise = Nothing
+  let pkg_mod_map = M.mapMaybe f pkg_mod_map_with_keep
+
+  liftIO $ putStrLn "Done reading current package mod map."
+  return pkg_mod_map
+
   where
-    ipis        = eltsUFM $ pkgIdMap $ pkgState dflags
     pkgIdFromIpi ipi   = mkPackageId $ sourcePackageId ipi
-    pkgNameFromIpi ipi = pkgIdName $ pkgIdFromIpi ipi
     mkMod ipi modName  = mkModule (pkgIdFromIpi ipi) modName
     allModsFromIpi ipi = (exposedModules ipi) ++ (hiddenModules ipi)
   
+
+-- | Given a PackageId, which looks like "foo-bar-1.2.3", peel off the part
+--   before the version number, "foo-bar".
 pkgIdName :: PackageId -> String
-pkgIdName pid = takeWhile (\c -> c /= '-') $ packageIdString pid
+pkgIdName pid | last s == '-' = init s
+              | otherwise     = s
+  where
+    s = takeWhile (not . isDigit) $ packageIdString pid
+
+
+printPkgs :: Ghc ()
+printPkgs = do
+  dflags <- getSessionDynFlags
+
+  let pkgIdFromIpi ipi   = mkPackageId $ sourcePackageId ipi
+  let pkgNameFromIpi ipi = pkgIdName $ pkgIdFromIpi ipi
+  let ipis = eltsUFM $ pkgIdMap $ pkgState dflags
+  let pids = sortBy stablePackageIdCmp $ map pkgIdFromIpi ipis
+
+  forM_ pids (printSDoc . ppr)  
+
+
+
+updateDynFlags :: [String] -> Ghc ()
+updateDynFlags str_args = do
+  dflags0 <- getSessionDynFlags
+  let args = map noLoc str_args
+  (dflags, _, _) <- parseDynamicFlagsCmdLine dflags0 args
+  pids <- setSessionDynFlags dflags
+  -- forM_ pids $ \pid -> do
+  --   printSDoc $ text " ! " <> ppr pid
+  return ()
 
 
 printSDoc :: SDoc -> Ghc ()

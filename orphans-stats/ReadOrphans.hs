@@ -69,7 +69,7 @@ stats req_pkgs = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
     --     Nothing    -> "! lookup failed"
     --   liftIO $ putStrLn ""
 
-    let pkg_mod_map = currentPkgModMap dflags req_pkgs
+    pkg_mod_map <- currentPkgModMap req_pkgs
     processAllPkgs pkg_mod_map
 
 
