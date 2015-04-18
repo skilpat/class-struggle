@@ -15,7 +15,7 @@ import Outputable
 import TcIface
 import TcRnMonad
 import UniqFM
-import UniqSet
+--import UniqSet
 
 import LoadIface
 import Maybes
@@ -25,22 +25,17 @@ import ReadUtils
 import World
 
 -- | A context that maps a Moduleish to its typechecked interface and world.
-data Ctx = Ctx { ctx_map  :: UniqFM (Moduleish, ModIface, World)
-               , ctx_pkgs :: UniqSet PackageId }
+data Ctx = Ctx { ctx_map  :: UniqFM (Moduleish, ModIface, World) }
 
 -- | A wrapper around the Ghc monad that keeps up with a Ctx as state.
 type CtxM a = StateT Ctx Ghc a
 
 instance Monoid Ctx where
-  mempty = Ctx { ctx_map  = emptyUFM
-               , ctx_pkgs = emptyUniqSet }
+  mempty = Ctx { ctx_map  = emptyUFM }
 
-  mappend Ctx { ctx_map  = map1
-              , ctx_pkgs = pkgs1 }
-          Ctx { ctx_map  = map2
-              , ctx_pkgs   = pkgs2 } =
-    Ctx { ctx_map = plusUFM map1 map2
-        , ctx_pkgs   = unionUniqSets pkgs1 pkgs2 }
+  mappend Ctx { ctx_map  = map1 }
+          Ctx { ctx_map  = map2 } =
+    Ctx { ctx_map = plusUFM map1 map2 }
         
 
 -- | Build a Ctx mapping modules to worlds and interfaces, given an absolute
@@ -71,10 +66,12 @@ buildCtx sandbox_path req_pkgs = defaultErrorHandler defaultFatalMessager defaul
 
     -- liftIO $ putStrLn "LOADED PACKAGES:"
     -- printPkgs
-    let pids = M.keys pkg_mod_map
+    --let pkg_names = M.keys pkg_mod_map
 
     ctx <- execStateT (processAllPkgs pkg_mod_map) mempty :: Ghc Ctx
     --liftIO $ putStrLn $ showSDoc dflags $ ppr ctx
+    --printSDoc $ pprCtxEntries ctx ["base:Prelude"]
+
     return ctx
 
 
@@ -82,8 +79,8 @@ processAllPkgs :: PkgModMap -> CtxM ()
 processAllPkgs pkg_mod_map = F.sequence_ $ M.mapWithKey processPkg pkg_mod_map
 
 
-processPkg :: PackageId -> [Module] -> CtxM ()
-processPkg pid mods = do
+processPkg :: String -> (PackageId, [Module]) -> CtxM ()
+processPkg pname (pid, mods) = do
   ctx <- get
 
   -- -- Check whether already done.
@@ -123,7 +120,7 @@ lookupAndProcess mish = do
 
 processMod :: Moduleish -> CtxM ()
 processMod mish = do
-  let modsToPrint = ["Test1.Left","Test1.Right"]
+  let modsToPrint = ["Prelude","Test1.Left","Test1.Right"]
   let maybeDo m
         | mishModStr mish `elem` modsToPrint = m
         | otherwise                          = return ()
@@ -133,7 +130,7 @@ processMod mish = do
 
   -- Get the worlds of imports, after recursively processing them first.
   let imp_mishes = importedMishes (mish_mod mish) iface
-  imp_worlds <- return [] -- mapM (fmap snd . lookupAndProcess) imp_mishes
+  imp_worlds <- mapM (fmap snd . lookupAndProcess) imp_mishes
 
   -- Type check the interface so that the instances are in the right format.
   insts <- lift $ readInstsFromIface iface
@@ -186,15 +183,15 @@ updateCtxMap mish iface w = do
   put $ ctx { ctx_map = addToUFM cm mish (mish, iface, w) }
 
 
-updateCtxPkgs :: PackageId -> CtxM ()
-updateCtxPkgs pid = do
-  ctx@Ctx{ctx_pkgs = pkgs} <- get
-  -- Update context's pkg set with this one.
-  put $ ctx { ctx_pkgs = addOneToUniqSet pkgs pid }
+--updateCtxPkgs :: String -> CtxM ()
+--updateCtxPkgs pname = do
+--  ctx@Ctx{ctx_pkgs = pkgs} <- get
+--  -- Update context's pkg set with this one.
+--  put $ ctx { ctx_pkgs = addOneToUniqSet pkgs pname }
 
 
-ctxHasPkg :: Ctx -> PackageId -> Bool
-ctxHasPkg Ctx {ctx_pkgs = pids} pid = elementOfUniqSet pid pids
+--ctxHasPkg :: Ctx -> String -> Bool
+--ctxHasPkg Ctx {ctx_pkgs = pnames} pname = elementOfUniqSet pname pnames
 
 
 lookupWorld :: Ctx -> String -> Maybe World
@@ -213,12 +210,13 @@ lookupWorld Ctx {ctx_map = cmap} lookup_str = do
 --- PRINTING -----------------
 
 instance Outputable Ctx where
-  ppr ctx = text "ctx saw packages:" <+> ppr (uniqSetToList (ctx_pkgs ctx))
-            $+$ pprCtxEntries ctx []
+  --ppr ctx = text "ctx saw packages:" <+> ppr (uniqSetToList (ctx_pkgs ctx))
+  --          $+$ pprCtxEntries ctx []
+  ppr ctx = pprCtxEntries ctx []
 
 
 pprCtxEntries :: Ctx -> [String] -> SDoc
-pprCtxEntries ctx mods = sep $ catMaybes maybeEntryDocs
+pprCtxEntries ctx mods_to_print = sep $ catMaybes maybeEntryDocs
   where
     maybeEntryDocs = [ pprEntry mish w | (mish, _, w) <- eltsUFM (ctx_map ctx) ]
     
@@ -227,9 +225,9 @@ pprCtxEntries ctx mods = sep $ catMaybes maybeEntryDocs
       | otherwise        = Nothing
 
     shouldPrint mish
-      | null mods                   = True
-      | mishModStr mish `elem` mods = True
-      | otherwise                   = False
+      | null mods_to_print                   = True
+      | mishModStr mish `elem` mods_to_print = True
+      | otherwise                            = False
 
 
 -- | Given a list of module names and a Ctx, print out the World of any modules
@@ -237,3 +235,4 @@ pprCtxEntries ctx mods = sep $ catMaybes maybeEntryDocs
 printCtx :: [String] -> Ctx -> IO ()
 printCtx mods ctx = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
   runGhc (Just libdir) $ printSDoc $ pprCtxEntries ctx mods
+

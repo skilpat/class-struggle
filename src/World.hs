@@ -257,12 +257,13 @@ worldInstCount (World wimap _) = islandsInstCount wimap
 
 
 instance Outputable Island where
-  ppr wi = sep [ pprMish
-               , parens (int (islandInstCount wi)) ]
+  ppr wi = pprMish <+> parens (int (islandInstCount wi))
     where
       mish = wi_mod wi
       pprMish | mish_boot mish = text "--" <+> ppr mish
               | otherwise      = ppr mish
+
+
 
 pprIslands :: Islands -> SDoc
 pprIslands wimap = sep [ braces listSDoc

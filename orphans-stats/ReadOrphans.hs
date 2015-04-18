@@ -186,8 +186,8 @@ updateTotalOrphStats (TotalOrphStats noi1 nni1 nom1 nnm1 nnoinst1)
                  pos@(PkgOrphStats pid noi2 nni2 nom2 nnm2 nnoinst2) =
   TotalOrphStats (noi1+noi2) (nni1+nni2) (nom1+nom2) (nnm1+nnm2) (nnoinst1+nnoinst2)
 
-processPkg :: PackageId -> [Module] -> Ghc PkgOrphStats
-processPkg pid mods = do
+processPkg :: String -> (PackageId, [Module]) -> Ghc PkgOrphStats
+processPkg pname (pid, mods) = do
   dflags <- getSessionDynFlags
 
   -- print package id

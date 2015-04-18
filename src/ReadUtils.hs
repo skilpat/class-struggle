@@ -36,7 +36,7 @@ import TcIface
 import Moduleish
 
 
-type PkgModMap = M.Map PackageId [Module]
+type PkgModMap = M.Map String (PackageId, [Module])
 
 currentPkgModMap :: [String] -> Ghc PkgModMap
 currentPkgModMap req_pkgs = do
@@ -53,13 +53,13 @@ currentPkgModMap req_pkgs = do
         let keep = pkgIdName pid `elem` req_pkgs
         let keepstr = if keep then "> " else "  "
         printSDoc $ text keepstr <> ppr pid <+> parens (int (length mods))
-        return (pid, (mods, keep))
+        return (pkgIdName pid, (pid, mods, keep))
   assocs <- mapM mkEntry ipis
   let pkg_mod_map_with_keep = M.fromList assocs
 
   -- Filter out any packages that aren't in the required list.
-  let f (mods, keep)
-        | keep      = Just mods
+  let f (pid, mods, keep)
+        | keep      = Just (pid, mods)
         | otherwise = Nothing
   let pkg_mod_map = M.mapMaybe f pkg_mod_map_with_keep
 
@@ -75,10 +75,25 @@ currentPkgModMap req_pkgs = do
 -- | Given a PackageId, which looks like "foo-bar-1.2.3", peel off the part
 --   before the version number, "foo-bar".
 pkgIdName :: PackageId -> String
-pkgIdName pid | last s == '-' = init s
-              | otherwise     = s
+pkgIdName = fst . pkgIdSplit
+
+pkgIdVersion :: PackageId -> String
+pkgIdVersion = snd . pkgIdSplit
+
+
+pkgIdSplit :: PackageId -> (String, String)
+pkgIdSplit pid | last n == '-' = (init n, v)
+               | otherwise     = (n, v)
   where
-    s = takeWhile (not . isDigit) $ packageIdString pid
+    (n, v) = span (not . isDigit) $ packageIdString pid
+
+
+stringToModule :: String -> Module
+stringToModule s = mkModule pid mname
+  where
+    (p, ':':m) = span (/= ':') s
+    pid   = stringToPackageId p
+    mname = mkModuleName m
 
 
 printPkgs :: Ghc ()
