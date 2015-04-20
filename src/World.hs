@@ -1,3 +1,4 @@
+{-# LANGUAGE TupleSections #-}
 module World where
 
 import Control.Monad
@@ -20,9 +21,9 @@ import Moduleish
 
 -- | The world of a module that extends other worlds and adds at least one
 --   instance.
-data Island = Island { wi_exts :: Islands
-                     , wi_mod  :: Moduleish
-                     , wi_ienv :: IslandInstEnv }
+data Island = Island { wi_exts :: !Islands
+                     , wi_mod  :: !Moduleish
+                     , wi_ienv :: !IslandInstEnv }
 
 instance Eq Island where
   Island {wi_mod = mod1} == Island {wi_mod = mod2} = mod1 == mod2
@@ -40,11 +41,19 @@ type Islands = UniqFM Island
 -- | Describes how a World was created: either the merging of some other worlds
 --   with no additional instances, or the extension of other worlds with an
 --   Island.
-data Origin = MergedWorlds [World] | NewWorld [World] Island
+data Origin
+  = MergedWorlds [(World, Maybe Moduleish)]
+  | NewWorld [(World, Maybe Moduleish)] Island
 
 
-data World = World { w_wimap  :: Islands
-                   , w_origin :: Origin }
+data World = World { w_wimap  :: !Islands
+                   , w_origin :: !Origin }
+
+-- | Two Worlds are equal if they include the same Moduleishes in their Island
+--   maps.
+instance Eq World where
+  (World wimap1 _) == (World wimap2 _) =
+    sort (keysUFM wimap1) == sort (keysUFM wimap2)
 
 
 -- | A mapping from Class names to a list of instances for that class.
@@ -67,7 +76,7 @@ merge w1 w2 = do
 
 
 
-  return $ World wimap (MergedWorlds [w1, w2])
+  return $ World wimap (MergedWorlds [(w1, Nothing), (w2, Nothing)])
 
 -- | Merge together a list of worlds.
 mergeList :: [World] -> Maybe World
@@ -80,7 +89,7 @@ mergeList ws = do
   -- is what plusUFM does).
   let wimaps = map w_wimap ws
   let wimap_all = foldl plusUFM emptyUFM wimaps
-  return $ World wimap_all (MergedWorlds ws)
+  return $ World wimap_all (MergedWorlds $ map (, Nothing) ws)
 
 
 -- | All pairs (xi,xj) of a list xs such that i < j.
@@ -170,14 +179,31 @@ mergeableInsts inst1 inst2
 -- | Create a new world given a list of worlds to extend, the Moduleish for
 --   this module, and this module's locally defined instances.
 newWorld :: [World] -> Moduleish -> [ClsInst] -> Maybe World
-newWorld ws mish local_insts = do
+newWorld ws mish local_insts = newWorld' anno_worlds mish local_insts
+  where
+    anno_worlds = [(w, Nothing) | w <- ws]
+
+
+-- | Create a new world given a list of worlds (and Moduleishes that pointed to
+--   those worlds) to extend, the Moduleish for
+--   this module, and this module's locally defined instances.
+newWorldFromImports :: [(Moduleish, World)] -> Moduleish -> [ClsInst] -> Maybe World
+newWorldFromImports imps mish local_insts = newWorld' anno_worlds mish local_insts
+  where
+    anno_worlds = [(w, Just m) | (m,w) <- imps]
+
+
+newWorld' :: [(World, Maybe Moduleish)] -> Moduleish -> [ClsInst] -> Maybe World
+newWorld' anno_worlds mish local_insts = do
+  let (ws, annos) = unzip anno_worlds
+
   -- First merge the extended worlds into a single parent world.
   pw <- mergeList ws
 
   -- If the list of locally defined instances is empty, then just return
   -- this merged world.
   if null local_insts
-    then return $ World (w_wimap pw) (MergedWorlds ws)
+    then return $ World (w_wimap pw) (MergedWorlds anno_worlds)
     else do
 
       -- Organize the list of local instances into an IslandInstEnv.
@@ -196,7 +222,7 @@ newWorld ws mish local_insts = do
       -- don't need to check anything. Just extend the parent world's island
       -- map with this island.
       let wimap_new = addToUFM (w_wimap pw) mish island
-      return $ World wimap_new (NewWorld ws island)
+      return $ World wimap_new (NewWorld anno_worlds island)
 
 
 
@@ -251,9 +277,18 @@ islandsInstCount wimap =
 worldInstCount :: World -> Int
 worldInstCount (World wimap _) = islandsInstCount wimap
 
+extendedWorlds :: World -> [World]
+extendedWorlds w = case w_origin w of
+  NewWorld anno_worlds _   -> map fst anno_worlds
+  MergedWorlds anno_worlds -> map fst anno_worlds
+
+imports :: World -> [(Moduleish, World)]
+imports w = case w_origin w of
+  NewWorld anno_worlds _   -> [(m, w) | (w, Just m) <- anno_worlds]
+  MergedWorlds anno_worlds -> [(m, w) | (w, Just m) <- anno_worlds]
 
 
-
+-- PRINTING ------------------------------------------------------
 
 
 instance Outputable Island where

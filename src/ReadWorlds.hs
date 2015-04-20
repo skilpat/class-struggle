@@ -2,7 +2,7 @@ module ReadWorlds where
 
 import Control.Monad.State hiding (liftIO)
 import Data.Monoid
-import qualified Data.Map as M
+import qualified Data.Map.Strict as M
 import qualified Data.Foldable as F
 
 import DynFlags
@@ -144,7 +144,7 @@ processMod mish = do
   -- TODO: family instances!
 
   -- Try to create a new world.
-  case newWorld imp_worlds mish insts of
+  case newWorldFromImports (zip imp_mishes imp_worlds) mish insts of
     Just w  -> do
       -- maybeDo $ do
       --   lift $ printSDoc $ text "new world's island ..."

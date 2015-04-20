@@ -3,7 +3,7 @@ module ReadUtils where
 import Control.Monad
 import Data.Char
   ( isDigit )
-import qualified Data.Map as M
+import qualified Data.Map.Strict as M
 import Data.List
   ( sortBy )
 import System.Directory

@@ -11,8 +11,8 @@ import Unique
 -- | Basically just a Module, but with an additional bit that determines whether
 --   this refers to a boot file (True) or a normal module implementation
 --   (False).
-data Moduleish = Moduleish { mish_mod  :: Module
-                           , mish_boot :: Bool }
+data Moduleish = Moduleish { mish_mod  :: !Module
+                           , mish_boot :: !Bool }
 
 deriving instance Eq Moduleish
 deriving instance Ord Moduleish
@@ -21,8 +21,21 @@ deriving instance Ord Moduleish
 mkModuleish :: Module -> Moduleish
 mkModuleish mod = Moduleish mod False
 
+mishPkgStr :: Moduleish -> String
+mishPkgStr mish = packageIdString $ modulePackageId $ mish_mod mish
+
 mishModStr :: Moduleish -> String
 mishModStr mish = moduleNameString $ moduleName $ mish_mod mish
+
+mkModuleishFull :: String -> Moduleish
+mkModuleishFull s = Moduleish mod boot
+  where
+    (ps, ':':mbs) = span (/= ':') s
+    pid = stringToPackageId ps
+    (ms, rest) = span (/= '[') mbs
+    mname = mkModuleName ms
+    mod = mkModule pid mname
+    boot = not $ null rest
 
 -- | Do the two Moduleishes point to the same Module but different boot status?
 similarish :: Moduleish -> Moduleish -> Bool
@@ -41,16 +54,17 @@ instance Uniquable Moduleish where
     where
       mod_uniq = getUnique $ mish_mod mish
 
-
+instance Show Moduleish where
+  show mish | mish_boot mish = s ++ "[boot]"
+            | otherwise      = s
+    where
+      s = mishPkgStr mish ++ ":" ++ mishModStr mish
 
 instance Outputable Moduleish where
-  ppr mish | mish_boot mish = mod_sdoc <> text "[boot]"
-           | otherwise      = mod_sdoc
-    where
-      mod_sdoc = ppr $ mish_mod mish
+  ppr mish = text $ show mish
 
-instance Show Moduleish where
-  show mish | mish_boot mish = mod_str ++ "[boot]"
-            | otherwise      = mod_str
-    where
-      mod_str = moduleNameString $ moduleName $ mish_mod mish
+-- instance Show Moduleish where
+--   show mish | mish_boot mish = mod_str ++ "[boot]"
+--             | otherwise      = mod_str
+--     where
+--       mod_str = moduleNameString $ moduleName $ mish_mod mish
