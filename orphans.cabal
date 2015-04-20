@@ -20,6 +20,7 @@ library
                        ReadWorlds,
                        ReadUtils,
                        World,
+                       WorldCtx,
                        WorldDag
   other-extensions:    StandaloneDeriving
   build-depends:       base >=4.7 && <4.8,
