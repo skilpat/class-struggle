@@ -73,9 +73,6 @@ merge w1 w2 = do
   -- the Island maps and take the RHS in case a Mod is mapped by both (which
   -- is what plusUFM does).
   let wimap = plusUFM (w_wimap w1) (w_wimap w2)
-
-
-
   return $ World wimap (MergedWorlds [(w1, Nothing), (w2, Nothing)])
 
 -- | Merge together a list of worlds.

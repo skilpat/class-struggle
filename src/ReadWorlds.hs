@@ -24,6 +24,11 @@ import Moduleish
 import ReadUtils
 import World
 import WorldCtx
+
+
+
+-- | A wrapper around the Ghc monad that keeps up with a Ctx as state.
+type CtxM a = StateT Ctx Ghc a
         
 
 -- | Build a Ctx mapping modules to worlds and interfaces, given an absolute
@@ -69,44 +74,32 @@ processAllPkgs pkg_mod_map = F.sequence_ $ M.mapWithKey processPkg pkg_mod_map
 
 processPkg :: String -> (PackageId, [Module]) -> CtxM ()
 processPkg pname (pid, mods) = do
-  ctx <- get
-
-  -- -- Check whether already done.
-  -- if ctxHasPkg ctx pid
-  --   then return ()
-  --   else do
-
-  -- If not, process each of its mods. Since we are processing this package
+  -- Process each of its mods. Since we are processing this package
   -- from the outside, we are looking for *non-boot* modules to process,
   -- hence the `mkModuleish` call.
   lift $ printSDoc $ text "*" <+> ppr pid
-  mapM_ (processIfMissing . mkModuleish) mods
+  mws <- mapM (lookupOrProcess . mkModuleish) mods
 
-  -- -- Record this package as done.
-  -- updateCtxPkgs pid
+  -- Record this package's world
+  pkg_world <- case mergeList (map snd mws) of
+    Just w -> return w
+    Nothing -> do
+      lift $ printSDoc $
+        text "! warning: failed to merge pkg world for" <+> ppr pid
+      return emptyWorld
 
-
-
-processIfMissing :: Moduleish -> CtxM ()
-processIfMissing mish = do
-  ctx <- get
-  case lookupUFM (ctx_map ctx) mish of
-    Just res -> return ()
-    Nothing  -> processMod mish
+  updateCtxPkg pid pkg_world
 
 
-lookupAndProcess :: Moduleish -> CtxM (ModIface, World)
-lookupAndProcess mish = do
-  -- If we haven't processed this mish yet, do it now.
-  processIfMissing mish
-  -- Get the map and look it up.
+lookupOrProcess :: Moduleish -> CtxM (ModIface, World)
+lookupOrProcess mish = do
   ctx <- get
   case lookupUFM (ctx_map ctx) mish of
     Just (_, iface, w) -> return (iface, w)
-    Nothing  -> error $ "lookup failed for module " ++ (mishModStr mish)
+    Nothing            -> processMod mish
 
 
-processMod :: Moduleish -> CtxM ()
+processMod :: Moduleish -> CtxM (ModIface, World)
 processMod mish = do
   let modsToPrint = ["Prelude","Test1.Left","Test1.Right"]
   let maybeDo m
@@ -118,7 +111,7 @@ processMod mish = do
 
   -- Get the worlds of imports, after recursively processing them first.
   let imp_mishes = importedMishes (mish_mod mish) iface
-  imp_worlds <- mapM (fmap snd . lookupAndProcess) imp_mishes
+  imp_worlds <- mapM (fmap snd . lookupOrProcess) imp_mishes
 
   -- Type check the interface so that the instances are in the right format.
   insts <- lift $ readInstsFromIface iface
@@ -143,11 +136,13 @@ processMod mish = do
       
       -- Store the iface and newly created world for this module.
       updateCtxMap mish iface w
+      return (iface, w)
 
 
     Nothing -> do
       lift $ printSDoc $ text "! error: failed to create world for " <+> ppr mish
       updateCtxMap mish iface emptyWorld
+      return (iface, emptyWorld)
 
 
 importedMishes :: Module -> ModIface -> [Moduleish]
@@ -166,18 +161,15 @@ importedMishes this_mod iface = concatMap mishFromUsage (mi_usages iface)
 
 updateCtxMap :: Moduleish -> ModIface -> World -> CtxM ()
 updateCtxMap mish iface w = do
-  ctx@Ctx{ctx_map = cm} <- get
+  ctx@Ctx{ctx_map = cmap} <- get
   -- Update context's map with this Moduleish and (ModIface, World).
-  put $ ctx { ctx_map = addToUFM cm mish (mish, iface, w) }
+  put $ ctx { ctx_map = addToUFM cmap mish (mish, iface, w) }
 
 
---updateCtxPkgs :: String -> CtxM ()
---updateCtxPkgs pname = do
---  ctx@Ctx{ctx_pkgs = pkgs} <- get
---  -- Update context's pkg set with this one.
---  put $ ctx { ctx_pkgs = addOneToUniqSet pkgs pname }
+updateCtxPkg :: PackageId -> World -> CtxM ()
+updateCtxPkg pid w = do
+ ctx@Ctx{ctx_pkg_map = pmap} <- get
+ -- Update context's pkg world map with this one.
+ put $ ctx { ctx_pkg_map = addToUFM pmap pid (pid, w) }
 
-
---ctxHasPkg :: Ctx -> String -> Bool
---ctxHasPkg Ctx {ctx_pkgs = pnames} pname = elementOfUniqSet pname pnames
 
