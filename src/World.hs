@@ -6,6 +6,7 @@ import Data.List
   ( sort )
 import Data.Maybe
   ( isNothing, isJust )
+import qualified Data.Set as S
 
 -- GHC imports
 import InstEnv
@@ -283,6 +284,12 @@ imports :: World -> [(Moduleish, World)]
 imports w = case w_origin w of
   NewWorld anno_worlds _   -> [(m, w) | (w, Just m) <- anno_worlds]
   MergedWorlds anno_worlds -> [(m, w) | (w, Just m) <- anno_worlds]
+
+
+coveredPkgs :: World -> S.Set PackageId
+coveredPkgs (World wimap _) =
+  S.fromList [ modulePackageId (mish_mod (wi_mod wi)) | wi <- eltsUFM wimap ]
+  
 
 
 -- PRINTING ------------------------------------------------------

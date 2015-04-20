@@ -38,23 +38,34 @@ instance Monoid Ctx where
 
 
 
-lookupWorld :: Ctx -> String -> Maybe World
-lookupWorld Ctx {ctx_map = cmap} lookup_str = do
-  let (pstr, ':':mstr) = span (/= ':') lookup_str
-  let pid = stringToPackageId pstr
-  let mname = mkModuleName mstr
-  let mish = mkModule pid mname
+lookupWorld :: Ctx -> Moduleish -> Maybe World
+lookupWorld Ctx {ctx_map = cmap} mish = do
   (_, _, w) <- lookupUFM cmap mish
   return w
+-- lookupWorld ctx mish =
+--   case lookupEntriesMatching ctx (show mish) of
+--     [(_, _, w)] -> Just w
+--     _           -> Nothing
 
 
-lookupPkgWorld :: Ctx -> String -> Maybe World
-lookupPkgWorld Ctx {ctx_pkg_map = pmap} pstr = do
-  let pid = stringToPackageId pstr
+lookupPkgWorld :: Ctx -> PackageId -> Maybe World
+lookupPkgWorld Ctx {ctx_pkg_map = pmap} pid = do
   (_, w) <- lookupUFM pmap pid
   return w
+-- lookupPkgWorld ctx pid =
+--   case lookupPkgEntriesMatching ctx (packageIdString pid) of
+--     [(_, w)] -> Just w
+--     _        -> Nothing
 
+lookupEntriesMatching :: Ctx -> String -> [(Moduleish, ModIface, World)]
+lookupEntriesMatching Ctx {ctx_map = cmap} mod_str =
+  [(m,i,w) | (m,i,w) <- eltsUFM cmap
+           , show m == mod_str || mishModStr m == mod_str ]
 
+lookupPkgEntriesMatching :: Ctx -> String -> [(PackageId, World)]
+lookupPkgEntriesMatching Ctx {ctx_pkg_map = pmap} pkg_str =
+  [(p,w) | (p,w) <- eltsUFM pmap
+         , packageIdString p == pkg_str || pkgIdName p == pkg_str ]
 
 
 

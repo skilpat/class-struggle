@@ -13,11 +13,15 @@ import Data.Maybe
 import qualified Data.Map as M
 import qualified Data.Set as S
 
+import Module
+  ( PackageId, modulePackageId, packageIdString )
 import UniqFM
   ( eltsUFM )
 
 import Moduleish
+import ReadUtils
 import World
+import WorldCtx
 
 
 -- FIRST ATTEMPT:
@@ -43,85 +47,108 @@ type Edge = (N, N, EL)
 
 type MW = (Moduleish, World)
 
+-- TODO: Get rid of the Moduleish inside WorldOrigin now that we're
+--       passing a whole Ctx around?
+
+
 -- | Construct the DAG of Islands described by the given World.
-worldDag :: Moduleish -> World -> ([Node], [Edge])
-worldDag mish w = worldDagExcept mish w []
+worldDag :: Ctx -> String -> ([Node], [Edge])
+worldDag ctx mod_str = worldDagExceptPkgs ctx mod_str []
 
-worldDagExcept :: Moduleish -> World -> [MW] -> ([Node], [Edge])
-worldDagExcept mish w skip_mw = worldDag' mish w ci
+makeClusterInfo :: Ctx -> World -> [String] -> ClusterInfo
+makeClusterInfo ctx w0 skip_pkgs = ClusterInfo skip_pids cluster imp_nodes
   where
-    ci = ClusterInfo skip_map imp_nodes
+    -- Does the given PackageId match any of the skipped packages.
+    should_skip pid =
+      any (\s -> packageIdString pid == s || pkgIdName pid == s) skip_pkgs
 
-    skip_map = M.fromList [ (show m', worldAllNodes w')
-                          | (m', w') <- skip_mw ]
-    
-    -- | Map a given imported Moduleish and its World to a list of nodes to
-    --   which the present node should point. If the imported Moduleish matches
-    --   one that we should skip, send it to a cluster for that node. Otherwise,
-    --   if all the imported World's canonical nodes are contained in the
-    --   canonical nodes of a skipped world, send it to a cluster for that
-    --   skipped world.
-    imp_nodes (imp_m, imp_w)
-      | M.member (show imp_m) skip_map = [clusterN (show imp_m)]
-      | otherwise = case M.foldlWithKey f Nothing skip_map of
-        Just n  -> [clusterN n]
-        Nothing -> S.toList imp_w_ns
-      
+    -- Get all pkg ids in ctx that match the search strings
+    skip_pids :: S.Set PackageId
+    skip_pids = S.filter should_skip $ coveredPkgs w0
+
+    cluster :: Moduleish -> Maybe Node
+    cluster mish
+      | S.member pid skip_pids, Just w <- lookupPkgWorld ctx pid
+                  = Just $ clusterNode mish w
+      | otherwise = Nothing
       where
-        imp_w_ns = worldCanonicalNodes imp_w
-        
-        f :: Maybe N -> N -> S.Set N -> Maybe N
-        f res next_m next_ns
-          | isJust res                    = res
-          | S.isSubsetOf imp_w_ns next_ns = Just $ clusterN next_m
-          | otherwise                     = Nothing
+        pid = modulePackageId (mish_mod mish)
+
+    imp_nodes :: Moduleish -> Moduleish -> World -> [N]
+    imp_nodes mish imp_m imp_w = case cluster imp_m of
+      -- If the imported mod should be clustered and its the same package,
+      -- then do nothing.
+      Just _     | mishPkgStr mish == mishPkgStr imp_m -> []
+      -- If the imported mod should be clustered and its a different package,
+      -- need an edge to just the cluster's node. 
+      Just (n,_) | otherwise -> [n]
+      -- If the imported mod should *not* be clustered, then need an edge to
+      -- each of the nodes in its world's canonical set.
+      Nothing -> S.toList $ worldCanonicalNodes imp_w
+
+
+worldDagExceptPkgs :: Ctx -> String -> [String] -> ([Node], [Edge])
+worldDagExceptPkgs ctx mod_str skip_pkgs = worldDagWithClusters mish0 w0 ci
+  where
+    -- Make sure that the requested module matches a single one in ctx
+    (mish0, w0) = case lookupEntriesMatching ctx mod_str of
+      [(m,_,w)] -> (m, w)
+      [] -> error $ "! no matches in ctx for module string " ++ mod_str
+      es -> error $ "! found " ++ show (length es) ++
+                    " matches in ctx for module string " ++ mod_str
+
+    -- Make the clustering object
+    ci = makeClusterInfo ctx w0 skip_pkgs
 
 
 data ClusterInfo =
-  ClusterInfo { ci_skip_map  :: M.Map N (S.Set N)
-              , ci_imp_nodes :: MW -> [N] }
+  ClusterInfo { ci_skip_pids :: S.Set PackageId
+              , ci_cluster   :: Moduleish -> Maybe Node
+              , ci_imp_nodes :: Moduleish -> Moduleish -> World -> [N] }
 
 
-worldDag' :: Moduleish -> World -> ClusterInfo -> ([Node], [Edge])
-worldDag' mish w ci = (nodes, edges)
-  where
-    ClusterInfo { ci_skip_map = skip_map, ci_imp_nodes = imp_nodes } = ci
-    me = show mish
+-- IF CLUSTER ME: Then create cluster node and no edges.
+-- OTHERWISE:
+--    1. For each of my imported mods/worlds, recursively compute DAGS.
+--    2. If I create a new node, then:
+--      2.1. Add my node.
+--      2.2. Add edges for each of my imports.
+worldDagWithClusters :: Moduleish -> World -> ClusterInfo -> ([Node], [Edge])
+worldDagWithClusters mish w ci
+  | Just cluster_node <- cluster mish = ([cluster_node], [])
+  | otherwise = ( my_nodes `union` parent_nodes_merged
+                , my_edges `union` parent_edges_merged )
 
-    -- recursively compute DAG for each parent
-    (parent_nodes, parent_edges) =
-      unzip $ [ worldDag' pm pw ci | (pm, pw) <- imports w ]
+    where
+      -- Unpack cluster functions
+      ClusterInfo { ci_cluster = cluster, ci_imp_nodes = imp_nodes } = ci
 
-    -- Merge nodes and edges from parents
-    parent_nodes_merged = foldl union [] parent_nodes
-    parent_edges_merged = foldl union [] parent_edges
+      -- recursively compute DAG for each parent
+      (parent_nodes, parent_edges) =
+        unzip $ [ worldDagWithClusters pm pw ci | (pm, pw) <- imports w ]
 
-    -- merge their nodes and edges
-    (nodes, edges)
-      -- In case this is a world to skip, return only this node.
-      | M.member me skip_map = ( [clusterNode mish w], [] )
+      -- Merge nodes and edges from parents
+      parent_nodes_merged = foldl union [] parent_nodes
+      parent_edges_merged = foldl union [] parent_edges
 
-      -- Otherwise, recursively merge in DAGs of parents.
-      | otherwise = ( my_nodes `union` parent_nodes_merged
-                    , my_edges `union` parent_edges_merged )
-        where
-          -- Node produced by this world, if it's a new Island.
-          -- Edges produced by this world, if it's a new Island. Note that any
-          -- edges pointing to something in a cluster need to be redirected to
-          -- the cluser node.
-          (my_nodes, my_edges) = case w_origin w of
-            MergedWorlds _ -> ([], [])
-            NewWorld _ wi  ->
-              ( [(show (wi_mod wi), islandInstCount wi)]
-              , [ (me, n, (show imp_m))
+      -- Node produced by this world, if it's a new Island.
+      -- Edges produced by this world, if it's a new Island. Note that any
+      -- edges pointing to something in a cluster need to be redirected to
+      -- the cluser node.
+      (my_nodes, my_edges) = case w_origin w of
+        MergedWorlds _ -> ([], [])
+        NewWorld _ wi  ->
+          -- ASSERT: wi_mod wi == mish ?
+          ( [ (show (wi_mod wi), islandInstCount wi) ]
+          , [ (show mish, n, show imp_m)
                 | (imp_m, imp_w) <- imports w
-                , n <- imp_nodes (imp_m, imp_w) ] )
+                , n <- imp_nodes mish imp_m imp_w ] )
 
-clusterN :: N -> N
-clusterN n = "(" ++ n ++ ")"
 
 clusterNode :: Moduleish -> World -> Node
-clusterNode mish w = (clusterN (show mish), worldInstCount w)
+clusterNode mish w = (n, worldInstCount w)
+  where
+    n = "<" ++ mishPkgStr mish ++ ">"
 
 -- | The canonical set of nodes corresponding to this World, i.e., the smallest
 --   set of Islands whose total reachability set includes every Island in this
