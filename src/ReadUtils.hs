@@ -45,15 +45,17 @@ currentPkgModMap req_pkgs = do
   -- Installed packages
   let ipis = eltsUFM $ pkgIdMap $ pkgState dflags
 
+  let keep pid | null req_pkgs = True
+               | otherwise     = pkgIdName pid `elem` req_pkgs
+
   -- Generate association list for map
   liftIO $ putStrLn "Reading current package mod map..."
   let mkEntry ipi = do
         let pid = pkgIdFromIpi ipi
         let mods = map (mkMod ipi) (allModsFromIpi ipi)
-        let keep = pkgIdName pid `elem` req_pkgs
-        let keepstr = if keep then "> " else "  "
+        let keepstr = if not (null req_pkgs) && keep pid then "> " else "  "
         printSDoc $ text keepstr <> ppr pid <+> parens (int (length mods))
-        return (pkgIdName pid, (pid, mods, keep))
+        return (pkgIdName pid, (pid, mods, keep pid))
   assocs <- mapM mkEntry ipis
   let pkg_mod_map_with_keep = M.fromList assocs
 
