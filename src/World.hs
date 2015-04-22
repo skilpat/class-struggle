@@ -290,7 +290,11 @@ coveredPkgs :: World -> S.Set PackageId
 coveredPkgs (World wimap _) =
   S.fromList [ modulePackageId (mish_mod (wi_mod wi)) | wi <- eltsUFM wimap ]
   
-
+canonicalIslands :: World -> S.Set Island
+canonicalIslands (World _ wo) = case wo of
+  NewWorld _ wi  -> S.singleton $ wi
+  MergedWorlds anno_ws ->
+    S.unions [ canonicalIslands w' | (w', _) <- anno_ws ]
 
 -- PRINTING ------------------------------------------------------
 

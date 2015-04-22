@@ -38,7 +38,7 @@ import Moduleish
 
 type PkgModMap = M.Map String (PackageId, [Module])
 
-currentPkgModMap :: [String] -> Ghc PkgModMap
+currentPkgModMap :: [String] -> Ghc (PkgModMap, PkgModMap)
 currentPkgModMap req_pkgs = do
   dflags <- getSessionDynFlags
 
@@ -60,13 +60,19 @@ currentPkgModMap req_pkgs = do
   let pkg_mod_map_with_keep = M.fromList assocs
 
   -- Filter out any packages that aren't in the required list.
-  let f (pid, mods, keep)
+  let f_select (pid, mods, keep)
         | keep      = Just (pid, mods)
         | otherwise = Nothing
-  let pkg_mod_map = M.mapMaybe f pkg_mod_map_with_keep
+  let pkg_mod_map_selected = M.mapMaybe f_select pkg_mod_map_with_keep
+
+  -- Filter out packages that *are* in the required list.
+  let f_unselect (pid, mods, keep)
+        | keep      = Nothing
+        | otherwise = Just (pid, mods)
+  let pkg_mod_map_unselected = M.mapMaybe f_unselect pkg_mod_map_with_keep
 
   liftIO $ putStrLn "Done reading current package mod map."
-  return pkg_mod_map
+  return (pkg_mod_map_selected, pkg_mod_map_unselected)
 
   where
     pkgIdFromIpi ipi   = mkPackageId $ sourcePackageId ipi

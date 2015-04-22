@@ -3,7 +3,10 @@ module ReadWorlds where
 import Control.Monad.State hiding (liftIO)
 import Data.Monoid
 import qualified Data.Map.Strict as M
+import qualified Data.Set as S
 import qualified Data.Foldable as F
+import Data.Maybe
+  ( mapMaybe )
 
 import DynFlags
 import GHC
@@ -26,9 +29,6 @@ import World
 import WorldCtx
 
 
-
--- | A wrapper around the Ghc monad that keeps up with a Ctx as state.
-type CtxM a = StateT Ctx Ghc a
         
 
 -- | Build a Ctx mapping modules to worlds and interfaces, given an absolute
@@ -55,21 +55,40 @@ buildCtx sandbox_path req_pkgs = defaultErrorHandler defaultFatalMessager defaul
     load LoadAllTargets
 
     -- Start doing stuff.
-    pkg_mod_map <- currentPkgModMap req_pkgs
+    pkg_mod_maps <- currentPkgModMap req_pkgs
 
     -- liftIO $ putStrLn "LOADED PACKAGES:"
     -- printPkgs
     --let pkg_names = M.keys pkg_mod_map
 
-    ctx <- execStateT (processAllPkgs pkg_mod_map) mempty :: Ghc Ctx
+    ctx <- execStateT (processAllPkgs pkg_mod_maps) mempty :: Ghc Ctx
     --liftIO $ putStrLn $ showSDoc dflags $ ppr ctx
     --printSDoc $ pprCtxEntries ctx ["base:Prelude"]
 
     return ctx
 
 
-processAllPkgs :: PkgModMap -> CtxM ()
-processAllPkgs pkg_mod_map = F.sequence_ $ M.mapWithKey processPkg pkg_mod_map
+processAllPkgs :: (PkgModMap, PkgModMap) -> CtxM ()
+processAllPkgs (pkg_mod_map_selected, pkg_mod_map_unselected) = do
+  -- Process each of the selected packages.
+  lift $ printSDoc $
+    text "Processing selected packages:" <+>
+    hsep (map (ppr . fst) (M.elems pkg_mod_map_selected))
+  F.sequence_ $ M.mapWithKey processPkg pkg_mod_map_selected
+
+  -- Get all depended-upon packages.
+  depended_pids <- get >>= return . ctx_pkgs
+
+  -- Create a map for the unselected but depended-upon packages and modules
+  let depended (pid, _) = S.member pid depended_pids
+  let pkg_mod_map_depended = M.filter depended pkg_mod_map_unselected
+
+  lift $ printSDoc $
+    text "Processing unselected but depended-upon packages:" <+>
+    hsep (map (ppr . fst) (M.elems pkg_mod_map_depended))
+  F.sequence_ $ M.mapWithKey processPkg pkg_mod_map_depended
+
+  return ()
 
 
 processPkg :: String -> (PackageId, [Module]) -> CtxM ()
@@ -157,19 +176,6 @@ importedMishes this_mod iface = concatMap mishFromUsage (mi_usages iface)
     mkHomeMish name = Moduleish (mkModule (modulePackageId this_mod) name)
                                 (fromJust $ lookup name (dep_mods (mi_deps iface)))
 
---------- CTX OPS --------------
 
-updateCtxMap :: Moduleish -> ModIface -> World -> CtxM ()
-updateCtxMap mish iface w = do
-  ctx@Ctx{ctx_map = cmap} <- get
-  -- Update context's map with this Moduleish and (ModIface, World).
-  put $ ctx { ctx_map = addToUFM cmap mish (mish, iface, w) }
-
-
-updateCtxPkg :: PackageId -> World -> CtxM ()
-updateCtxPkg pid w = do
- ctx@Ctx{ctx_pkg_map = pmap} <- get
- -- Update context's pkg world map with this one.
- put $ ctx { ctx_pkg_map = addToUFM pmap pid (pid, w) }
 
 

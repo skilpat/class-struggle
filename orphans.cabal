@@ -19,6 +19,7 @@ library
   exposed-modules:     Moduleish,
                        ReadWorlds,
                        ReadUtils,
+                       Test,
                        World,
                        WorldCtx,
                        WorldDag

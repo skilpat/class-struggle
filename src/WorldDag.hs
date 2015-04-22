@@ -87,6 +87,23 @@ makeClusterInfo ctx w0 skip_pkgs = ClusterInfo skip_pids cluster imp_nodes
       Nothing -> S.toList $ worldCanonicalNodes imp_w
 
 
+worldDagExceptExtPkgs :: Ctx -> String -> ([Node], [Edge])
+worldDagExceptExtPkgs ctx mod_str = worldDagWithClusters mish0 w0 ci
+  where
+    -- Make sure that the requested module matches a single one in ctx
+    (mish0, w0, pid0) = case lookupEntriesMatching ctx mod_str of
+      [(m,_,w)] -> (m, w, modulePackageId (mish_mod m))
+      [] -> error $ "! no matches in ctx for module string " ++ mod_str
+      es -> error $ "! found " ++ show (length es) ++
+                    " matches in ctx for module string " ++ mod_str
+
+    -- All pids in ctx minus this module's
+    skip_pkgs = map packageIdString $ S.toList $ S.delete pid0 (ctx_pkgs ctx)
+
+    -- Make the clustering object
+    ci = makeClusterInfo ctx w0 skip_pkgs
+
+
 worldDagExceptPkgs :: Ctx -> String -> [String] -> ([Node], [Edge])
 worldDagExceptPkgs ctx mod_str skip_pkgs = worldDagWithClusters mish0 w0 ci
   where
@@ -154,10 +171,7 @@ clusterNode mish w = (n, worldInstCount w)
 --   set of Islands whose total reachability set includes every Island in this
 --   World.
 worldCanonicalNodes :: World -> S.Set N
-worldCanonicalNodes w = case w_origin w of
-  NewWorld _ wi  -> S.singleton $ show (wi_mod wi)
-  MergedWorlds anno_ws ->
-    S.unions [ worldCanonicalNodes w' | (w', _) <- anno_ws ]
+worldCanonicalNodes w = S.map (show . wi_mod) $ canonicalIslands w
 
 worldAllNodes :: World -> S.Set N
 worldAllNodes (World wimap _) =

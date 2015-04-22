@@ -1,8 +1,10 @@
 module WorldCtx where
 
+import Control.Monad.State hiding (liftIO)
 import Data.Maybe
   ( catMaybes )
 import Data.Monoid
+import qualified Data.Set as S
 
 
 import DynFlags
@@ -25,17 +27,23 @@ import World
 
 -- | A context that maps a Moduleish to its typechecked interface and world.
 data Ctx = Ctx { ctx_map     :: UniqFM (Moduleish, ModIface, World)
-               , ctx_pkg_map :: UniqFM (PackageId, World) }
+               , ctx_pkg_map :: UniqFM (PackageId, World)
+               , ctx_pkgs    :: S.Set PackageId }
 
 instance Monoid Ctx where
   mempty = Ctx { ctx_map     = emptyUFM
-               , ctx_pkg_map = emptyUFM }
+               , ctx_pkg_map = emptyUFM
+               , ctx_pkgs    = S.empty }
 
-  mappend Ctx { ctx_map  = cmap1, ctx_pkg_map = pmap1 }
-          Ctx { ctx_map  = cmap2, ctx_pkg_map = pmap2 } =
-    Ctx { ctx_map = plusUFM cmap1 cmap2
-        , ctx_pkg_map = plusUFM pmap1 pmap2 }
+  mappend Ctx { ctx_map  = cmap1, ctx_pkg_map = pmap1, ctx_pkgs = pkgs1 }
+          Ctx { ctx_map  = cmap2, ctx_pkg_map = pmap2, ctx_pkgs = pkgs2 } =
+    Ctx { ctx_map     = plusUFM cmap1 cmap2
+        , ctx_pkg_map = plusUFM pmap1 pmap2
+        , ctx_pkgs    = S.union pkgs1 pkgs2 }
 
+
+-- | A wrapper around the Ghc monad that keeps up with a Ctx as state.
+type CtxM a = StateT Ctx Ghc a
 
 
 lookupWorld :: Ctx -> Moduleish -> Maybe World
@@ -67,6 +75,21 @@ lookupPkgEntriesMatching Ctx {ctx_pkg_map = pmap} pkg_str =
   [(p,w) | (p,w) <- eltsUFM pmap
          , packageIdString p == pkg_str || pkgIdName p == pkg_str ]
 
+
+
+updateCtxMap :: Moduleish -> ModIface -> World -> CtxM ()
+updateCtxMap mish iface w = do
+  ctx@Ctx{ctx_map = cmap, ctx_pkgs = cpids} <- get
+  -- Update context's map with this Moduleish and (ModIface, World).
+  put $ ctx { ctx_map  = addToUFM cmap mish (mish, iface, w)
+            , ctx_pkgs = S.union cpids (coveredPkgs w) } -- and depended-upon pkgs
+
+
+updateCtxPkg :: PackageId -> World -> CtxM ()
+updateCtxPkg pid w = do
+ ctx@Ctx{ctx_pkg_map = pmap} <- get
+ -- Update context's pkg world map with this one.
+ put $ ctx { ctx_pkg_map = addToUFM pmap pid (pid, w) }
 
 
 --- PRINTING -----------------

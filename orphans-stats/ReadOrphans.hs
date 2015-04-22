@@ -69,8 +69,8 @@ stats req_pkgs = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
     --     Nothing    -> "! lookup failed"
     --   liftIO $ putStrLn ""
 
-    pkg_mod_map <- currentPkgModMap req_pkgs
-    processAllPkgs pkg_mod_map
+    (pkg_mod_map_selected, _) <- currentPkgModMap req_pkgs
+    processAllPkgs pkg_mod_map_selected
 
 
 processAllPkgs :: PkgModMap -> Ghc TotalOrphStats
