@@ -22,9 +22,10 @@ import Moduleish
 
 -- | The world of a module that extends other worlds and adds at least one
 --   instance.
-data Island = Island { wi_exts :: !Islands
-                     , wi_mod  :: !Moduleish
-                     , wi_ienv :: !IslandInstEnv }
+data Island = Island { wi_exts   :: !Islands
+                     , wi_mod    :: !Moduleish
+                     , wi_ienv   :: !IslandInstEnv
+                     , wi_icount :: !Int }
 
 instance Eq Island where
   Island {wi_mod = mod1} == Island {wi_mod = mod2} = mod1 == mod2
@@ -48,13 +49,14 @@ data Origin
 
 
 data World = World { w_wimap  :: !Islands
-                   , w_origin :: !Origin }
+                   , w_origin :: !Origin
+                   , w_icount :: !Int }
 
 -- | Two Worlds are equal if they include the same Moduleishes in their Island
 --   maps.
 instance Eq World where
-  (World wimap1 _) == (World wimap2 _) =
-    sort (keysUFM wimap1) == sort (keysUFM wimap2)
+  w1 == w2 =
+    sort (keysUFM (w_wimap w1)) == sort (keysUFM (w_wimap w2))
 
 
 -- | A mapping from Class names to a list of instances for that class.
@@ -62,7 +64,7 @@ type IslandInstEnv = UniqFM [ClsInst]
 
 -- | The initial, empty world.
 emptyWorld :: World
-emptyWorld = World emptyUFM (MergedWorlds [])
+emptyWorld = World emptyUFM (MergedWorlds []) 0
 
 -- | Merge two worlds.
 merge :: World -> World -> Maybe World
@@ -74,7 +76,9 @@ merge w1 w2 = do
   -- the Island maps and take the RHS in case a Mod is mapped by both (which
   -- is what plusUFM does).
   let wimap = plusUFM (w_wimap w1) (w_wimap w2)
-  return $ World wimap (MergedWorlds [(w1, Nothing), (w2, Nothing)])
+  return $ World wimap
+                 (MergedWorlds [(w1, Nothing), (w2, Nothing)])
+                 (calcIslandsInstCount wimap)
 
 -- | Merge together a list of worlds.
 mergeList :: [World] -> Maybe World
@@ -87,7 +91,9 @@ mergeList ws = do
   -- is what plusUFM does).
   let wimaps = map w_wimap ws
   let wimap_all = foldl plusUFM emptyUFM wimaps
-  return $ World wimap_all (MergedWorlds $ map (, Nothing) ws)
+  return $ World wimap_all
+                 (MergedWorlds $ map (, Nothing) ws)
+                 (calcIslandsInstCount wimap_all)
 
 
 -- | All pairs (xi,xj) of a list xs such that i < j.
@@ -105,7 +111,7 @@ mergeableList :: [World] -> Bool
 mergeableList ws = and [ mergeable w1 w2 | (w1, w2) <- pairs ws ]
 
 mergeable :: World -> World -> Bool
-mergeable (World wimap1 _) (World wimap2 _) =
+mergeable (World wimap1 _ _) (World wimap2 _ _) =
   -- For every Module/Island in w1 and not in w2,
   -- and for every Module/Island in w2 and not in w1,
   -- check that the two Islands are mergeable with each other.
@@ -201,7 +207,9 @@ newWorld' anno_worlds mish local_insts = do
   -- If the list of locally defined instances is empty, then just return
   -- this merged world.
   if null local_insts
-    then return $ World (w_wimap pw) (MergedWorlds anno_worlds)
+    then return $ World (w_wimap pw)
+                        (MergedWorlds anno_worlds)
+                        (w_icount pw)
     else do
 
       -- Organize the list of local instances into an IslandInstEnv.
@@ -211,21 +219,24 @@ newWorld' anno_worlds mish local_insts = do
       let local_ienv = foldl f emptyUFM local_insts
 
       -- Create an Island.
-      let island = Island { wi_exts = w_wimap pw
-                          , wi_mod  = mish
-                          , wi_ienv = local_ienv }
+      let island = Island { wi_exts   = w_wimap pw
+                          , wi_mod    = mish
+                          , wi_ienv   = local_ienv
+                          , wi_icount = (length local_insts) }
 
       -- Parent world shouldn't have an Island for Moduleish mish. If it does,
       -- since we assume all Islands from the same Moduleish are the same, we
       -- don't need to check anything. Just extend the parent world's island
       -- map with this island.
       let wimap_new = addToUFM (w_wimap pw) mish island
-      return $ World wimap_new (NewWorld anno_worlds island)
+      return $ World wimap_new
+                     (NewWorld anno_worlds island)
+                     (calcIslandsInstCount wimap_new)
 
 
 
 lookupIsland :: World -> Moduleish -> Maybe Island
-lookupIsland (World wimap _) mish = lookupUFM wimap mish
+lookupIsland w mish = lookupUFM (w_wimap w) mish
 
 
 -- | If the given island comes from a boot file, get the island corresponding
@@ -242,7 +253,6 @@ islandImplementation wimap wi
 islandIsOverridden :: Islands -> Island -> Bool
 islandIsOverridden wimap wi = isJust $ islandImplementation wimap wi
 
-
 islandInsts :: Island -> [ClsInst]
 islandInsts wi = concat $ eltsUFM (wi_ienv wi)
 
@@ -256,16 +266,19 @@ islandsInsts wimap =
 
 
 worldInsts :: World -> [ClsInst]
-worldInsts (World wimap _) = islandsInsts wimap
+worldInsts w = islandsInsts $ w_wimap w
 
 islandInstCount :: Island -> Int
-islandInstCount wi =
+islandInstCount = wi_icount
+
+calcIslandInstCount :: Island -> Int
+calcIslandInstCount wi =
   sum [ length insts
       -- for each unique class's list of instances
       | insts <- eltsUFM (wi_ienv wi) ]
 
-islandsInstCount :: Islands -> Int
-islandsInstCount wimap =
+calcIslandsInstCount :: Islands -> Int
+calcIslandsInstCount wimap =
   sum [ islandInstCount wi
       | wi <- eltsUFM wimap
       -- Ignore this island if its module is the boot
@@ -273,7 +286,10 @@ islandsInstCount wimap =
       , not (islandIsOverridden wimap wi) ]
 
 worldInstCount :: World -> Int
-worldInstCount (World wimap _) = islandsInstCount wimap
+worldInstCount = w_icount
+
+calcWorldInstCount :: World -> Int
+calcWorldInstCount w = calcIslandsInstCount $ w_wimap w
 
 extendedWorlds :: World -> [World]
 extendedWorlds w = case w_origin w of
@@ -287,11 +303,12 @@ imports w = case w_origin w of
 
 
 coveredPkgs :: World -> S.Set PackageId
-coveredPkgs (World wimap _) =
-  S.fromList [ modulePackageId (mish_mod (wi_mod wi)) | wi <- eltsUFM wimap ]
+coveredPkgs w =
+  S.fromList [ modulePackageId (mish_mod (wi_mod wi))
+               | wi <- eltsUFM (w_wimap w) ]
   
 canonicalIslands :: World -> S.Set Island
-canonicalIslands (World _ wo) = case wo of
+canonicalIslands w = case w_origin w of
   NewWorld _ wi  -> S.singleton $ wi
   MergedWorlds anno_ws ->
     S.unions [ canonicalIslands w' | (w', _) <- anno_ws ]
@@ -310,7 +327,7 @@ instance Outputable Island where
 
 pprIslands :: Islands -> SDoc
 pprIslands wimap = sep [ braces listSDoc
-                       , parens (int (islandsInstCount wimap)) ]
+                       , parens (int (calcIslandsInstCount wimap)) ]
   where
     islandSDocs = map ppr $ sort $ eltsUFM wimap
     listSDoc = sep $ punctuate (text ", ") $ islandSDocs

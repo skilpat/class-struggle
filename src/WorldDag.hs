@@ -52,7 +52,8 @@ type EL = String -- Moduleish that was imported
 type Node = (N, NL)
 type Edge = (N, N, EL)
 
-type DAG = ([Node], [Edge])
+-- type DAG = ([Node], [Edge])
+type DAG = (S.Set Node, S.Set Edge)
 
 
 
@@ -83,17 +84,17 @@ makeClusterInfo ctx w0 skip_pkgs = ClusterInfo skip_pids cluster imp_nodes
       where
         pid = modulePackageId (mish_mod mish)
 
-    imp_nodes :: Moduleish -> Moduleish -> World -> [N]
+    imp_nodes :: Moduleish -> Moduleish -> World -> S.Set N
     imp_nodes mish imp_m imp_w = case cluster imp_m of
       -- If the imported mod should be clustered and its the same package,
       -- then do nothing.
-      Just _     | mishPkgStr mish == mishPkgStr imp_m -> []
+      Just _     | mishPkgStr mish == mishPkgStr imp_m -> S.empty
       -- If the imported mod should be clustered and its a different package,
       -- need an edge to just the cluster's node. 
-      Just (n,_) | otherwise -> [n]
+      Just (n,_) | otherwise -> S.singleton n
       -- If the imported mod should *not* be clustered, then need an edge to
       -- each of the nodes in its world's canonical set.
-      Nothing -> S.toList $ worldCanonicalNodes imp_w
+      Nothing -> worldCanonicalNodes imp_w
 
 
 worldDagExceptExtPkgs :: Ctx -> String -> DAG
@@ -130,7 +131,7 @@ worldDagExceptPkgs ctx mod_str skip_pkgs = worldDagWithClusters mish0 w0 ci
 data ClusterInfo =
   ClusterInfo { ci_skip_pids :: S.Set PackageId
               , ci_cluster   :: Moduleish -> Maybe Node
-              , ci_imp_nodes :: Moduleish -> Moduleish -> World -> [N] }
+              , ci_imp_nodes :: Moduleish -> Moduleish -> World -> S.Set N }
 
 
 -- IF CLUSTER ME: Then create cluster node and no edges.
@@ -141,9 +142,9 @@ data ClusterInfo =
 --      2.2. Add edges for each of my imports.
 worldDagWithClusters :: Moduleish -> World -> ClusterInfo -> DAG
 worldDagWithClusters mish w ci
-  | Just cluster_node <- cluster mish = ([cluster_node], [])
-  | otherwise = ( my_nodes `union` parent_nodes_merged
-                , my_edges `union` parent_edges_merged )
+  | Just cluster_node <- cluster mish = (S.singleton cluster_node, S.empty)
+  | otherwise = ( S.union my_nodes parent_nodes_merged
+                , S.union my_edges parent_edges_merged )
 
     where
       -- Unpack cluster functions
@@ -154,21 +155,26 @@ worldDagWithClusters mish w ci
         unzip $ [ worldDagWithClusters pm pw ci | (pm, pw) <- imports w ]
 
       -- Merge nodes and edges from parents
-      parent_nodes_merged = foldl union [] parent_nodes
-      parent_edges_merged = foldl union [] parent_edges
+      parent_nodes_merged = S.unions parent_nodes
+      parent_edges_merged = S.unions parent_edges
 
       -- Node produced by this world, if it's a new Island.
       -- Edges produced by this world, if it's a new Island. Note that any
       -- edges pointing to something in a cluster need to be redirected to
       -- the cluser node.
       (my_nodes, my_edges) = case w_origin w of
-        MergedWorlds _ -> ([], [])
+        MergedWorlds _ -> (S.empty, S.empty)
         NewWorld _ wi  ->
           -- ASSERT: wi_mod wi == mish ?
-          ( [ (show (wi_mod wi), islandInstCount wi) ]
-          , [ (show mish, n, show imp_m)
-                | (imp_m, imp_w) <- imports w
-                , n <- imp_nodes mish imp_m imp_w ] )
+          ( S.singleton (show (wi_mod wi), islandInstCount wi)
+          -- , S.fromList [ (show mish, n, show imp_m)
+          --                  | (imp_m, imp_w) <- imports w
+          --                  , n <- S.toList $ imp_nodes mish imp_m imp_w ] )
+          , S.unions [ S.map (mkE imp_m) (imp_nodes mish imp_m imp_w)
+                         | (imp_m, imp_w) <- imports w ]
+          )
+          where
+            mkE imp_m n = (show mish, n, show imp_m)
 
 
 clusterNode :: Moduleish -> World -> Node
@@ -183,8 +189,8 @@ worldCanonicalNodes :: World -> S.Set N
 worldCanonicalNodes w = S.map (show . wi_mod) $ canonicalIslands w
 
 worldAllNodes :: World -> S.Set N
-worldAllNodes (World wimap _) =
-  S.fromList [ show (wi_mod wi) | wi <- eltsUFM wimap ]
+worldAllNodes w =
+  S.fromList [ show (wi_mod wi) | wi <- eltsUFM (w_wimap w) ]
 
 --------------- OUTPUT -------------------
 
@@ -201,8 +207,8 @@ graphToDotPng fpre (nodes,edges) =
     --                      , fmtNode          = const []
     --                      , fmtEdge          = const []
     --                      }
-    nodes' = reverse nodes
-    edges' = edges
+    nodes' = S.toList nodes
+    edges' = S.toList edges
 
     params :: GraphvizParams N NL EL () NL
     params = nonClusteredParams
