@@ -1,11 +1,18 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module WorldDag where
 
--- import Data.GraphViz
---   ( graphElemtsToDot )
--- import Data.GraphViz.Attributes.Complete
---   ( Attribute(RankDir, Splines, FontName)
---   , RankDir(FromLeft)
---   , EdgeType(SplineEdges) )
+import Data.GraphViz
+  ( graphElemsToDot
+  , nonClusteredParams
+  , GraphvizParams(..)
+  , GlobalAttributes(GraphAttrs, EdgeAttrs)
+  , toLabel )
+import Data.GraphViz.Attributes.Complete
+  ( Attribute(RankDir, FontSize)
+  , RankDir(FromBottom))
+import Data.GraphViz.Commands
+  ( runGraphviz, GraphvizOutput(..), addExtension,  )
+import Data.GraphViz.Exception
 import Data.List
   ( union )
 import Data.Maybe
@@ -45,14 +52,16 @@ type EL = String -- Moduleish that was imported
 type Node = (N, NL)
 type Edge = (N, N, EL)
 
-type MW = (Moduleish, World)
+type DAG = ([Node], [Edge])
+
+
 
 -- TODO: Get rid of the Moduleish inside WorldOrigin now that we're
 --       passing a whole Ctx around?
 
 
 -- | Construct the DAG of Islands described by the given World.
-worldDag :: Ctx -> String -> ([Node], [Edge])
+worldDag :: Ctx -> String -> DAG
 worldDag ctx mod_str = worldDagExceptPkgs ctx mod_str []
 
 makeClusterInfo :: Ctx -> World -> [String] -> ClusterInfo
@@ -87,7 +96,7 @@ makeClusterInfo ctx w0 skip_pkgs = ClusterInfo skip_pids cluster imp_nodes
       Nothing -> S.toList $ worldCanonicalNodes imp_w
 
 
-worldDagExceptExtPkgs :: Ctx -> String -> ([Node], [Edge])
+worldDagExceptExtPkgs :: Ctx -> String -> DAG
 worldDagExceptExtPkgs ctx mod_str = worldDagWithClusters mish0 w0 ci
   where
     -- Make sure that the requested module matches a single one in ctx
@@ -104,7 +113,7 @@ worldDagExceptExtPkgs ctx mod_str = worldDagWithClusters mish0 w0 ci
     ci = makeClusterInfo ctx w0 skip_pkgs
 
 
-worldDagExceptPkgs :: Ctx -> String -> [String] -> ([Node], [Edge])
+worldDagExceptPkgs :: Ctx -> String -> [String] -> DAG
 worldDagExceptPkgs ctx mod_str skip_pkgs = worldDagWithClusters mish0 w0 ci
   where
     -- Make sure that the requested module matches a single one in ctx
@@ -130,7 +139,7 @@ data ClusterInfo =
 --    2. If I create a new node, then:
 --      2.1. Add my node.
 --      2.2. Add edges for each of my imports.
-worldDagWithClusters :: Moduleish -> World -> ClusterInfo -> ([Node], [Edge])
+worldDagWithClusters :: Moduleish -> World -> ClusterInfo -> DAG
 worldDagWithClusters mish w ci
   | Just cluster_node <- cluster mish = ([cluster_node], [])
   | otherwise = ( my_nodes `union` parent_nodes_merged
@@ -177,4 +186,44 @@ worldAllNodes :: World -> S.Set N
 worldAllNodes (World wimap _) =
   S.fromList [ show (wi_mod wi) | wi <- eltsUFM wimap ]
 
+--------------- OUTPUT -------------------
 
+ 
+graphToDotPng :: FilePath -> DAG -> IO Bool
+graphToDotPng fpre (nodes,edges) =
+  handle (\(e::GraphvizException) -> return False) $
+    addExtension (runGraphviz (graphElemsToDot params nodes' edges')) Png fpre >> return True
+  where
+    -- params = blankParams { globalAttributes = []
+    --                      , clusterBy        = clustBy
+    --                      , clusterID        = Num . Int
+    --                      , fmtCluster       = clFmt
+    --                      , fmtNode          = const []
+    --                      , fmtEdge          = const []
+    --                      }
+    nodes' = reverse nodes
+    edges' = edges
+
+    params :: GraphvizParams N NL EL () NL
+    params = nonClusteredParams
+      { isDirected = True
+      , globalAttributes = [ GraphAttrs [RankDir FromBottom]
+                           , EdgeAttrs [FontSize 8.0] ]
+      , fmtEdge = \(n1, n2, el) -> [toLabel (mkEdgeLabel n1 n2 el)]
+      }
+
+    mkEdgeLabel :: N -> N -> EL -> String
+    mkEdgeLabel n1 n2 el
+      -- | Just (ps1,_) <- split_mish_str n1
+      -- , Just (ps2,_) <- split_mish_str n2
+      -- , Just (_,ms)  <- split_mish_str el
+      -- , ps1 == ps2 
+      --     = ms
+      -- | otherwise
+      --     = el
+      | Just (ps,ms) <- split_mish_str el = ms
+      | otherwise                         = el
+      where
+        split_mish_str s = case span (/= ':') s of
+          (ps, ':':ms) -> Just (ps, ms)
+          _            -> Nothing

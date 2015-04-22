@@ -19,3 +19,15 @@ mishP, mishL :: Moduleish
 mishP = mkModuleishFull "base:Prelude"
 mishL = mkModuleishFull "test-pkg-0.1.0.0:Test1.Left"
 
+generateGraphL :: IO Bool
+generateGraphL = do
+  ctx <- ctx1_
+  graphToDotPng "dag" $  worldDagExceptExtPkgs  ctx "Test1.Left"
+
+generateFullGraphP :: IO Bool
+generateFullGraphP = do
+  ctx <- buildCtx sandbox_path ["base"]
+  graphToDotPng "prelude-dag" $  worldDag ctx "Prelude"
+
+
+-- main = generateFullGraphP
