@@ -38,6 +38,11 @@ import Moduleish
 
 type PkgModMap = M.Map String (PackageId, [Module])
 
+-- | Returns a mapping of all the available packages to the modules that they
+--   define (whether exposed or not); the result is partitioned into two
+--   such mappings, the first contains only those packages whose names are
+--   passed in as the selected packages, and the second contains the rest of
+--   the available packages.
 currentPkgModMap :: [String] -> Ghc (PkgModMap, PkgModMap)
 currentPkgModMap req_pkgs = do
   dflags <- getSessionDynFlags

@@ -1,8 +1,5 @@
 module Test where
 
-import System.IO.Unsafe
-
-
 import Moduleish
 import ReadUtils
 import ReadWorlds
@@ -19,14 +16,12 @@ mishP, mishL :: Moduleish
 mishP = mkModuleishFull "base:Prelude"
 mishL = mkModuleishFull "test-pkg-0.1.0.0:Test1.Left"
 
-generateGraphL :: IO Bool
-generateGraphL = do
-  ctx <- ctx1_
-  graphToDotPng "dag" $  worldDagExceptExtPkgs  ctx "Test1.Left"
+generateGraphL :: Ctx -> IO Bool
+generateGraphL ctx = do
+  graphToDotPng "dag" $ worldDagExceptExtPkgs ctx "Test1.Left"
 
-generateFullGraphP :: IO Bool
-generateFullGraphP = do
-  ctx <- buildCtx sandbox_path ["base"]
+generateFullGraphP :: Ctx -> IO Bool
+generateFullGraphP ctx = do
   graphToDotPng "prelude-dag" $  worldDag ctx "Prelude"
 
 

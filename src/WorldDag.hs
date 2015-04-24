@@ -1,6 +1,10 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module WorldDag where
 
+import Control.Monad
+  ( mapAndUnzipM )
+import Control.Monad.State.Strict
+  ( State, evalState, get, modify )
 import Data.GraphViz
   ( graphElemsToDot
   , nonClusteredParams
@@ -55,7 +59,7 @@ type Edge = (N, N, EL)
 -- type DAG = ([Node], [Edge])
 type DAG = (S.Set Node, S.Set Edge)
 
-
+type DagCache = M.Map Moduleish DAG
 
 -- TODO: Get rid of the Moduleish inside WorldOrigin now that we're
 --       passing a whole Ctx around?
@@ -64,6 +68,45 @@ type DAG = (S.Set Node, S.Set Edge)
 -- | Construct the DAG of Islands described by the given World.
 worldDag :: Ctx -> String -> DAG
 worldDag ctx mod_str = worldDagExceptPkgs ctx mod_str []
+
+
+worldDagExceptExtPkgs :: Ctx -> String -> DAG
+worldDagExceptExtPkgs ctx mod_str =
+  evalState (worldDagInner ci (mish0, w0)) M.empty
+  where
+    -- Make sure that the requested module matches a single one in ctx
+    (mish0, w0, pid0) = case lookupEntriesMatching ctx mod_str of
+      [(m,_,w)] -> (m, w, modulePackageId (mish_mod m))
+      [] -> error $ "! no matches in ctx for module string " ++ mod_str
+      es -> error $ "! found " ++ show (length es) ++
+                    " matches in ctx for module string " ++ mod_str
+    -- All pids in ctx minus this module's
+    skip_pkgs = map packageIdString $ S.toList $ S.delete pid0 (ctx_pkgs ctx)
+
+    -- Make the clustering object
+    ci = makeClusterInfo ctx w0 skip_pkgs
+
+
+worldDagExceptPkgs :: Ctx -> String -> [String] -> DAG
+worldDagExceptPkgs ctx mod_str skip_pkgs =
+  evalState (worldDagInner ci (mish0, w0)) M.empty
+  where
+    -- Make sure that the requested module matches a single one in ctx
+    (mish0, w0) = case lookupEntriesMatching ctx mod_str of
+      [(m,_,w)] -> (m, w)
+      [] -> error $ "! no matches in ctx for module string " ++ mod_str
+      es -> error $ "! found " ++ show (length es) ++
+                    " matches in ctx for module string " ++ mod_str
+
+    -- Make the clustering object
+    ci = makeClusterInfo ctx w0 skip_pkgs
+
+
+data ClusterInfo =
+  ClusterInfo { ci_skip_pids :: S.Set PackageId
+              , ci_cluster   :: Moduleish -> Maybe Node
+              , ci_imp_nodes :: Moduleish -> Moduleish -> World -> S.Set N }
+
 
 makeClusterInfo :: Ctx -> World -> [String] -> ClusterInfo
 makeClusterInfo ctx w0 skip_pkgs = ClusterInfo skip_pids cluster imp_nodes
@@ -97,84 +140,61 @@ makeClusterInfo ctx w0 skip_pkgs = ClusterInfo skip_pids cluster imp_nodes
       Nothing -> worldCanonicalNodes imp_w
 
 
-worldDagExceptExtPkgs :: Ctx -> String -> DAG
-worldDagExceptExtPkgs ctx mod_str = worldDagWithClusters mish0 w0 ci
-  where
-    -- Make sure that the requested module matches a single one in ctx
-    (mish0, w0, pid0) = case lookupEntriesMatching ctx mod_str of
-      [(m,_,w)] -> (m, w, modulePackageId (mish_mod m))
-      [] -> error $ "! no matches in ctx for module string " ++ mod_str
-      es -> error $ "! found " ++ show (length es) ++
-                    " matches in ctx for module string " ++ mod_str
-
-    -- All pids in ctx minus this module's
-    skip_pkgs = map packageIdString $ S.toList $ S.delete pid0 (ctx_pkgs ctx)
-
-    -- Make the clustering object
-    ci = makeClusterInfo ctx w0 skip_pkgs
-
-
-worldDagExceptPkgs :: Ctx -> String -> [String] -> DAG
-worldDagExceptPkgs ctx mod_str skip_pkgs = worldDagWithClusters mish0 w0 ci
-  where
-    -- Make sure that the requested module matches a single one in ctx
-    (mish0, w0) = case lookupEntriesMatching ctx mod_str of
-      [(m,_,w)] -> (m, w)
-      [] -> error $ "! no matches in ctx for module string " ++ mod_str
-      es -> error $ "! found " ++ show (length es) ++
-                    " matches in ctx for module string " ++ mod_str
-
-    -- Make the clustering object
-    ci = makeClusterInfo ctx w0 skip_pkgs
-
-
-data ClusterInfo =
-  ClusterInfo { ci_skip_pids :: S.Set PackageId
-              , ci_cluster   :: Moduleish -> Maybe Node
-              , ci_imp_nodes :: Moduleish -> Moduleish -> World -> S.Set N }
-
-
 -- IF CLUSTER ME: Then create cluster node and no edges.
 -- OTHERWISE:
 --    1. For each of my imported mods/worlds, recursively compute DAGS.
 --    2. If I create a new node, then:
 --      2.1. Add my node.
 --      2.2. Add edges for each of my imports.
-worldDagWithClusters :: Moduleish -> World -> ClusterInfo -> DAG
-worldDagWithClusters mish w ci
-  | Just cluster_node <- cluster mish = (S.singleton cluster_node, S.empty)
-  | otherwise = ( S.union my_nodes parent_nodes_merged
-                , S.union my_edges parent_edges_merged )
+worldDagInner :: ClusterInfo -> (Moduleish, World) -> State DagCache DAG
+worldDagInner ci (mish, w) = do
+  -- Check the cache for a DAG for this module.
+  cache <- get
+  case M.lookup mish cache of
+    Just dag -> return dag
+    Nothing  -> do
+      -- If it doesn't exist, compute it and add it to cache.
+      dag <- worldDagInner' (mish, w)
+      modify $ \cache -> M.insert mish dag cache
+      return dag
 
-    where
-      -- Unpack cluster functions
-      ClusterInfo { ci_cluster = cluster, ci_imp_nodes = imp_nodes } = ci
+  where
+    -- Unpack cluster functions
+    ClusterInfo { ci_cluster = cluster, ci_imp_nodes = imp_nodes } = ci
 
-      -- recursively compute DAG for each parent
-      (parent_nodes, parent_edges) =
-        unzip $ [ worldDagWithClusters pm pw ci | (pm, pw) <- imports w ]
+    -- Main code for computing DAG
+    worldDagInner' :: (Moduleish, World) -> State DagCache DAG
+    worldDagInner' (mish, w)
+      | Just cluster_node <- cluster mish =
+          return (S.singleton cluster_node, S.empty)
+      | otherwise = do
+          -- recursively compute DAG for each parent
+          (parent_nodes, parent_edges) <- mapAndUnzipM (worldDagInner ci) (imports w)
 
-      -- Merge nodes and edges from parents
-      parent_nodes_merged = S.unions parent_nodes
-      parent_edges_merged = S.unions parent_edges
+          -- Merge nodes and edges from parents
+          let parent_nodes_merged = S.unions parent_nodes
+          let parent_edges_merged = S.unions parent_edges
 
-      -- Node produced by this world, if it's a new Island.
-      -- Edges produced by this world, if it's a new Island. Note that any
-      -- edges pointing to something in a cluster need to be redirected to
-      -- the cluser node.
-      (my_nodes, my_edges) = case w_origin w of
-        MergedWorlds _ -> (S.empty, S.empty)
-        NewWorld _ wi  ->
-          -- ASSERT: wi_mod wi == mish ?
-          ( S.singleton (show (wi_mod wi), islandInstCount wi)
-          -- , S.fromList [ (show mish, n, show imp_m)
-          --                  | (imp_m, imp_w) <- imports w
-          --                  , n <- S.toList $ imp_nodes mish imp_m imp_w ] )
-          , S.unions [ S.map (mkE imp_m) (imp_nodes mish imp_m imp_w)
-                         | (imp_m, imp_w) <- imports w ]
-          )
-          where
-            mkE imp_m n = (show mish, n, show imp_m)
+          -- Node produced by this world, if it's a new Island.
+          -- Edges produced by this world, if it's a new Island. Note that any
+          -- edges pointing to something in a cluster need to be redirected to
+          -- the cluser node.
+          let (my_nodes, my_edges) = case w_origin w of
+                MergedWorlds _ -> (S.empty, S.empty)
+                NewWorld _ wi  ->
+                  -- ASSERT: wi_mod wi == mish ?
+                  ( S.singleton (show (wi_mod wi), islandInstCount wi)
+                  -- , S.fromList [ (show mish, n, show imp_m)
+                  --                  | (imp_m, imp_w) <- imports w
+                  --                  , n <- S.toList $ imp_nodes mish imp_m imp_w ] )
+                  , S.unions [ S.map (mkE imp_m) (imp_nodes mish imp_m imp_w)
+                                 | (imp_m, imp_w) <- imports w ]
+                  )
+                  where
+                    mkE imp_m n = (show mish, n, show imp_m)
+
+          return ( S.union my_nodes parent_nodes_merged
+                 , S.union my_edges parent_edges_merged )
 
 
 clusterNode :: Moduleish -> World -> Node
@@ -198,7 +218,7 @@ worldAllNodes w =
 graphToDotPng :: FilePath -> DAG -> IO Bool
 graphToDotPng fpre (nodes,edges) =
   handle (\(e::GraphvizException) -> return False) $
-    addExtension (runGraphviz (graphElemsToDot params nodes' edges')) Png fpre >> return True
+    addExtension (runGraphviz (graphElemsToDot dagParams nodes' edges')) Png fpre >> return True
   where
     -- params = blankParams { globalAttributes = []
     --                      , clusterBy        = clustBy
@@ -210,14 +230,14 @@ graphToDotPng fpre (nodes,edges) =
     nodes' = S.toList nodes
     edges' = S.toList edges
 
-    params :: GraphvizParams N NL EL () NL
-    params = nonClusteredParams
+dagParams :: GraphvizParams N NL EL () NL
+dagParams = nonClusteredParams
       { isDirected = True
       , globalAttributes = [ GraphAttrs [RankDir FromBottom]
                            , EdgeAttrs [FontSize 8.0] ]
       , fmtEdge = \(n1, n2, el) -> [toLabel (mkEdgeLabel n1 n2 el)]
       }
-
+  where
     mkEdgeLabel :: N -> N -> EL -> String
     mkEdgeLabel n1 n2 el
       -- | Just (ps1,_) <- split_mish_str n1
