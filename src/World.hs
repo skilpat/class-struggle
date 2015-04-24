@@ -22,7 +22,7 @@ import Moduleish
 
 -- | The world of a module that extends other worlds and adds at least one
 --   instance.
-data Island = Island { wi_exts   :: !Islands
+data Island = Island { wi_exts   :: !(S.Set Island)
                      , wi_mod    :: !Moduleish
                      , wi_ienv   :: !IslandInstEnv
                      , wi_icount :: !Int }
@@ -219,7 +219,7 @@ newWorld' anno_worlds mish local_insts = do
       let local_ienv = foldl f emptyUFM local_insts
 
       -- Create an Island.
-      let island = Island { wi_exts   = w_wimap pw
+      let island = Island { wi_exts   = canonicalIslands pw
                           , wi_mod    = mish
                           , wi_ienv   = local_ienv
                           , wi_icount = (length local_insts) }
