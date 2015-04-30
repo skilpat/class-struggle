@@ -102,11 +102,12 @@ updateCtxPkg pid w c = do
 instance Outputable Ctx where
   --ppr ctx = text "ctx saw packages:" <+> ppr (uniqSetToList (ctx_pkgs ctx))
   --          $+$ pprCtxEntries ctx []
-  ppr ctx = pprCtxEntries ctx []
+  ppr ctx = pprCtxEntries ctx [] False
 
 
-pprCtxEntries :: Ctx -> [String] -> SDoc
-pprCtxEntries ctx mods_to_print = sep $ catMaybes maybeEntryDocs ++ pkgEntryDocs
+pprCtxEntries :: Ctx -> [String] -> Bool -> SDoc
+pprCtxEntries ctx mods_to_print print_islands =
+  sep $ catMaybes maybeEntryDocs ++ pkgEntryDocs
   where
     maybeEntryDocs = [ pprEntry mish w | (mish, _, w, _) <- eltsUFM (ctx_map ctx) ]
     
@@ -119,13 +120,22 @@ pprCtxEntries ctx mods_to_print = sep $ catMaybes maybeEntryDocs ++ pkgEntryDocs
       | mishModStr mish `elem` mods_to_print = True
       | otherwise                            = False
 
-    pkgEntryDocs = [ ppr pid <+> text "=>" <+> pprIslands (w_wimap w)
-                   | (pid, w, _) <- eltsUFM (ctx_pkg_map ctx) ]
+    mbPprIslands wimap
+      | print_islands = pprIslands wimap
+      | otherwise     = Outputable.empty
+
+    pkgEntryDocs = [ ppr pid <+> text "=>" <+> mbPprIslands (w_wimap w) <+> pprCons c
+                   | (pid, w, c) <- eltsUFM (ctx_pkg_map ctx) ]
+
+    pprCons c
+      | S.null c  = text "consistent"
+      | otherwise = text "inconsistent!" <+> braces (pprWithCommas ppr (S.toList c))
 
 
 -- | Given a list of module names and a Ctx, print out the World of any modules
 --   whose names occur in the list.
-printCtx :: [String] -> Ctx -> IO ()
-printCtx mods ctx = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
-  runGhc (Just libdir) $ printSDoc $ pprCtxEntries ctx mods
+printCtx :: [String] -> Bool -> Ctx -> IO ()
+printCtx mods print_islands ctx =
+  defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
+    runGhc (Just libdir) $ printSDoc $ pprCtxEntries ctx mods print_islands
 
