@@ -50,7 +50,8 @@ data Origin
 
 data World = World { w_wimap  :: !Islands
                    , w_origin :: !Origin
-                   , w_icount :: !Int }
+                   , w_icount :: !Int
+                   , w_okay   :: !Bool }
 
 -- | Two Worlds are equal if they include the same Moduleishes in their Island
 --   maps.
@@ -64,13 +65,13 @@ type IslandInstEnv = UniqFM [ClsInst]
 
 -- | The initial, empty world.
 emptyWorld :: World
-emptyWorld = World emptyUFM (MergedWorlds []) 0
+emptyWorld = World emptyUFM (MergedWorlds []) 0 True
 
 -- | Merge two worlds.
 merge :: World -> World -> Maybe World
 merge w1 w2 = do
   -- Make sure they're mergeable.
-  guard $ mergeable w1 w2
+  let okay = mergeable w1 w2 && w_okay w1 && w_okay w2
   -- If a Moduleish appears in two worlds, then we assume that it points to the
   -- exact same Island in both worlds. So to merge two worlds we simply add
   -- the Island maps and take the RHS in case a Mod is mapped by both (which
@@ -79,12 +80,13 @@ merge w1 w2 = do
   return $ World wimap
                  (MergedWorlds [(w1, Nothing), (w2, Nothing)])
                  (calcIslandsInstCount wimap)
+                 okay
 
 -- | Merge together a list of worlds.
 mergeList :: [World] -> Maybe World
 mergeList ws = do
   -- Make sure they're mergeable.
-  guard $ mergeableList ws
+  let okay = mergeableList ws && and (map w_okay ws)
   -- If a Module appears in two worlds, then we assume that it points to the
   -- exact same Island in both worlds. So to merge two worlds we simply add
   -- the Island maps and take the RHS in case a Mod is mapped by both (which
@@ -94,6 +96,7 @@ mergeList ws = do
   return $ World wimap_all
                  (MergedWorlds $ map (, Nothing) ws)
                  (calcIslandsInstCount wimap_all)
+                 okay
 
 
 -- | All pairs (xi,xj) of a list xs such that i < j.
@@ -111,7 +114,7 @@ mergeableList :: [World] -> Bool
 mergeableList ws = and [ mergeable w1 w2 | (w1, w2) <- pairs ws ]
 
 mergeable :: World -> World -> Bool
-mergeable (World wimap1 _ _) (World wimap2 _ _) =
+mergeable World{w_wimap = wimap1} World{w_wimap = wimap2} =
   -- For every Module/Island in w1 and not in w2,
   -- and for every Module/Island in w2 and not in w1,
   -- check that the two Islands are mergeable with each other.
@@ -210,6 +213,7 @@ newWorld' anno_worlds mish local_insts = do
     then return $ World (w_wimap pw)
                         (MergedWorlds anno_worlds)
                         (w_icount pw)
+                        (w_okay pw)
     else do
 
       -- Organize the list of local instances into an IslandInstEnv.
@@ -232,6 +236,7 @@ newWorld' anno_worlds mish local_insts = do
       return $ World wimap_new
                      (NewWorld anno_worlds island)
                      (calcIslandsInstCount wimap_new)
+                     (w_okay pw)
 
 
 
