@@ -18,8 +18,12 @@ cabal-version:       >=1.10
 library
   exposed-modules:     Test1.Top,
                        Test1.Right,
-                       Test1.Left
-                       -- Test1.Bottom
+                       Test1.Left,
+                       -- Test1.Bottom,
+                       Test2.Top,
+                       Test2.Right,
+                       Test2.Left,
+                       Test2.Bottom
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8,
