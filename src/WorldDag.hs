@@ -76,7 +76,7 @@ worldDagExceptExtPkgs ctx mod_str =
   where
     -- Make sure that the requested module matches a single one in ctx
     (mish0, w0, pid0) = case lookupEntriesMatching ctx mod_str of
-      [(m,_,w)] -> (m, w, modulePackageId (mish_mod m))
+      [(m,_,w,_)] -> (m, w, modulePackageId (mish_mod m))
       [] -> error $ "! no matches in ctx for module string " ++ mod_str
       es -> error $ "! found " ++ show (length es) ++
                     " matches in ctx for module string " ++ mod_str
@@ -93,7 +93,7 @@ worldDagExceptPkgs ctx mod_str skip_pkgs =
   where
     -- Make sure that the requested module matches a single one in ctx
     (mish0, w0) = case lookupEntriesMatching ctx mod_str of
-      [(m,_,w)] -> (m, w)
+      [(m,_,w,_)] -> (m, w)
       [] -> error $ "! no matches in ctx for module string " ++ mod_str
       es -> error $ "! found " ++ show (length es) ++
                     " matches in ctx for module string " ++ mod_str

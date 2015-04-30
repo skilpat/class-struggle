@@ -51,7 +51,7 @@ data Origin
 data World = World { w_wimap  :: !Islands
                    , w_origin :: !Origin
                    , w_icount :: !Int
-                   , w_okay   :: !Bool }
+                   , w_consis :: !Bool }
 
 -- | Two Worlds are equal if they include the same Moduleishes in their Island
 --   maps.
@@ -63,40 +63,45 @@ instance Eq World where
 -- | A mapping from Class names to a list of instances for that class.
 type IslandInstEnv = UniqFM [ClsInst]
 
+
+
+
+
 -- | The initial, empty world.
 emptyWorld :: World
 emptyWorld = World emptyUFM (MergedWorlds []) 0 True
 
 -- | Merge two worlds.
-merge :: World -> World -> Maybe World
-merge w1 w2 = do
-  -- Make sure they're mergeable.
-  let okay = mergeable w1 w2 && w_okay w1 && w_okay w2
-  -- If a Moduleish appears in two worlds, then we assume that it points to the
-  -- exact same Island in both worlds. So to merge two worlds we simply add
-  -- the Island maps and take the RHS in case a Mod is mapped by both (which
-  -- is what plusUFM does).
-  let wimap = plusUFM (w_wimap w1) (w_wimap w2)
-  return $ World wimap
-                 (MergedWorlds [(w1, Nothing), (w2, Nothing)])
-                 (calcIslandsInstCount wimap)
-                 okay
+merge :: World -> World -> World
+merge w1 w2 = World wimap
+                    (MergedWorlds [(w1, Nothing), (w2, Nothing)])
+                    (calcIslandsInstCount wimap)
+                    consis
+  where
+    -- Make sure they're mergeable.
+    consis = w_consis w1 && w_consis w2 && mergeable w1 w2
+    -- If a Moduleish appears in two worlds, then we assume that it points to the
+    -- exact same Island in both worlds. So to merge two worlds we simply add
+    -- the Island maps and take the RHS in case a Mod is mapped by both (which
+    -- is what plusUFM does).
+    wimap = plusUFM (w_wimap w1) (w_wimap w2)
+  
 
 -- | Merge together a list of worlds.
-mergeList :: [World] -> Maybe World
-mergeList ws = do
-  -- Make sure they're mergeable.
-  let okay = mergeableList ws && and (map w_okay ws)
-  -- If a Module appears in two worlds, then we assume that it points to the
-  -- exact same Island in both worlds. So to merge two worlds we simply add
-  -- the Island maps and take the RHS in case a Mod is mapped by both (which
-  -- is what plusUFM does).
-  let wimaps = map w_wimap ws
-  let wimap_all = foldl plusUFM emptyUFM wimaps
-  return $ World wimap_all
-                 (MergedWorlds $ map (, Nothing) ws)
-                 (calcIslandsInstCount wimap_all)
-                 okay
+mergeList :: [World] -> World
+mergeList ws = World wimap_all
+                     (MergedWorlds $ map (, Nothing) ws)
+                     (calcIslandsInstCount wimap_all)
+                     consis
+  where
+    -- Make sure they're mergeable.
+    consis = and (map w_consis ws) && mergeableList ws
+    -- If a Module appears in two worlds, then we assume that it points to the
+    -- exact same Island in both worlds. So to merge two worlds we simply add
+    -- the Island maps and take the RHS in case a Mod is mapped by both (which
+    -- is what plusUFM does).
+    wimaps = map w_wimap ws
+    wimap_all = foldl plusUFM emptyUFM wimaps
 
 
 -- | All pairs (xi,xj) of a list xs such that i < j.
@@ -182,10 +187,23 @@ mergeableInsts inst1 inst2
     tvs1 = is_tvs inst1
     tvs2 = is_tvs inst2
 
+-- newIslandMergeable :: World -> Island -> Bool
+-- newIslandMergeable pw wi
+--   -- If this mod implements an earlier one, check that it does indeed.
+--   | not $ mish_boot (wi_mod wi)
+--   , Just wi_boot <- lookupUFM (w_wimap pw) (mish {mish_boot = True})
+--     = 
+--   where
+--     mish = wi_mod wi
+
+
+-- NOTE: For all the `newWorld` functions, we assume that GHC typechecking has
+-- guaranteed that the freshly defined instances in the new Island do not
+-- overlap with anything in the parent worlds.
 
 -- | Create a new world given a list of worlds to extend, the Moduleish for
 --   this module, and this module's locally defined instances.
-newWorld :: [World] -> Moduleish -> [ClsInst] -> Maybe World
+newWorld :: [World] -> Moduleish -> [ClsInst] -> World
 newWorld ws mish local_insts = newWorld' anno_worlds mish local_insts
   where
     anno_worlds = [(w, Nothing) | w <- ws]
@@ -194,49 +212,47 @@ newWorld ws mish local_insts = newWorld' anno_worlds mish local_insts
 -- | Create a new world given a list of worlds (and Moduleishes that pointed to
 --   those worlds) to extend, the Moduleish for
 --   this module, and this module's locally defined instances.
-newWorldFromImports :: [(Moduleish, World)] -> Moduleish -> [ClsInst] -> Maybe World
+newWorldFromImports :: [(Moduleish, World)] -> Moduleish -> [ClsInst] -> World
 newWorldFromImports imps mish local_insts = newWorld' anno_worlds mish local_insts
   where
     anno_worlds = [(w, Just m) | (m,w) <- imps]
 
 
-newWorld' :: [(World, Maybe Moduleish)] -> Moduleish -> [ClsInst] -> Maybe World
-newWorld' anno_worlds mish local_insts = do
-  let (ws, annos) = unzip anno_worlds
-
-  -- First merge the extended worlds into a single parent world.
-  pw <- mergeList ws
-
-  -- If the list of locally defined instances is empty, then just return
-  -- this merged world.
-  if null local_insts
-    then return $ World (w_wimap pw)
-                        (MergedWorlds anno_worlds)
-                        (w_icount pw)
-                        (w_okay pw)
-    else do
+newWorld' :: [(World, Maybe Moduleish)] -> Moduleish -> [ClsInst] -> World
+newWorld' anno_worlds mish local_insts
+  | null local_insts = World (w_wimap pw)
+                             (MergedWorlds anno_worlds)
+                             (w_icount pw)
+                             (w_consis pw)
+  | otherwise = let
 
       -- Organize the list of local instances into an IslandInstEnv.
       -- We assume that this list is internally mergeable.
-      let f :: IslandInstEnv -> ClsInst -> IslandInstEnv
-          f ienv inst = addToUFM_C (++) ienv (is_cls inst) [inst]
-      let local_ienv = foldl f emptyUFM local_insts
+      f :: IslandInstEnv -> ClsInst -> IslandInstEnv
+      f ienv inst = addToUFM_C (++) ienv (is_cls inst) [inst]
+      local_ienv = foldl f emptyUFM local_insts
 
       -- Create an Island.
-      let island = Island { wi_exts   = canonicalIslands pw
-                          , wi_mod    = mish
-                          , wi_ienv   = local_ienv
-                          , wi_icount = (length local_insts) }
+      island = Island { wi_exts   = canonicalIslands pw
+                      , wi_mod    = mish
+                      , wi_ienv   = local_ienv
+                      , wi_icount = (length local_insts) }
 
       -- Parent world shouldn't have an Island for Moduleish mish. If it does,
       -- since we assume all Islands from the same Moduleish are the same, we
       -- don't need to check anything. Just extend the parent world's island
       -- map with this island.
-      let wimap_new = addToUFM (w_wimap pw) mish island
-      return $ World wimap_new
-                     (NewWorld anno_worlds island)
-                     (calcIslandsInstCount wimap_new)
-                     (w_okay pw)
+      wimap_new = addToUFM (w_wimap pw) mish island
+      in
+        World wimap_new
+              (NewWorld anno_worlds island)
+              (calcIslandsInstCount wimap_new)
+              (w_consis pw)
+
+  where
+    -- First merge the extended worlds into a single parent world.
+    (ws, annos) = unzip anno_worlds
+    pw = mergeList ws
 
 
 

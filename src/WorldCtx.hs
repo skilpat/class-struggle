@@ -23,11 +23,16 @@ import ReadUtils
 import World
 
 
+type Consistency = S.Set Moduleish
+-- data Consistency
+--   = Consistent
+--   | Inconsistent ![Moduleish]
 
+type CtxEntry = (Moduleish, ModIface, World, Consistency)
 
 -- | A context that maps a Moduleish to its typechecked interface and world.
-data Ctx = Ctx { ctx_map     :: UniqFM (Moduleish, ModIface, World)
-               , ctx_pkg_map :: UniqFM (PackageId, World)
+data Ctx = Ctx { ctx_map     :: UniqFM CtxEntry
+               , ctx_pkg_map :: UniqFM (PackageId, World, Consistency)
                , ctx_pkgs    :: S.Set PackageId }
 
 instance Monoid Ctx where
@@ -48,7 +53,7 @@ type CtxM a = StateT Ctx Ghc a
 
 lookupWorld :: Ctx -> Moduleish -> Maybe World
 lookupWorld Ctx {ctx_map = cmap} mish = do
-  (_, _, w) <- lookupUFM cmap mish
+  (_, _, w, _) <- lookupUFM cmap mish
   return w
 -- lookupWorld ctx mish =
 --   case lookupEntriesMatching ctx (show mish) of
@@ -58,38 +63,38 @@ lookupWorld Ctx {ctx_map = cmap} mish = do
 
 lookupPkgWorld :: Ctx -> PackageId -> Maybe World
 lookupPkgWorld Ctx {ctx_pkg_map = pmap} pid = do
-  (_, w) <- lookupUFM pmap pid
+  (_, w, _) <- lookupUFM pmap pid
   return w
 -- lookupPkgWorld ctx pid =
 --   case lookupPkgEntriesMatching ctx (packageIdString pid) of
 --     [(_, w)] -> Just w
 --     _        -> Nothing
 
-lookupEntriesMatching :: Ctx -> String -> [(Moduleish, ModIface, World)]
+lookupEntriesMatching :: Ctx -> String -> [CtxEntry]
 lookupEntriesMatching Ctx {ctx_map = cmap} mod_str =
-  [(m,i,w) | (m,i,w) <- eltsUFM cmap
-           , show m == mod_str || mishModStr m == mod_str ]
+  [(m,i,w,c) | (m,i,w,c) <- eltsUFM cmap
+             , show m == mod_str || mishModStr m == mod_str ]
 
-lookupPkgEntriesMatching :: Ctx -> String -> [(PackageId, World)]
+lookupPkgEntriesMatching :: Ctx -> String -> [(PackageId, World, Consistency)]
 lookupPkgEntriesMatching Ctx {ctx_pkg_map = pmap} pkg_str =
-  [(p,w) | (p,w) <- eltsUFM pmap
-         , packageIdString p == pkg_str || pkgIdName p == pkg_str ]
+  [(p,w,c) | (p,w,c) <- eltsUFM pmap
+           , packageIdString p == pkg_str || pkgIdName p == pkg_str ]
 
 
 
-updateCtxMap :: Moduleish -> ModIface -> World -> CtxM ()
-updateCtxMap mish iface w = do
+updateCtxMap :: Moduleish -> ModIface -> World -> Consistency -> CtxM ()
+updateCtxMap mish iface w c = do
   ctx@Ctx{ctx_map = cmap, ctx_pkgs = cpids} <- get
   -- Update context's map with this Moduleish and (ModIface, World).
-  put $ ctx { ctx_map  = addToUFM cmap mish (mish, iface, w)
+  put $ ctx { ctx_map  = addToUFM cmap mish (mish, iface, w, c)
             , ctx_pkgs = S.union cpids (coveredPkgs w) } -- and depended-upon pkgs
 
 
-updateCtxPkg :: PackageId -> World -> CtxM ()
-updateCtxPkg pid w = do
+updateCtxPkg :: PackageId -> World -> Consistency -> CtxM ()
+updateCtxPkg pid w c = do
  ctx@Ctx{ctx_pkg_map = pmap} <- get
  -- Update context's pkg world map with this one.
- put $ ctx { ctx_pkg_map = addToUFM pmap pid (pid, w) }
+ put $ ctx { ctx_pkg_map = addToUFM pmap pid (pid, w, c) }
 
 
 --- PRINTING -----------------
@@ -103,7 +108,7 @@ instance Outputable Ctx where
 pprCtxEntries :: Ctx -> [String] -> SDoc
 pprCtxEntries ctx mods_to_print = sep $ catMaybes maybeEntryDocs ++ pkgEntryDocs
   where
-    maybeEntryDocs = [ pprEntry mish w | (mish, _, w) <- eltsUFM (ctx_map ctx) ]
+    maybeEntryDocs = [ pprEntry mish w | (mish, _, w, _) <- eltsUFM (ctx_map ctx) ]
     
     pprEntry mish w
       | shouldPrint mish = Just $ ppr mish <+> text "->" <+> pprIslands (w_wimap w)
@@ -115,7 +120,7 @@ pprCtxEntries ctx mods_to_print = sep $ catMaybes maybeEntryDocs ++ pkgEntryDocs
       | otherwise                            = False
 
     pkgEntryDocs = [ ppr pid <+> text "=>" <+> pprIslands (w_wimap w)
-                   | (pid, w) <- eltsUFM (ctx_pkg_map ctx) ]
+                   | (pid, w, _) <- eltsUFM (ctx_pkg_map ctx) ]
 
 
 -- | Given a list of module names and a Ctx, print out the World of any modules

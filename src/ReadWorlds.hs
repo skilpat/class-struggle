@@ -97,28 +97,35 @@ processPkg pname (pid, mods) = do
   -- from the outside, we are looking for *non-boot* modules to process,
   -- hence the `mkModuleish` call.
   lift $ printSDoc $ text "*" <+> ppr pid
-  mws <- mapM (lookupOrProcess . mkModuleish) mods
+  results <- mapM (lookupOrProcess . mkModuleish) mods
 
   -- Record this package's world
-  pkg_world <- case mergeList (map snd mws) of
-    Just w -> return w
-    Nothing -> do
-      lift $ printSDoc $
-        text "! warning: failed to merge pkg world for" <+> ppr pid
-      return emptyWorld
+  let pkg_world = mergeList [ w | (_,_,w,_) <- results ]
+  -- unless (w_consis pkg_world) $ do
+  --   lift $ printSDoc $
+  --     text "! warning: failed to merge pkg world for" <+> ppr pid
 
-  updateCtxPkg pid pkg_world
+  updateCtxPkg pid pkg_world $ S.unions [ c | (_,_,_,c) <- results]
 
 
-lookupOrProcess :: Moduleish -> CtxM (ModIface, World)
+lookupOrProcess :: Moduleish -> CtxM CtxEntry
 lookupOrProcess mish = do
   ctx <- get
   case lookupUFM (ctx_map ctx) mish of
-    Just (_, iface, w) -> return (iface, w)
-    Nothing            -> processMod mish
+    Just r  -> return r
+    Nothing -> processMod mish
 
 
-processMod :: Moduleish -> CtxM (ModIface, World)
+
+-- mkConsistency :: Moduleish -> [(Moduleish, World)] -> CtxM Consistency
+-- mkConsistency mish imps = do
+--   -- gather up consistency from imports
+--   inconsistent_mishes <- liftM concat $ mapM ()
+
+--   -- add self if imported worlds don't merge
+
+
+processMod :: Moduleish -> CtxM CtxEntry
 processMod mish = do
   let modsToPrint = ["Prelude","Test1.Left","Test1.Right"]
   let maybeDo m
@@ -130,7 +137,14 @@ processMod mish = do
 
   -- Get the worlds of imports, after recursively processing them first.
   let imp_mishes = importedMishes (mish_mod mish) iface
-  imp_worlds <- mapM (fmap snd . lookupOrProcess) imp_mishes
+  imp_results <- mapM lookupOrProcess imp_mishes
+  let imports = [(m,w) | (m,_,w,_) <- imp_results ]
+
+  -- Are any imported worlds inconsistent?
+  let imp_inconss = S.unions [ c | (_,_,_,c) <- imp_results]
+  let inconss
+        | not $ mergeableList (map snd imports) = S.insert mish imp_inconss
+        | otherwise = imp_inconss
 
   -- Type check the interface so that the instances are in the right format.
   insts <- lift $ readInstsFromIface iface
@@ -144,24 +158,22 @@ processMod mish = do
   -- TODO: family instances!
 
   -- Try to create a new world.
-  case newWorldFromImports (zip imp_mishes imp_worlds) mish insts of
-    Just w  -> do
-      -- maybeDo $ do
-      --   lift $ printSDoc $ text "new world's island ..."
-      --   let island = fromJust $ lookupIsland w mish
-      --   lift $ printSDoc $ ppr island
-      --   F.forM_ (islandInsts island) $ \inst ->
-      --     lift $ printSDoc $ text "    -" <+> pprInstanceHdr inst
+  let w = newWorldFromImports imports mish insts
+  -- unless (w_consis w) $ do
+  --   lift $ printSDoc $ text "! warning: created inconsistent world for " <+> ppr mish
+
+    -- Just w  -> do
+    --   -- maybeDo $ do
+    --   --   lift $ printSDoc $ text "new world's island ..."
+    --   --   let island = fromJust $ lookupIsland w mish
+    --   --   lift $ printSDoc $ ppr island
+    --   --   F.forM_ (islandInsts island) $ \inst ->
+    --   --     lift $ printSDoc $ text "    -" <+> pprInstanceHdr inst
       
-      -- Store the iface and newly created world for this module.
-      updateCtxMap mish iface w
-      return (iface, w)
+  -- Store the iface and newly created world for this module.
+  updateCtxMap mish iface w inconss
+  return (mish, iface, w, inconss)
 
-
-    Nothing -> do
-      lift $ printSDoc $ text "! error: failed to create world for " <+> ppr mish
-      updateCtxMap mish iface emptyWorld
-      return (iface, emptyWorld)
 
 
 importedMishes :: Module -> ModIface -> [Moduleish]

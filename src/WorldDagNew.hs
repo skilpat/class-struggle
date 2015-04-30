@@ -63,7 +63,7 @@ type DAG = (S.Set Node, S.Set Edge)
 
 worldDagOf :: Ctx -> String -> DAG
 worldDagOf ctx mod_str = case lookupEntriesMatching ctx mod_str of
-  [(_,_,w)] -> worldDag w
+  [(_,_,w,_)] -> worldDag w
   [] -> error $ "! no matches in ctx for module string " ++ mod_str
   es -> error $ "! found " ++ show (length es) ++
                 " matches in ctx for module string " ++ mod_str
