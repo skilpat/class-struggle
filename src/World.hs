@@ -13,8 +13,10 @@ import InstEnv
 import Module
 import Outputable
 import Unify
-  ( tcUnifyTys, BindFlag(BindMe) )
+  ( tcUnifyTys, BindFlag(BindMe), tcMatchTys )
 import UniqFM
+import VarSet
+  ( mkVarSet )
 
 import Moduleish
 
@@ -132,25 +134,29 @@ mergeable World{w_wimap = wimap1} World{w_wimap = wimap2} =
     -- Map for Modules/Islands in RHS but not LHS.
     wimap2minus1 = minusUFM wimap2 wimap1
 
-    mergeableIslands :: Island -> Island -> Bool
-    mergeableIslands (Island {wi_mod = mish1, wi_ienv = ienv1})
-                     (Island {wi_mod = mish2, wi_ienv = ienv2})
-      | similarish mish1 mish2 = True     -- guaranteed by the type checker!
-      | otherwise              = mergeableInstEnvs ienv1 ienv2
+mergeableIslands :: Island -> Island -> Bool
+mergeableIslands wi1@(Island {wi_mod = mish1, wi_ienv = ienv1})
+                 wi2@(Island {wi_mod = mish2, wi_ienv = ienv2})
+  -- If one is an implementation of the other, check valid impl.
+  | similarish mish1 mish2 =
+    if mish_boot mish2 then islandImplements wi1 wi2
+                       else islandImplements wi2 wi1
+  -- Otherwise, check mergeability of instance envs.
+  | otherwise = mergeableInstEnvs ienv1 ienv2
 
 
-    mergeableInstEnvs :: IslandInstEnv -> IslandInstEnv -> Bool
-    mergeableInstEnvs ienv1 ienv2 =
-      and [ mergeableInstLists is1 is2
-            -- Gather the insts in each side, but only for classes that have
-            -- instances in both sides; other classes' instances are fine.
-            | (is1, is2) <- eltsUFM $ intersectUFM_C (,) ienv1 ienv2 ]
+mergeableInstEnvs :: IslandInstEnv -> IslandInstEnv -> Bool
+mergeableInstEnvs ienv1 ienv2 =
+  and [ mergeableInstLists is1 is2
+        -- Gather the insts in each side, but only for classes that have
+        -- instances in both sides; other classes' instances are fine.
+        | (is1, is2) <- eltsUFM $ intersectUFM_C (,) ienv1 ienv2 ]
 
-    -- Just check that every pair of instances is mergeable. Each pair comes
-    -- from the same class.
-    mergeableInstLists :: [ClsInst] -> [ClsInst] -> Bool
-    mergeableInstLists insts1 insts2 =
-      and [mergeableInsts i1 i2 | i1 <- insts1, i2 <- insts2]
+-- Just check that every pair of instances is mergeable. Each pair comes
+-- from the same class.
+mergeableInstLists :: [ClsInst] -> [ClsInst] -> Bool
+mergeableInstLists insts1 insts2 =
+  and [mergeableInsts i1 i2 | i1 <- insts1, i2 <- insts2]
 
 
 -- | Determine whether two instances are mergeable, i.e., non-overlapping.
@@ -187,14 +193,38 @@ mergeableInsts inst1 inst2
     tvs1 = is_tvs inst1
     tvs2 = is_tvs inst2
 
--- newIslandMergeable :: World -> Island -> Bool
--- newIslandMergeable pw wi
---   -- If this mod implements an earlier one, check that it does indeed.
---   | not $ mish_boot (wi_mod wi)
---   , Just wi_boot <- lookupUFM (w_wimap pw) (mish {mish_boot = True})
---     = 
---   where
---     mish = wi_mod wi
+-- | Check whether the given Island is mergeable with the given parent World.
+--   Not only does this check for mergeability with the parent's Islands, it
+--   also checks that this Island is a valid implementation of any
+--   corresponding signature Islands in the parent.
+newIslandMergeable :: World -> Island -> Bool
+newIslandMergeable pw wi =
+  and [mergeableIslands pwi wi | pwi <- eltsUFM (w_wimap pw)
+                               , pwi /= wi ]
+  -- where
+  --   mish = wi_mod wi
+  --   wi_impls pwi = mish_boot (wi_mod pwi) && not (mish_boot mish)
+  --                  && mish_mod (wi_mod pwi) == mish_mod mish
+
+    -- -- If this mod implements an earlier one, check that it does indeed.
+    -- is_valid_impl
+    --   -- If this is an impl of some other island, wi_sig, check it.
+    --   | not $ mish_boot mish
+    --   , Just wi_sig <- lookupUFM (w_wimap pw) (mish {mish_boot = True})
+    --     = islandImplements wi wi_sig
+    --   -- Vacuously true.
+    --   | otherwise
+    --     = True
+
+
+islandImplements :: Island -> Island -> Bool
+islandImplements wi_impl wi_sig =
+  -- For every instance in wi_sig, check for an identical instance in wi_impl.
+  and [ maybe False
+              (\impl_insts -> any (identicalClsInstHead sig_inst) impl_insts)
+              (lookupUFM (wi_ienv wi_impl) cls_nm)
+      | sig_inst <- islandInsts wi_sig
+      , let cls_nm = is_cls_nm sig_inst ]
 
 
 -- NOTE: For all the `newWorld` functions, we assume that GHC typechecking has
@@ -203,7 +233,7 @@ mergeableInsts inst1 inst2
 
 -- | Create a new world given a list of worlds to extend, the Moduleish for
 --   this module, and this module's locally defined instances.
-newWorld :: [World] -> Moduleish -> [ClsInst] -> World
+newWorld :: [World] -> Moduleish -> [ClsInst] -> (World, Bool)
 newWorld ws mish local_insts = newWorld' anno_worlds mish local_insts
   where
     anno_worlds = [(w, Nothing) | w <- ws]
@@ -212,18 +242,19 @@ newWorld ws mish local_insts = newWorld' anno_worlds mish local_insts
 -- | Create a new world given a list of worlds (and Moduleishes that pointed to
 --   those worlds) to extend, the Moduleish for
 --   this module, and this module's locally defined instances.
-newWorldFromImports :: [(Moduleish, World)] -> Moduleish -> [ClsInst] -> World
+newWorldFromImports :: [(Moduleish, World)] -> Moduleish -> [ClsInst] -> (World, Bool)
 newWorldFromImports imps mish local_insts = newWorld' anno_worlds mish local_insts
   where
     anno_worlds = [(w, Just m) | (m,w) <- imps]
 
 
-newWorld' :: [(World, Maybe Moduleish)] -> Moduleish -> [ClsInst] -> World
+newWorld' :: [(World, Maybe Moduleish)] -> Moduleish -> [ClsInst] -> (World, Bool)
 newWorld' anno_worlds mish local_insts
-  | null local_insts = World (w_wimap pw)
-                             (MergedWorlds anno_worlds)
-                             (w_icount pw)
-                             (w_consis pw)
+  | null local_insts = ( World (w_wimap pw)
+                               (MergedWorlds anno_worlds)
+                               (w_icount pw)
+                               (w_consis pw)
+                       , True )
   | otherwise = let
 
       -- Organize the list of local instances into an IslandInstEnv.
@@ -238,16 +269,19 @@ newWorld' anno_worlds mish local_insts
                       , wi_ienv   = local_ienv
                       , wi_icount = (length local_insts) }
 
+      island_okay = newIslandMergeable pw island
+
       -- Parent world shouldn't have an Island for Moduleish mish. If it does,
       -- since we assume all Islands from the same Moduleish are the same, we
       -- don't need to check anything. Just extend the parent world's island
       -- map with this island.
       wimap_new = addToUFM (w_wimap pw) mish island
       in
-        World wimap_new
-              (NewWorld anno_worlds island)
-              (calcIslandsInstCount wimap_new)
-              (w_consis pw)
+        ( World wimap_new
+                (NewWorld anno_worlds island)
+                (calcIslandsInstCount wimap_new)
+                (w_consis pw && island_okay)
+        , island_okay )
 
   where
     -- First merge the extended worlds into a single parent world.
@@ -352,3 +386,19 @@ pprIslands wimap = sep [ braces listSDoc
   where
     islandSDocs = map ppr $ sort $ eltsUFM wimap
     listSDoc = sep $ punctuate (text ", ") $ islandSDocs
+
+
+---------------------------------------------------------------
+
+
+identicalClsInstHead :: ClsInst -> ClsInst -> Bool
+-- ^ True when when the instance heads are the same
+-- e.g.  both are   Eq [(a,b)]
+-- Used for overriding in GHCi
+-- Obviously should be insenstive to alpha-renaming
+identicalClsInstHead (ClsInst { is_cls_nm = cls_nm1, is_tcs = rough1, is_tvs = tvs1, is_tys = tys1 })
+                     (ClsInst { is_cls_nm = cls_nm2, is_tcs = rough2, is_tvs = tvs2, is_tys = tys2 })
+  =  cls_nm1 == cls_nm2
+  && not (instanceCantMatch rough1 rough2)  -- Fast check for no match, uses the "rough match" fields
+  && isJust (tcMatchTys (mkVarSet tvs1) tys1 tys2)
+  && isJust (tcMatchTys (mkVarSet tvs2) tys2 tys1)

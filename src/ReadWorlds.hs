@@ -127,7 +127,7 @@ lookupOrProcess mish = do
 
 processMod :: Moduleish -> CtxM CtxEntry
 processMod mish = do
-  let modsToPrint = ["Prelude","Test1.Left","Test1.Right"]
+  let modsToPrint = ["Test3.OverlapShow","Test3.OverlapShowClient"]
   let maybeDo m
         | mishModStr mish `elem` modsToPrint = m
         | otherwise                          = return ()
@@ -139,12 +139,6 @@ processMod mish = do
   let imp_mishes = importedMishes (mish_mod mish) iface
   imp_results <- mapM lookupOrProcess imp_mishes
   let imports = [(m,w) | (m,_,w,_) <- imp_results ]
-
-  -- Are any imported worlds inconsistent?
-  let imp_inconss = S.unions [ c | (_,_,_,c) <- imp_results]
-  let inconss
-        | not $ mergeableList (map snd imports) = S.insert mish imp_inconss
-        | otherwise = imp_inconss
 
   -- Type check the interface so that the instances are in the right format.
   insts <- lift $ readInstsFromIface iface
@@ -158,9 +152,9 @@ processMod mish = do
   -- TODO: family instances!
 
   -- Try to create a new world.
-  let w = newWorldFromImports imports mish insts
-  -- unless (w_consis w) $ do
-  --   lift $ printSDoc $ text "! warning: created inconsistent world for " <+> ppr mish
+  let (w, island_consis) = newWorldFromImports imports mish insts
+  unless island_consis $ do
+    lift $ printSDoc $ text "! warning: created inconsistent world for" <+> ppr mish
 
     -- Just w  -> do
     --   -- maybeDo $ do
@@ -169,6 +163,13 @@ processMod mish = do
     --   --   lift $ printSDoc $ ppr island
     --   --   F.forM_ (islandInsts island) $ \inst ->
     --   --     lift $ printSDoc $ text "    -" <+> pprInstanceHdr inst
+
+  -- Are any imported worlds inconsistent?
+  let imp_inconss = S.unions [ c | (_,_,_,c) <- imp_results]
+  let inconss
+        | not $ mergeableList (map snd imports) = S.insert mish imp_inconss
+        | not island_consis                     = S.insert mish imp_inconss
+        | otherwise                             = imp_inconss
       
   -- Store the iface and newly created world for this module.
   updateCtxMap mish iface w inconss
