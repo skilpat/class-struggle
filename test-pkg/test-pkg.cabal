@@ -20,10 +20,14 @@ library
                        Test1.Right,
                        Test1.Left,
                        -- Test1.Bottom,
+                       -- Test2
                        Test2.Top,
                        Test2.Right,
                        Test2.Left,
-                       Test2.Bottom
+                       Test2.Bottom,
+                       -- Test3
+                       Test3.OverlapShow,
+                       Test3.OverlapShowClient
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.7 && <4.8,
