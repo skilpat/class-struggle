@@ -36,6 +36,15 @@ library
   hs-source-dirs:      src
   default-language:    Haskell2010
 
+executable calc-worlds
+  main-is:             Main.hs
+  other-modules:       Main
+  other-extensions:    StandaloneDeriving
+  build-depends:       base >=4.7 && <4.8,
+                       orphans
+  hs-source-dirs:      calc-worlds
+  default-language:    Haskell2010
+
 executable orphans-stats
   main-is:             Main.hs
   other-modules:       Main,

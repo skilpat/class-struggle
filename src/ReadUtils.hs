@@ -7,7 +7,11 @@ import qualified Data.Map.Strict as M
 import Data.List
   ( sortBy )
 import System.Directory
+import System.Exit
+  ( exitFailure )
 import System.FilePath
+import System.IO
+  ( withFile, hIsEOF, IOMode(ReadMode), hGetLine )
 
 import GHC
 import Module
@@ -183,6 +187,19 @@ getPackageConfig hsc_env mod = lookupPackage pkg_map pkg_id
 
 
 
+
+readSandboxPath :: IO FilePath
+readSandboxPath = withFile "cabal.sandbox.config" ReadMode loop
+  where
+    loop handle = do
+      eof <- hIsEOF handle
+      when eof $ do
+        putStrLn "error: couldn't find package-db"
+        exitFailure
+      line <- hGetLine handle
+      case span (/= ':') line of
+        ("package-db", ':':' ':path) -> return path
+        _ -> loop handle
 
 
 
