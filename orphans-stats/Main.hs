@@ -12,8 +12,6 @@ main = stats $ hackageMostDownloadedPkgs `union` haskellPlatformPkgs
 
 ----- lists of packages to analyze -----
 
-                      , 
-
 -- from Haskell Platform 2014
 -- https://github.com/haskell/haskell-platform/blob/74c3a90290f23adfeeb342f4e97122fd735f9c64/hptool/src/Releases2014.hs
 haskellPlatformPkgs = [ "alex"
