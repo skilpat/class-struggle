@@ -150,7 +150,7 @@ hackageMostDownloadedPkgs = [ "lens"
                             , "happstack-server"
                             , "either"
                             , "fast-logger"
-                            , "fre"
+                            , "free"
                             ]
 
 

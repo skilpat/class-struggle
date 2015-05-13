@@ -16,7 +16,7 @@ egison
 either
 fast-logger
 file-embed
-fre
+free
 ghc-mod
 git-annex
 haddock
