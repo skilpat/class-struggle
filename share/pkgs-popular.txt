@@ -1,3 +1,7 @@
+# Most downloaded packages from Hackage on 2015.05.13
+# Only those above 1000 downloads
+# https://hackage.haskell.org/packages/top
+
 aeson
 attoparsec
 authenticate

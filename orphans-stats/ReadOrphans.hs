@@ -26,48 +26,28 @@ import UniqFM
 import Moduleish
 import ReadUtils
 
-
-stats :: [String] -> IO TotalOrphStats
-stats req_pkgs = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
+-- | Read statistics about orphan instances in installed packages, given an
+--   absolute path to a cabal sandbox conf and a list of package names
+--   (minus versions) to check.
+stats :: String -> [String] -> IO TotalOrphStats
+stats sandbox_path req_pkgs = defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
   runGhc (Just libdir) $ do
 
-    -- we have to call 'setSessionDynFlags' before doing
-    -- everything else
+    -- Try to use a sandbox pkg db, if one is passed in.
+    updateDynFlags [ "-hide-all-packages"
+                   , "-no-user-package-db"
+                   , "-package-db " ++ sandbox_path ]
+    -- unless (null sandbox_path) $
+    --        updateDynFlags [ "-no-user-package-db"
+    --                       , "-package-db " ++ sandbox_path ]
+
     dflags <- getSessionDynFlags
-    let dflags' = gopt_set dflags Opt_HideAllPackages
-    setSessionDynFlags $ dflags' { ghcMode      = OneShot
-                                 , hscTarget    = HscNothing
-                                 --, thisPackage  = stringToPackageId "containers-0.5.0.0"
-                                 -- , packageFlags = map ExposePackage req_pkgs
-                                 }
+    setSessionDynFlags $ dflags { ghcMode       = OneShot
+                                , hscTarget     = HscNothing
+                                }
     setTargets []
     -- setTargets =<< sequence [guessTarget "Test.hs" Nothing]
     load LoadAllTargets
-    hscEnv <- getSession
-    dflags <- getSessionDynFlags
-
-    -- let pkgModMap = currentPkgModMap dflags requestedPkgs
-    -- let mods = concat $ M.elems pkgModMap
-
-    -- liftIO $ putStrLn $ showSDoc dflags $ ppr pkgModMap
-    -- liftIO $ putStrLn ""
-
-    -- forM_ mods $ \mod -> do
-    --   liftIO $ putStrLn $ showSDoc dflags $ pprModule mod
-    --   -- Found modLoc _ <- liftIO $ findModLocation hscEnv mod
-    --   modLoc <- findModLocation mod
-    --   let hiFile = ml_hi_file modLoc
-    --   let tcInstances = do
-    --         res <- readIface mod hiFile False
-    --         return $ case res of
-    --           Maybes.Succeeded modIface -> Just $ mi_insts modIface
-    --           Maybes.Failed _ -> Nothing
-    --   mbInsts <- liftIO $ initTcForLookup hscEnv tcInstances
-    --   liftIO $ putStrLn $ case mbInsts of
-    --     Just []    -> "  no instances"
-    --     Just insts -> showSDoc dflags $ vcat $ map pprInstanceWithOrphan insts
-    --     Nothing    -> "! lookup failed"
-    --   liftIO $ putStrLn ""
 
     (pkg_mod_map_selected, _) <- currentPkgModMap req_pkgs
     processAllPkgs pkg_mod_map_selected
@@ -77,19 +57,22 @@ processAllPkgs :: PkgModMap -> Ghc TotalOrphStats
 processAllPkgs pkg_mod_map = do
   dflags <- getSessionDynFlags
 
+  -- :: M.Map String PkgOrphStats
   pkg_orph_stats_map <- T.sequence $ M.mapWithKey processPkg pkg_mod_map
 
   liftIO $ putStrLn "========= TOTALS ========="
   liftIO $ putStrLn ""
-  let calcTotalStats tos pos = do
-        liftIO $ putStrLn $ showSDoc dflags $ ppr pos
+  let calcTotalStats :: (Int, TotalOrphStats) -> PkgOrphStats -> Ghc (Int, TotalOrphStats)
+      calcTotalStats (ix, tos) pos = do
+        liftIO $ putStrLn $ showSDoc dflags $ int ix <> char ')' <+> ppr pos
         liftIO $ putStrLn ""
-        return $ updateTotalOrphStats tos pos
+        return $ (ix+1, updateTotalOrphStats tos pos)
         -- liftIO $ putStrLn $ showSDoc dflags $ ppr pid
         -- liftIO $ putStrLn $ "  orphan modules:   " ++ show num_orphs
         -- liftIO $ putStrLn $ "  orphan instances: " ++ show num_orphs
 
-  tos_final <- F.foldlM calcTotalStats initTotalOrphStats pkg_orph_stats_map
+  -- :: TotalOrphStats
+  (_, tos_final) <- F.foldlM calcTotalStats (1, initTotalOrphStats) pkg_orph_stats_map
   liftIO $ putStrLn $ showSDoc dflags $ ppr tos_final
   return tos_final
   -- liftIO $ putStrLn $ "TOTAL"

@@ -11,7 +11,7 @@ import System.Exit
   ( exitFailure )
 import System.FilePath
 import System.IO
-  ( withFile, hIsEOF, IOMode(ReadMode), hGetLine )
+  ( withFile, hIsEOF, IOMode(ReadMode), hGetLine, getContents )
 
 import GHC
 import Module
@@ -186,7 +186,10 @@ getPackageConfig hsc_env mod = lookupPackage pkg_map pkg_id
 
 
 
-
+readPkgList :: IO [String]
+readPkgList = liftM (filter is_pkg . lines) getContents
+  where
+    is_pkg line = not (null line) && head line /= '#'
 
 readSandboxPath :: IO FilePath
 readSandboxPath = withFile "cabal.sandbox.config" ReadMode loop

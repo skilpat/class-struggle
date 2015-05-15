@@ -1,18 +1,18 @@
 module Main where
 
-import System.Environment
-  ( getArgs )
-
 import ReadUtils
+  ( readSandboxPath, readPkgList )
 import ReadWorlds
+  ( buildCtx )
 import WorldCtx
+  ( printCtx )
 
 
--- | Given a list of packages as command-line arguments, read all the worlds
+-- | Given a list of packages from STDIN, read all the worlds
 --   for these packages and print them out.
 main :: IO ()
 main = do
   sandbox <- readSandboxPath
-  pkgs <- getArgs
+  pkgs <- readPkgList
   ctx <- buildCtx sandbox pkgs
-  printCtx [""] True ctx
+  printCtx [""] False ctx
