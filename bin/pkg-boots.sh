@@ -33,8 +33,21 @@ else
 
     PKGVERSION=$(cabal sandbox hc-pkg -- --simple-output field ${PKGNAME} version)
     PKG="$PKGNAME-$PKGVERSION"
-    printPkgBoots $PKG > /dev/null
-    [ $? -eq 0 ] && echo "$PKG has boot files"
+    printPkgBoots $PKG > /dev/null || continue
+    
+    
+
+
+    # print the absolute path to the .hi files for PKG
+    # ASSERT: there can be only one
+    LIBDIR=$(cabal sandbox hc-pkg -- --simple-output field ${PKGNAME} library-dirs)
+
+    # if there are .hi-boot files there, good!
+    if [ "$(find ${LIBDIR} -name '*.hi-boot')" ]; then
+      echo "  $PKG has boot files... and they're installed."
+    else
+      echo "! $PKG has boot files... and they're *NOT* installed."
+    fi
   done
 fi
 
