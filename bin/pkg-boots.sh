@@ -12,11 +12,13 @@ printPkgBoots ()
   # 2) Extract each boot file link to a separate line
   # 3) Strip off the 'src/' and '.hs-boot'
   # 4) Convert slashes to dots a la module names
-  MATCHES=$(wget -qO - --no-check-certificate https://hackage.haskell.org/package/${PKG}/src/ |
-            grep -oE 'src/[^ "]+\.hs-boot') || return 1
-  echo "$MATCHES" |
-    sed -nE 's|src/(.+)\.hs-boot|\1|p' |
-    sed -n 's|/|.|gp'
+  # MATCHES=$(wget -qO - --no-check-certificate https://hackage.haskell.org/package/${PKG}/src/ |
+  #           grep -oE 'src/[^ "]+\.hs-boot') || return 1
+  # echo "$MATCHES" |
+  #   sed -nE 's|src/(.+)\.hs-boot|\1|p' |
+  #   sed -n 's|/|.|gp'
+  wget -qO - --no-check-certificate https://hackage.haskell.org/package/${PKG}/src/ |
+    grep -oE '"[^ "]+\.hs-boot"'
 }
 
 
