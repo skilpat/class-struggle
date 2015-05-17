@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # Print out any module names with boot files in the given package (NAME-VERSION).
 printPkgBoots ()
@@ -6,7 +6,7 @@ printPkgBoots ()
   PKG=$1
 
   # ghc doesn't exist on hackage, but it has boot files
-  [[ $PKG =~ ^ghc-[0-9] ]] && return 0
+  [[ $PKG =~ ^ghc-[0-9] ]] && echo "(ghc has some boot files)" && return 0
 
   # 1) Get the HTML of the package contents.
   # 2) Extract each boot file link to a separate line
