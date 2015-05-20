@@ -12,6 +12,7 @@ QuickCheck
 array
 async
 attoparsec
+base
 bytestring
 case-insensitive
 cgi
@@ -21,6 +22,8 @@ directory
 fgl
 filepath
 hashable
+haskell2010
+haskell98
 hpc
 hscolour
 html

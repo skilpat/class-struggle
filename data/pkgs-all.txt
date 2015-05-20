@@ -27,9 +27,7 @@ conduit-extra
 containers
 contravariant
 deepseq
-deepseq-generics
 directory
-directory-tree
 egison
 either
 fast-logger
@@ -43,6 +41,8 @@ hakyll
 happstack-server
 hashable
 haskell-src-exts
+haskell2010
+haskell98
 highlighting-kate
 hlint
 hoogle
@@ -88,7 +88,6 @@ snap-core
 snap-server
 split
 stm
-stm-chans
 streaming-commons
 syb
 system-filepath
@@ -97,13 +96,10 @@ template-haskell
 texmath
 text
 time
-time-compat
 tls
 transformers
-transformers-base
 transformers-compat
 unix
-unix-time
 unordered-containers
 vector
 vector-algorithms
