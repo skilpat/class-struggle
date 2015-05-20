@@ -1,14 +1,11 @@
 # from Haskell Platform 2014
 # https://github.com/haskell/haskell-platform/blob/74c3a90290f23adfeeb342f4e97122fd735f9c64/hptool/src/Releases2014.hs
 
-alex
 array
 async
 attoparsec
-base
 bytestring
 Cabal
-cabal-install
 case-insensitive
 cgi
 containers
@@ -18,11 +15,7 @@ fgl
 filepath
 GLURaw
 GLUT
-happy
 hashable
-haskell-src
-haskell2010
-haskell98
 hpc
 hscolour
 html
@@ -30,6 +23,7 @@ HTTP
 HUnit
 mtl
 network
+network-uri
 old-locale
 old-time
 OpenGL
@@ -51,6 +45,7 @@ template-haskell
 text
 time
 transformers
+transformers-compat
 unix
 unordered-containers
 vector
