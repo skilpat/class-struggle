@@ -2,10 +2,12 @@ module ReadUtils where
 
 import Control.Monad
 import Data.Char
-  ( isDigit )
-import qualified Data.Map.Strict as M
+  ( isDigit, isAlpha )
 import Data.List
-  ( sortBy )
+  ( sortBy, intercalate )
+import Data.List.Split
+  ( splitOn )
+import qualified Data.Map.Strict as M
 import System.Directory
 import System.Exit
   ( exitFailure )
@@ -99,11 +101,15 @@ pkgIdVersion = snd . pkgIdSplit
 
 
 pkgIdSplit :: PackageId -> (String, String)
-pkgIdSplit pid | last n == '-' = (init n, v)
-               | otherwise     = (n, v)
+pkgIdSplit pid = (name, version)
   where
-    (n, v) = span (not . isDigit) $ packageIdString pid
-
+    pieces = splitOn "-" (packageIdString pid)
+    (npieces, vpieces) = span (isAlpha . head) pieces
+    name = intercalate "-" npieces
+    version = case vpieces of
+      []  -> "" -- for package strings like "base"
+      [s] -> s  -- for normal package strings
+      _   -> error "unknown package string format"
 
 stringToModule :: String -> Module
 stringToModule s = mkModule pid mname
