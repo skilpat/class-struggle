@@ -24,7 +24,6 @@ classy-prelude
 comonad
 conduit
 conduit-extra
-conduit-extra
 containers
 contravariant
 deepseq
@@ -43,7 +42,6 @@ haddock-library
 hakyll
 happstack-server
 hashable
-haskell-src-exts
 haskell-src-exts
 highlighting-kate
 hlint
@@ -72,9 +70,6 @@ persistent
 persistent-postgresql
 persistent-sqlite
 persistent-template
-persistent-postgresql
-persistent-sqlite
-persistent-template
 pretty
 primitive
 process
@@ -89,8 +84,6 @@ semigroups
 shake
 shelly
 snap
-snap-core
-snap-server
 snap-core
 snap-server
 split
@@ -109,7 +102,6 @@ tls
 transformers
 transformers-base
 transformers-compat
-transformers-compat
 unix
 unix-time
 unordered-containers
@@ -123,9 +115,6 @@ xhtml
 xml-conduit
 yaml
 yesod
-yesod-auth
-yesod-core
-yesod-form
 yesod-auth
 yesod-core
 yesod-form

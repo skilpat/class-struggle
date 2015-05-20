@@ -2,6 +2,10 @@
 # Only those above 1000 downloads
 # https://hackage.haskell.org/packages/top
 
+Cabal
+HTTP
+JuicyPixels
+QuickCheck
 aeson
 attoparsec
 attoparsec-enumerator
@@ -9,12 +13,10 @@ authenticate
 binary
 blaze-html
 blaze-markup
-Cabal
 case-insensitive
 classy-prelude
 comonad
 conduit
-conduit-extra
 conduit-extra
 contravariant
 egison
@@ -34,10 +36,8 @@ hoogle
 hscolour
 hspec
 hspec-core
-HTTP
 http-client
 http-conduit
-JuicyPixels
 lens
 monad-control
 network
@@ -51,11 +51,7 @@ persistent
 persistent-postgresql
 persistent-sqlite
 persistent-template
-persistent-postgresql
-persistent-sqlite
-persistent-template
 primitive
-QuickCheck
 resourcet
 scientific
 semigroupoids
@@ -63,8 +59,6 @@ semigroups
 shake
 shelly
 snap
-snap-core
-snap-server
 snap-core
 snap-server
 streaming-commons
@@ -83,9 +77,6 @@ warp
 xml-conduit
 yaml
 yesod
-yesod-auth
-yesod-core
-yesod-form
 yesod-auth
 yesod-core
 yesod-form

@@ -1,11 +1,18 @@
 # from Haskell Platform 2014
 # https://github.com/haskell/haskell-platform/blob/74c3a90290f23adfeeb342f4e97122fd735f9c64/hptool/src/Releases2014.hs
 
+Cabal
+GLURaw
+GLUT
+HTTP
+HUnit
+OpenGL
+OpenGLRaw
+QuickCheck
 array
 async
 attoparsec
 bytestring
-Cabal
 case-insensitive
 cgi
 containers
@@ -13,27 +20,20 @@ deepseq
 directory
 fgl
 filepath
-GLURaw
-GLUT
 hashable
 hpc
 hscolour
 html
-HTTP
-HUnit
 mtl
 network
 network-uri
 old-locale
 old-time
-OpenGL
-OpenGLRaw
 parallel
 parsec
 pretty
 primitive
 process
-QuickCheck
 random
 regex-base
 regex-compat
