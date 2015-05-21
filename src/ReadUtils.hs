@@ -99,7 +99,6 @@ pkgIdName = fst . pkgIdSplit
 pkgIdVersion :: PackageId -> String
 pkgIdVersion = snd . pkgIdSplit
 
-
 pkgIdSplit :: PackageId -> (String, String)
 pkgIdSplit pid = (name, version)
   where
