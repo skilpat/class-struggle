@@ -192,9 +192,14 @@ getPackageConfig hsc_env mod = lookupPackage pkg_map pkg_id
 
 
 readPkgList :: IO [String]
-readPkgList = liftM (filter is_pkg . lines) getContents
+readPkgList = do
+  pkgs_as_lines <- liftM (filter is_pkg . lines) getContents
+  case pkgs_as_lines of
+    [line] -> return $ words line
+    _      -> return pkgs_as_lines
   where
     is_pkg line = not (null line) && head line /= '#'
+
 
 readSandboxPath :: IO FilePath
 readSandboxPath = withFile "cabal.sandbox.config" ReadMode loop

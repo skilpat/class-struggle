@@ -1,5 +1,7 @@
 module Main where
 
+import Data.List
+  ( delete )
 import System.Environment
   ( getArgs )
 
@@ -21,6 +23,7 @@ main = do
 
   args <- getArgs
   let printIslands = "--islands" `elem` args
+  let modsToPrint = delete "--islands" args
 
   ctx <- buildCtx sandbox pkgs
-  printCtx [""] printIslands ctx
+  printCtx modsToPrint printIslands ctx
