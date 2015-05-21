@@ -127,7 +127,7 @@ lookupOrProcess mish = do
 
 processMod :: Moduleish -> CtxM CtxEntry
 processMod mish = do
-  let modsToPrint = ["Test3.OverlapShow","Test3.OverlapShowClient"]
+  let modsToPrint = []
   let maybeDo m
         | mishModStr mish `elem` modsToPrint = m
         | otherwise                          = return ()
@@ -141,20 +141,20 @@ processMod mish = do
   let imports = [(m,w) | (m,_,w,_) <- imp_results ]
 
   -- Type check the interface so that the instances are in the right format.
-  insts <- lift $ readInstsFromIface iface
+  local_insts <- lift $ readInstsFromIface iface
 
   -- Print module name and instances found.
   lift $ printSDoc $ text "  -" <+> ppr mish
   maybeDo $ do
-    F.forM_ insts $ \inst ->
+    F.forM_ local_insts $ \inst ->
       lift $ printSDoc $ text "    -" <+> ppr inst
 
   -- TODO: family instances!
 
   -- Try to create a new world.
-  let (w, island_consis) = newWorldFromImports imports mish insts
-  unless island_consis $ do
-    lift $ printSDoc $ text "! warning: created inconsistent world for" <+> ppr mish
+  let (w, mb_bad_island) = newWorldFromImports imports mish local_insts
+  --when (isJust mb_bad_island) $ do
+  --  lift $ printSDoc $ text "! warning: created inconsistent world for" <+> ppr mish
 
     -- Just w  -> do
     --   -- maybeDo $ do
@@ -166,10 +166,29 @@ processMod mish = do
 
   -- Are any imported worlds inconsistent?
   let imp_inconss = S.unions [ c | (_,_,_,c) <- imp_results]
+  --unless (S.null imp_inconss) $ do
+  --  lift $ printSDoc $ text "! warning: inheriting inconsistency from:"
+  --                     <+> hsep (map ppr (S.toAscList imp_inconss))
+
+  -- Check for inconsistency among imports
+  let mb_bad_islands = mergeableListBlame (map snd imports)
+  when (isJust mb_bad_islands) $ do -- inconsistency among imports
+    lift $ printSDoc $ text "! warning: creating inconsistency @ imports:"
+    lift $ printSDoc $ text "    island 1:" <+> ppr (fst (fromJust mb_bad_islands))
+    lift $ printSDoc $ text "    island 2:" <+> ppr (snd (fromJust mb_bad_islands))
+    lift $ printSDoc $ text "    island 1 instances:" <+> ppr (islandInsts (fst (fromJust mb_bad_islands)))
+    lift $ printSDoc $ text "    island 2 instances:" <+> ppr (islandInsts (snd (fromJust mb_bad_islands)))
+  when (isJust mb_bad_island) $ do -- inconsistency btw imports & locals
+    lift $ printSDoc $ text "! warning: creating inconsistency @ imports+locals:"
+    lift $ printSDoc $ text "    parent island:" <+> ppr (fromJust mb_bad_island)
+    lift $ printSDoc $ text "    parent island instances:" <+> ppr (islandInsts (fromJust mb_bad_island))
+    lift $ printSDoc $ text "    local instances:" <+> sep (map ppr local_insts)
+  
+  -- Record all inherited and created inconsistencies
   let inconss
-        | not $ mergeableList (map snd imports) = S.insert mish imp_inconss
-        | not island_consis                     = S.insert mish imp_inconss
-        | otherwise                             = imp_inconss
+        | isJust mb_bad_islands = S.insert mish imp_inconss
+        | isJust mb_bad_island  = S.insert mish imp_inconss
+        | otherwise             = imp_inconss
       
   -- Store the iface and newly created world for this module.
   updateCtxMap mish iface w inconss

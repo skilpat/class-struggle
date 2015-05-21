@@ -3,7 +3,7 @@ module World where
 
 import Control.Monad
 import Data.List
-  ( sort )
+  ( sort, find )
 import Data.Maybe
   ( isNothing, isJust )
 import qualified Data.Set as S
@@ -120,6 +120,7 @@ pairs xs = [ (x1, x2)
 mergeableList :: [World] -> Bool
 mergeableList ws = and [ mergeable w1 w2 | (w1, w2) <- pairs ws ]
 
+
 mergeable :: World -> World -> Bool
 mergeable World{w_wimap = wimap1} World{w_wimap = wimap2} =
   -- For every Module/Island in w1 and not in w2,
@@ -193,6 +194,7 @@ mergeableInsts inst1 inst2
     tvs1 = is_tvs inst1
     tvs2 = is_tvs inst2
 
+
 -- | Check whether the given Island is mergeable with the given parent World.
 --   Not only does this check for mergeability with the parent's Islands, it
 --   also checks that this Island is a valid implementation of any
@@ -217,6 +219,36 @@ newIslandMergeable pw wi =
     --     = True
 
 
+type Blame1 = Maybe Island
+type Blame2 = Maybe (Island, Island)
+
+-- | Like mergeableList, but returns a pair of Islands to blame if not mergeable.
+mergeableListBlame :: [World] -> Blame2
+mergeableListBlame ws = foldl f Nothing (pairs ws)
+  where
+    f :: Blame2 -> (World, World) -> Blame2
+    f r (w1, w2) | isJust r  = r
+                 | otherwise = mergeableBlame w1 w2
+
+
+-- | Like mergeable, but returns a pair of Islands to blame if not mergeable.
+mergeableBlame :: World -> World -> Blame2
+mergeableBlame World{w_wimap = wimap1} World{w_wimap = wimap2} =
+    find (\(wi1, wi2) -> not (mergeableIslands wi1 wi2)) wi_pairs
+  where
+    wi_pairs = [ (wi1, wi2) | wi1 <- eltsUFM wimap1minus2
+                            , wi2 <- eltsUFM wimap2minus1 ]
+    wimap1minus2 = minusUFM wimap1 wimap2
+    wimap2minus1 = minusUFM wimap2 wimap1
+
+-- | Like newIslandMergeable, but returns a parent Island to
+--   blame if not mergeable.
+newIslandMergeableBlame :: World -> Island -> Blame1
+newIslandMergeableBlame pw wi =
+    find (\pwi -> not (mergeableIslands pwi wi))
+         [pwi | pwi <- eltsUFM (w_wimap pw), pwi /= wi]
+
+
 islandImplements :: Island -> Island -> Bool
 islandImplements wi_impl wi_sig =
   -- For every instance in wi_sig, check for an identical instance in wi_impl.
@@ -233,7 +265,7 @@ islandImplements wi_impl wi_sig =
 
 -- | Create a new world given a list of worlds to extend, the Moduleish for
 --   this module, and this module's locally defined instances.
-newWorld :: [World] -> Moduleish -> [ClsInst] -> (World, Bool)
+newWorld :: [World] -> Moduleish -> [ClsInst] -> (World, Blame1)
 newWorld ws mish local_insts = newWorld' anno_worlds mish local_insts
   where
     anno_worlds = [(w, Nothing) | w <- ws]
@@ -242,19 +274,19 @@ newWorld ws mish local_insts = newWorld' anno_worlds mish local_insts
 -- | Create a new world given a list of worlds (and Moduleishes that pointed to
 --   those worlds) to extend, the Moduleish for
 --   this module, and this module's locally defined instances.
-newWorldFromImports :: [(Moduleish, World)] -> Moduleish -> [ClsInst] -> (World, Bool)
+newWorldFromImports :: [(Moduleish, World)] -> Moduleish -> [ClsInst] -> (World, Blame1)
 newWorldFromImports imps mish local_insts = newWorld' anno_worlds mish local_insts
   where
     anno_worlds = [(w, Just m) | (m,w) <- imps]
 
 
-newWorld' :: [(World, Maybe Moduleish)] -> Moduleish -> [ClsInst] -> (World, Bool)
+newWorld' :: [(World, Maybe Moduleish)] -> Moduleish -> [ClsInst] -> (World, Blame1)
 newWorld' anno_worlds mish local_insts
   | null local_insts = ( World (w_wimap pw)
                                (MergedWorlds anno_worlds)
                                (w_icount pw)
                                (w_consis pw)
-                       , True )
+                       , Nothing )
   | otherwise = let
 
       -- Organize the list of local instances into an IslandInstEnv.
@@ -269,7 +301,7 @@ newWorld' anno_worlds mish local_insts
                       , wi_ienv   = local_ienv
                       , wi_icount = (length local_insts) }
 
-      island_okay = newIslandMergeable pw island
+      mb_bad_pwi = newIslandMergeableBlame pw island
 
       -- Parent world shouldn't have an Island for Moduleish mish. If it does,
       -- since we assume all Islands from the same Moduleish are the same, we
@@ -280,8 +312,8 @@ newWorld' anno_worlds mish local_insts
         ( World wimap_new
                 (NewWorld anno_worlds island)
                 (calcIslandsInstCount wimap_new)
-                (w_consis pw && island_okay)
-        , island_okay )
+                (w_consis pw && isNothing mb_bad_pwi)
+        , mb_bad_pwi )
 
   where
     -- First merge the extended worlds into a single parent world.
