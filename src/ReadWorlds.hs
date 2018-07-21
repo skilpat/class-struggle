@@ -143,6 +143,9 @@ processMod mish = do
   -- Type check the interface so that the instances are in the right format.
   local_insts <- lift $ readInstsFromIface iface
 
+  -- Check for locals consistency
+  let bad_locals = localInconsistentInstances local_insts
+
   -- Print module name and instances found.
   lift $ printSDoc $ text "  -" <+> ppr mish
   maybeDo $ do
@@ -172,12 +175,21 @@ processMod mish = do
 
   -- Check for inconsistency among imports
   let mb_bad_islands = mergeableListBlame (map snd imports)
+
+
+  when (not (null bad_locals)) $ do -- inconsistency among locals
+    lift $ printSDoc $ text "! warning: creating inconsistency @ locals:"
+    forM_ bad_locals $ \bad_pair -> do
+      lift $ printSDoc $ text "    between:" <+> ppr (fst bad_pair)
+      lift $ printSDoc $ text "        and:" <+> ppr (snd bad_pair)
+    
   when (isJust mb_bad_islands) $ do -- inconsistency among imports
     lift $ printSDoc $ text "! warning: creating inconsistency @ imports:"
     lift $ printSDoc $ text "    island 1:" <+> ppr (fst (fromJust mb_bad_islands))
     lift $ printSDoc $ text "    island 2:" <+> ppr (snd (fromJust mb_bad_islands))
     lift $ printSDoc $ text "    island 1 instances:" <+> ppr (islandInsts (fst (fromJust mb_bad_islands)))
     lift $ printSDoc $ text "    island 2 instances:" <+> ppr (islandInsts (snd (fromJust mb_bad_islands)))
+
   when (isJust mb_bad_island) $ do -- inconsistency btw imports & locals
     lift $ printSDoc $ text "! warning: creating inconsistency @ imports+locals:"
     lift $ printSDoc $ text "    parent island:" <+> ppr (fromJust mb_bad_island)
@@ -186,9 +198,8 @@ processMod mish = do
   
   -- Record all inherited and created inconsistencies
   let inconss
-        | isJust mb_bad_islands = S.insert mish imp_inconss
-        | isJust mb_bad_island  = S.insert mish imp_inconss
-        | otherwise             = imp_inconss
+        | isJust mb_bad_islands || isJust mb_bad_island || not (null bad_locals) = S.insert mish imp_inconss
+        | otherwise = imp_inconss
       
   -- Store the iface and newly created world for this module.
   updateCtxMap mish iface w inconss

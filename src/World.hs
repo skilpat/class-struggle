@@ -1,6 +1,8 @@
 {-# LANGUAGE TupleSections #-}
 module World where
 
+import Control.Applicative
+  ( (<|>) )
 import Control.Monad
 import Data.List
   ( sort, find )
@@ -11,6 +13,8 @@ import qualified Data.Set as S
 -- GHC imports
 import InstEnv
 import Module
+import Name
+  ( getName )
 import Outputable
 import Unify
   ( tcUnifyTys, BindFlag(BindMe), tcMatchTys )
@@ -259,9 +263,9 @@ islandImplements wi_impl wi_sig =
       , let cls_nm = is_cls_nm sig_inst ]
 
 
--- NOTE: For all the `newWorld` functions, we assume that GHC typechecking has
--- guaranteed that the freshly defined instances in the new Island do not
--- overlap with anything in the parent worlds.
+-- NOTE: For all the `newWorld` functions, we assume that the caller has
+-- verified that the given local instances have been checked and blamed
+-- for inconsistency.
 
 -- | Create a new world given a list of worlds to extend, the Moduleish for
 --   this module, and this module's locally defined instances.
@@ -290,10 +294,14 @@ newWorld' anno_worlds mish local_insts
   | otherwise = let
 
       -- Organize the list of local instances into an IslandInstEnv.
-      -- We assume that this list is internally mergeable.
+      -- We assume that this list is internally mergeable; this should
+      -- have been checked and blamed at caller.
       f :: IslandInstEnv -> ClsInst -> IslandInstEnv
       f ienv inst = addToUFM_C (++) ienv (is_cls inst) [inst]
       local_ienv = foldl f emptyUFM local_insts
+
+      -- Eagerly check that the instances are consistent.
+      -- mb_bad_newi = islandInternallyConsistent local_ienv
 
       -- Create an Island.
       island = Island { wi_exts   = canonicalIslands pw
@@ -312,14 +320,24 @@ newWorld' anno_worlds mish local_insts
         ( World wimap_new
                 (NewWorld anno_worlds island)
                 (calcIslandsInstCount wimap_new)
-                (w_consis pw && isNothing mb_bad_pwi)
-        , mb_bad_pwi )
+                (w_consis pw && isNothing mb_bad_pwi {-&& isNothing mb_bad_newi-})
+        , {-mb_bad_newi <|>-} mb_bad_pwi )
 
   where
     -- First merge the extended worlds into a single parent world.
     (ws, annos) = unzip anno_worlds
     pw = mergeList ws
 
+
+localInconsistentInstances :: [ClsInst] -> [(ClsInst, ClsInst)]
+localInconsistentInstances insts =
+    [ (i1, i2) | i1 <- insts,
+                 i2 <- insts,
+                 (getName i1) <= (getName i2),
+                 inconsistent i1 i2 ]
+  where
+    inconsistent :: ClsInst -> ClsInst -> Bool
+    inconsistent i1 i2 = not $ (identicalClsInstHead i1 i2) || (mergeableInsts i1 i2)
 
 
 lookupIsland :: World -> Moduleish -> Maybe Island
