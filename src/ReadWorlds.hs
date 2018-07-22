@@ -126,7 +126,7 @@ lookupOrProcess depth mish = do
       processMod depth mish
 
   lift flush
-  return entry
+  return $! entry
 
 
 
@@ -148,7 +148,7 @@ runCacheCtx cache_ctx_comp = do
   let (value, cons_cache') = runState cache_ctx_comp cons_cache
 
   -- Update the WorldCtx's cache with that result
-  modify $ \ctx -> ctx { ctx_cache = cons_cache' }
+  modify $! \ctx -> ctx { ctx_cache = cons_cache' }
 
   -- Return the value
   return value
@@ -288,7 +288,7 @@ processMod depth mish = do
 
   -- Read the interface.
   p $ text " # reading module interface"
-  iface <- lift $ readIfaceForMish mish
+  iface <- lift $! readIfaceForMish mish
 
   -- Get the names and worlds of imports, after recursively processing them first.
   let imp_mishes = importedMishes (mish_mod mish) iface
@@ -299,7 +299,7 @@ processMod depth mish = do
 
   -- Type check the interface so that the instances are in the right format.
   p $ text " # reading instances from interface"
-  local_insts <- lift $ readInstsFromIface iface
+  local_insts <- lift $! readInstsFromIface iface
   p $ text " # found" <+> int (length local_insts) <+> text "instances"
 
   -- Print instances found, if this mod was selected to print
@@ -307,10 +307,10 @@ processMod depth mish = do
     F.forM_ local_insts $ \inst ->
       p $ text " -" <+> ppr inst
 
-  -- TODO: family instances!
-
-  -- Get consistency cache
-  cons_cache <- get >>= return . ctx_cache
+  num <- getNumProcessed
+  cache_size <- getCacheSize
+  p $ text " # processed:" <+> int num
+  p $ text " # cache size:" <+> int cache_size
 
   -- Are any imported worlds inconsistent?
   let imp_inconss = S.unions [ c | (_,_,_,c) <- imp_results]
@@ -320,7 +320,7 @@ processMod depth mish = do
 
   -- Check for locals consistency
   p $ text " # checking inconsistency among" <+> int (length local_insts) <+> text "locals"
-  let mb_bad_locals = localInconsistentInstancesBlame local_insts
+  let mb_bad_locals = localInconsistentInstancesBlame $! local_insts
 
   -- Try to create a new world; its origin will contain newly created inconsistencies
   p $ text " # checking and creating new world"
@@ -343,14 +343,8 @@ processMod depth mish = do
         | otherwise = imp_inconss
       
   -- Store the iface and newly created world for this module.
-  updateCtxMap mish iface w_new inconss
-
-  num <- getNumProcessed
-  cache_size <- getCacheSize
-  p $ text " # processed:" <+> int num
-  p $ text " # cache size:" <+> int cache_size
-
-  return (mish, iface, w_new, inconss)
+  updateCtxMap mish () w_new inconss
+  return $! (mish, (), w_new, inconss)
 
 
 printWorldNewInconsistencies :: (SDoc -> CtxM ()) -> World -> CtxM ()

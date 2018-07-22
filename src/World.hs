@@ -128,10 +128,10 @@ checkMergeList ws mb_mish = do
 
   let origin = MergedWorlds (map (, Nothing) ws) mb_mish mb_wi_clashes
 
-  return $ World wimap_all
-                 origin
-                 (calcIslandsInstCount wimap_all)
-                 (each_w_consis && (isNothing mb_wi_clashes))
+  return $! World wimap_all
+                  origin
+                  (calcIslandsInstCount wimap_all)
+                  (each_w_consis && (isNothing mb_wi_clashes))
 
 
 -- | All pairs (xi,xj) of a list xs such that i < j.
@@ -158,7 +158,7 @@ checkMergeableBlame = checkMergeableWorldsWithCache compute
     compute :: World -> World -> WorldConsCtx (Maybe IslandClashes)
     compute w1@World{w_wimap = wimap1} w2@World{w_wimap = wimap2}
       | one_extends_other = return Nothing
-      | otherwise         = concatMaybeClashesInCtx checks
+      | otherwise         = concatMaybeClashesInCtx $! checks
       where
         one_extends_other = worldExtends w1 w2 || worldExtends w2 w1
 
@@ -187,7 +187,7 @@ checkMergeableIslandsBlame = checkMergeableIslandsWithCache compute
                              else checkIslandImplements wi2 wi1
 
         -- Otherwise, check mergeability of instance envs, blaming accordingly.
-        | otherwise = fmap (instToIslandClashes mish1 mish2) $ mergeableInstEnvs ienv1 ienv2
+        | otherwise = fmap (instToIslandClashes mish1 mish2) $! mergeableInstEnvs ienv1 ienv2
 
 -- | Given `m1` and `m2` and pairwise instance clashes, create the island
 --   clashes blaming those modules respectively.
@@ -199,7 +199,7 @@ instToIslandClashes m1 m2 inst_clashes = blame1 ++ blame2
     blame2 = map (m2,) insts2
 
 checkIslandImplements :: Island -> Island -> Maybe IslandClashes
-checkIslandImplements wi_impl wi_sig = concatMaybeClashes results
+checkIslandImplements wi_impl wi_sig = concatMaybeClashes $! results
   where
     -- Blame the given sig instance.
     sig_inconsis :: ClsInst -> Maybe IslandClashes
@@ -229,14 +229,14 @@ mergeableInstEnvs ienv1 ienv2 = foldUFM f Nothing pairs_for_classes
     -- Folding function: Given two pairs of instances to check and the previous
     -- clashes, concat any new clashes from checking those pairs.
     f :: ([ClsInst], [ClsInst]) -> Maybe PairwiseInstClashes -> Maybe PairwiseInstClashes
-    f (is1, is2) mb_clashes = liftA2 (++) mb_clashes $ mergeableInstLists is1 is2
+    f (is1, is2) mb_clashes = liftA2 (++) mb_clashes $! mergeableInstLists is1 is2
 
 
 -- Just check that every pair of instances is mergeable. Each pair comes
 -- from the same class, hence the use of `mergeableInstsSameClass`.
 mergeableInstLists :: [ClsInst] -> [ClsInst] -> Maybe PairwiseInstClashes
 mergeableInstLists insts1 insts2 | null inconsis_pairs = Nothing
-                                 | otherwise           = Just inconsis_pairs
+                                 | otherwise           = Just $! inconsis_pairs
   where
     inconsis_pairs = [ (i1, i2)
                      | i1 <- insts1
@@ -288,12 +288,12 @@ concatMaybeClashes :: [Maybe [a]] -> Maybe [a]
 concatMaybeClashes mb_clashes | null clashes = Nothing
                               | otherwise    = Just clashes
   where
-    clashes = concat $ catMaybes mb_clashes
+    clashes = concat $! catMaybes mb_clashes
 
 concatMaybeClashesInCtx :: [WorldConsCtx (Maybe [a])] -> WorldConsCtx (Maybe [a])
 concatMaybeClashesInCtx actions = do
   results <- sequence actions
-  return $ concatMaybeClashes results
+  return $! concatMaybeClashes results
 
 -- -- | Check whether the given Island is mergeable with the given parent World.
 -- --   Not only does this check for mergeability with the parent's Islands, it
@@ -406,10 +406,10 @@ checkNewWorld' anno_worlds mish (local_insts, mb_local_clashes) = do
     let (MergedWorlds _ _ mb_imps_clashes) = w_origin pw
 
     if null local_insts
-      then return $ World (w_wimap pw)
-                          (MergedWorlds anno_worlds (Just mish) mb_imps_clashes)
-                          (w_icount pw)
-                          (w_consis pw)
+      then return $! World (w_wimap pw)
+                           (MergedWorlds anno_worlds (Just mish) mb_imps_clashes)
+                           (w_icount pw)
+                           (w_consis pw)
       else do
         -- Organize the list of local instances into an IslandInstEnv.
         -- We assume that this list is internally mergeable; this should
@@ -434,16 +434,16 @@ checkNewWorld' anno_worlds mish (local_insts, mb_local_clashes) = do
         let wimap_new = addToUFM (w_wimap pw) mish island
 
         -- Determine new inconsistency
-        let nwis = catMaybes $
+        let nwis = catMaybes $!
               [ toImpsInconsis mb_imps_clashes
               , toLocsInconsis mb_local_clashes
               , toImpsLocsInconsis mb_implocal_clashes ]
         
-        return $ World wimap_new
-                       (NewWorld anno_worlds island nwis)
-                       (calcIslandsInstCount wimap_new)
-                       -- parent world is consistent and no new
-                       (w_consis pw && null nwis)
+        return $! World wimap_new
+                        (NewWorld anno_worlds island nwis)
+                        (calcIslandsInstCount wimap_new)
+                        -- parent world is consistent and no new
+                        (w_consis pw && null nwis)
 
   where
 
@@ -610,27 +610,32 @@ worldConsCacheContainsIslands wi1 wi2 cache = HS.member key cache
     key = toIslandCacheKey wi1 wi2
 
 worldConsCacheAdd :: World -> World -> WorldConsCache -> WorldConsCache
-worldConsCacheAdd w1 w2 cache = HS.union cache $! toAllCacheableKeys w1 w2
+worldConsCacheAdd w1 w2 cache = --HS.union cache $! toAllCacheableKeys w1 w2
+  case toRootCacheKey w1 w2 of
+    Just key -> HS.insert key cache
+    Nothing  -> cache
 
 worldConsCacheAddIslands :: Island -> Island -> WorldConsCache -> WorldConsCache
-worldConsCacheAddIslands wi1 wi2 = HS.insert (toIslandCacheKey wi1 wi2)
+worldConsCacheAddIslands wi1 wi2 = HS.insert $! toIslandCacheKey wi1 wi2
 
--- | Return the cache containing all keys derived from mergeable worlds
---   `w1` and `w2`. This includes `(mod(w1), mod(w2))` (the root cache key)
---   but also every pair of modules from islands in the two worlds, resp.
-toAllCacheableKeys :: World -> World -> WorldConsCache
-toAllCacheableKeys w1 w2 = foldl' (flip HS.insert) root_cache island_keys
-  where
-    -- The root cache for the root cache key of (mod(w1), mod(w2))
-    root_cache = case toRootCacheKey w1 w2 of
-      Just key -> HS.singleton key
-      Nothing -> HS.empty
+-- -- | Return the cache containing all keys derived from mergeable worlds
+-- --   `w1` and `w2`. This includes `(mod(w1), mod(w2))` (the root cache key)
+-- --   but also every pair of modules from islands in the two worlds, resp.
+-- toAllCacheableKeys :: World -> World -> WorldConsCache
+-- toAllCacheableKeys w1 w2 = foldl' (flip HS.insert) root_cache island_keys
+--   where
+--     -- The root cache for the root cache key of (mod(w1), mod(w2))
+--     root_cache = case toRootCacheKey w1 w2 of
+--       Just key -> HS.singleton key
+--       Nothing -> HS.empty
 
-    -- Pairs of all modules found among islands in w1 and w2, resp. These are
-    -- all the keys that can be added to the cache by analyzing islands.
-    wis1 = eltsUFM $ w_wimap w1
-    wis2 = eltsUFM $ w_wimap w2
-    island_keys = [ toIslandCacheKey wi1 wi2 | wi1 <- wis1, wi2 <- wis2 ]
+--     -- Pairs of all modules found among islands in w1 and w2, resp. These are
+--     -- all the keys that can be added to the cache by analyzing islands.
+--     wis1 = eltsUFM $ w_wimap w1
+--     wis2 = eltsUFM $ w_wimap w2
+--     island_keys = [ toIslandCacheKey wi1 wi2
+--                   | wi1 <- wis1
+--                   , wi2 <- wis2 ]
 
 toIslandCacheKey :: Island -> Island -> WorldConsCacheKey
 toIslandCacheKey wi1 wi2 = (wi_mod wi1, wi_mod wi2)

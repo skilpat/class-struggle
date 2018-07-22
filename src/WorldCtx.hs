@@ -29,7 +29,7 @@ type Consistency = S.Set Moduleish
 --   = Consistent
 --   | Inconsistent ![Moduleish]
 
-type CtxEntry = (Moduleish, ModIface, World, Consistency)
+type CtxEntry = (Moduleish, (), World, Consistency)
 
 -- | A context that maps a Moduleish to its typechecked interface and world.
 data Ctx = Ctx { ctx_map     :: UniqFM CtxEntry
@@ -92,7 +92,7 @@ lookupPkgEntriesMatching Ctx {ctx_pkg_map = pmap} pkg_str =
 
 
 
-updateCtxMap :: Moduleish -> ModIface -> World -> Consistency -> CtxM ()
+updateCtxMap :: Moduleish -> () -> World -> Consistency -> CtxM ()
 updateCtxMap mish iface w c = do
   ctx@Ctx{ctx_map = cmap, ctx_pkgs = cpids} <- get
   -- Update context's map with this Moduleish and (ModIface, World).
