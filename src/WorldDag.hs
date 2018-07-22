@@ -180,8 +180,8 @@ worldDagInner ci (mish, w) = do
           -- edges pointing to something in a cluster need to be redirected to
           -- the cluser node.
           let (my_nodes, my_edges) = case w_origin w of
-                MergedWorlds _ -> (S.empty, S.empty)
-                NewWorld _ wi  ->
+                MergedWorlds _ _ _ -> (S.empty, S.empty)
+                NewWorld _ wi _    ->
                   -- ASSERT: wi_mod wi == mish ?
                   ( S.singleton (show (wi_mod wi), islandInstCount wi)
                   -- , S.fromList [ (show mish, n, show imp_m)

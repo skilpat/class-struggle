@@ -2,6 +2,7 @@
 module Moduleish where
 
 -- import Control.Monad
+import Data.Hashable
 
 -- GHC imports
 import Module
@@ -16,6 +17,10 @@ data Moduleish = Moduleish { mish_mod  :: !Module
 
 deriving instance Eq Moduleish
 deriving instance Ord Moduleish
+
+-- Hash of Moduleish is just hash of the Unique's key
+instance Hashable Moduleish where
+  hashWithSalt salt mish = hashWithSalt salt $ getKey $ getUnique mish
 
 -- | Make a non-boot Moduleish for the given Module.
 mkModuleish :: Module -> Moduleish

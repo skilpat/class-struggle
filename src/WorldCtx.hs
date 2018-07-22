@@ -5,6 +5,7 @@ import Data.Maybe
   ( catMaybes )
 import Data.Monoid
 import qualified Data.Set as S
+import qualified Data.HashSet as HS
 
 
 import DynFlags
@@ -33,18 +34,27 @@ type CtxEntry = (Moduleish, ModIface, World, Consistency)
 -- | A context that maps a Moduleish to its typechecked interface and world.
 data Ctx = Ctx { ctx_map     :: UniqFM CtxEntry
                , ctx_pkg_map :: UniqFM (PackageId, World, Consistency)
-               , ctx_pkgs    :: S.Set PackageId }
+               , ctx_pkgs    :: S.Set PackageId
+               , ctx_cache   :: WorldConsCache }
 
 instance Monoid Ctx where
   mempty = Ctx { ctx_map     = emptyUFM
                , ctx_pkg_map = emptyUFM
-               , ctx_pkgs    = S.empty }
+               , ctx_pkgs    = S.empty
+               , ctx_cache   = HS.empty }
 
-  mappend Ctx { ctx_map  = cmap1, ctx_pkg_map = pmap1, ctx_pkgs = pkgs1 }
-          Ctx { ctx_map  = cmap2, ctx_pkg_map = pmap2, ctx_pkgs = pkgs2 } =
+  mappend Ctx { ctx_map = cmap1
+              , ctx_pkg_map = pmap1
+              , ctx_pkgs = pkgs1
+              , ctx_cache = cache1 }
+          Ctx { ctx_map = cmap2
+              , ctx_pkg_map = pmap2
+              , ctx_pkgs = pkgs2
+              , ctx_cache = cache2 } =
     Ctx { ctx_map     = plusUFM cmap1 cmap2
         , ctx_pkg_map = plusUFM pmap1 pmap2
-        , ctx_pkgs    = S.union pkgs1 pkgs2 }
+        , ctx_pkgs    = S.union pkgs1 pkgs2
+        , ctx_cache   = HS.union cache1 cache2 }
 
 
 -- | A wrapper around the Ghc monad that keeps up with a Ctx as state.

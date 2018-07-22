@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                orphans
-version:             0.2.0.0
+version:             0.3.0.0
 synopsis:            Calculates statistics about the usage of orphan instances in common packages.
 -- description:         
 license:             BSD3
@@ -32,10 +32,13 @@ library
                        ghc-paths >=0.1 && <0.2,
                        graphviz >=2999.17 && <2999.18,
                        split >=0.1 && <0.3,
+                       hashable,
+                       hashmap,
                        ghc,
                        test-pkg
   hs-source-dirs:      src
   default-language:    Haskell2010
+  ghc-options:         -O2
 
 executable calc-worlds
   main-is:             Main.hs
@@ -45,6 +48,7 @@ executable calc-worlds
                        orphans
   hs-source-dirs:      calc-worlds
   default-language:    Haskell2010
+  ghc-options:         -O2
 
 executable orphans-stats
   main-is:             Main.hs
@@ -59,3 +63,4 @@ executable orphans-stats
                        orphans
   hs-source-dirs:      orphans-stats
   default-language:    Haskell2010
+  ghc-options:         -O2

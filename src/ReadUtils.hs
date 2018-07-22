@@ -13,7 +13,7 @@ import System.Exit
   ( exitFailure )
 import System.FilePath
 import System.IO
-  ( withFile, hIsEOF, IOMode(ReadMode), hGetLine, getContents )
+  ( withFile, hIsEOF, IOMode(ReadMode), hGetLine, getContents, stdout, hFlush )
 
 import GHC
 import Module
@@ -149,6 +149,10 @@ printSDoc sdoc = do
 
 
 
+-- Flush any buffered output
+flush :: Ghc ()
+flush = liftIO $ hFlush stdout
+
 
 type FileExt = String   -- Filename extension
 type BaseName = String  -- Basename of file
@@ -175,8 +179,14 @@ readIfaceForMish mish = do
 --   in the right format. So do that.
 readInstsFromIface :: ModIface -> Ghc [ClsInst]
 readInstsFromIface iface = do
+  liftIO $ putStrLn $ "+ getting session"
+  flush
   hsc_env <- getSession
+  liftIO $ putStrLn $ "+ reading " ++ (show $ mkModuleish $ mi_module iface)
+  flush
   mod_details <- liftIO $ initTcForLookup hsc_env $ typecheckIface iface
+  liftIO $ putStrLn $ "+ done reading " ++ (show $ mkModuleish $ mi_module iface)
+  flush
   return $ md_insts mod_details
 
 
