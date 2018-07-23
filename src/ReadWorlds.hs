@@ -98,9 +98,9 @@ processPkg :: String -> (PackageId, [Module]) -> CtxM ()
 processPkg pname (pid, mods) = do
   -- Process each of its mods. Since we are processing this package
   -- from the outside, we are looking for *non-boot* modules to process,
-  -- hence the `mkModuleish` call.
+  -- hence the `mkModuleishImpl` call.
   lift $ printSDoc $ text "*" <+> ppr pid
-  results <- mapM ((lookupOrProcess 0) . mkModuleish) mods
+  results <- mapM ((lookupOrProcess 0) . mkModuleishImpl) mods
   lift $ printSDoc $ text " finished processing " <+> ppr pid
 
   -- Record this package's world
@@ -273,10 +273,12 @@ processMod :: Int -> Moduleish -> CtxM CtxEntry
 processMod depth mish = do
 
   -- Print everything at recursive depth, and flush output buffer
-
   let p sdoc = do
         lift $ printSDoc $ text (replicate depth '>') <+> sdoc
         lift flush
+
+  let debug sdoc = p $ text "#" <+> sdoc
+  let warn sdoc = p $ text "! WARNING:" <+> ppr mish <+> text ":" <+> sdoc
 
   -- Print module name
   p $ text "-" <+> ppr mish
@@ -287,20 +289,20 @@ processMod depth mish = do
         | otherwise                          = return ()
 
   -- Read the interface.
-  p $ text " # reading module interface"
+  debug $ text "reading module interface"
   iface <- lift $! readIfaceForMish mish
 
   -- Get the names and worlds of imports, after recursively processing them first.
   let imp_mishes = importedMishes (mish_mod mish) iface
-  p $ text " # found" <+> int (length imp_mishes) <+> text "imports: " <+> ppr imp_mishes
+  debug $ text "found" <+> int (length imp_mishes) <+> text "imports: " <+> ppr imp_mishes
   imp_results <- mapM (lookupOrProcess $ depth + 1) imp_mishes
   let imports = [(m,w) | (m,_,w,_) <- imp_results ]
-  p $ text " # done processing" <+> int (length imp_mishes) <+> text "imports"
+  debug $ text "done processing" <+> int (length imp_mishes) <+> text "imports"
 
   -- Type check the interface so that the instances are in the right format.
-  p $ text " # reading instances from interface"
+  debug $ text "reading instances from interface"
   local_insts <- lift $! readInstsFromIface iface
-  p $ text " # found" <+> int (length local_insts) <+> text "instances"
+  debug $ text "found" <+> int (length local_insts) <+> text "instances"
 
   -- Print instances found, if this mod was selected to print
   maybeDo $ do
@@ -309,26 +311,26 @@ processMod depth mish = do
 
   num <- getNumProcessed
   cache_size <- getCacheSize
-  p $ text " # processed:" <+> int num
-  p $ text " # cache size:" <+> int cache_size
+  debug $ text "processed:" <+> int num
+  debug $ text "cache size:" <+> int cache_size
 
   -- Are any imported worlds inconsistent?
   let imp_inconss = S.unions [ c | (_,_,_,c) <- imp_results]
   unless (S.null imp_inconss) $ do
-   p $ text "! warning: inheriting inconsistency from:"
+    warn $ text "inheriting inconsistency from:"
                       <+> hsep (map ppr (S.toAscList imp_inconss))
 
   -- Check for locals consistency
-  p $ text " # checking inconsistency among" <+> int (length local_insts) <+> text "locals"
+  debug $ text "checking inconsistency among" <+> int (length local_insts) <+> text "locals"
   let mb_bad_locals = localInconsistentInstancesBlame $! local_insts
 
   -- Try to create a new world; its origin will contain newly created inconsistencies
-  p $ text " # checking and creating new world"
+  debug $ text "checking and creating new world"
   w_new <- runCacheCtx $!
       checkNewWorldFromImports imports mish (local_insts, mb_bad_locals)
 
   -- Print each of the new inconsistencies that were found (including locals)
-  printWorldNewInconsistencies p w_new
+  printWorldNewInconsistencies p mish w_new
 
   -- n <- getNumProcessed
   -- when (n >= 690) $ do
@@ -347,25 +349,27 @@ processMod depth mish = do
   return $! (mish, (), w_new, inconss)
 
 
-printWorldNewInconsistencies :: (SDoc -> CtxM ()) -> World -> CtxM ()
-printWorldNewInconsistencies p w = case w_origin w of
+printWorldNewInconsistencies :: (SDoc -> CtxM ()) -> Moduleish -> World -> CtxM ()
+printWorldNewInconsistencies p mish w = case w_origin w of
     MergedWorlds _ _ Nothing -> return ()
     MergedWorlds _ _ (Just clashes) -> printImpClashes clashes
     NewWorld _ _ nw_inconss -> forM_ nw_inconss printNWI
   where
+    warn sdoc = p $ text "! WARNING:" <+> ppr mish <+> text ":" <+> sdoc
+
     printImpClashes clashes = do
-      p $ text "! warning: creating inconsistency @ imports:"
+      warn $ text "creating inconsistency @ imports:"
       forM_ clashes $ \(mish, inst) ->
         p $ text " -" <+> ppr mish <+> ppr inst
 
     printNWI (AmongImports clashes) = printImpClashes clashes
     printNWI (AmongLocals inst_clashes) = do
-        p $ text "! warning: creating inconsistency @ locals:"
+        warn $ text "creating inconsistency @ locals:"
         forM_ inst_clashes $ \(inst1, inst2) -> do
           p $ text "    - between:" <+> ppr inst1
           p $ text "          and:" <+> ppr inst2
     printNWI (BetweenImportsAndLocals clashes) = do
-        p $ text "! warning: creating inconsistency @ imports+locals:"
+        warn $ text "creating inconsistency @ imports+locals:"
         forM_ clashes $ \(mish, inst) ->
           p $ text " -" <+> ppr mish <+> ppr inst
 
@@ -385,14 +389,14 @@ getCacheSize = do
 importedMishes :: Module -> ModIface -> [Moduleish]
 importedMishes this_mod iface = concatMap mishFromUsage (mi_usages iface)
   where
-    mishFromUsage (UsagePackageModule {usg_mod = mod})    = [mkModuleish mod]
+    mishFromUsage (UsagePackageModule {usg_mod = mod})    = [mkModuleishImpl mod]
     mishFromUsage (UsageHomeModule {usg_mod_name = name}) = [mkHomeMish name]
     mishFromUsage _ = []
 
     -- Make a Moduleish for a home package module. Check the ModIface's
     -- Dependencies list to determine whether this is a boot file or not.
-    mkHomeMish name = Moduleish (mkModule (modulePackageId this_mod) name)
-                                (fromJust $ lookup name (dep_mods (mi_deps iface)))
+    mkHomeMish name = mkModuleish (mkModule (modulePackageId this_mod) name)
+                                  (fromJust $! lookup name (dep_mods (mi_deps iface)))
 
 
 

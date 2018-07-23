@@ -198,7 +198,7 @@ processPkg pname (pid, mods) = do
 processMod :: Module -> Ghc ModOrphStats
 processMod mod = do
   dflags <- getSessionDynFlags
-  iface  <- readIfaceForMish $ mkModuleish mod
+  iface  <- readIfaceForMish $ mkModuleishImpl mod
   let insts = mi_insts iface
 
   -- TODO: family instances!

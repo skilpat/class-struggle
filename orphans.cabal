@@ -38,7 +38,11 @@ library
                        test-pkg
   hs-source-dirs:      src
   default-language:    Haskell2010
-  ghc-options:         -O2
+  ghc-options:
+                       -O2
+                       -threaded
+                       -fprof-auto-top
+                       "-with-rtsopts=-N -p -s -h -i0.1"
 
 executable calc-worlds
   main-is:             Main.hs
@@ -48,7 +52,11 @@ executable calc-worlds
                        orphans
   hs-source-dirs:      calc-worlds
   default-language:    Haskell2010
-  ghc-options:         -O2
+  ghc-options:
+                       -O2
+                       -threaded
+                       -fprof-auto
+                       "-with-rtsopts=-N -p -s -h -i0.1"
 
 executable orphans-stats
   main-is:             Main.hs
@@ -63,4 +71,8 @@ executable orphans-stats
                        orphans
   hs-source-dirs:      orphans-stats
   default-language:    Haskell2010
-  ghc-options:         -O2
+  ghc-options:
+                       -O2
+                       -threaded
+                       -fprof-auto
+                       "-with-rtsopts=-N -p -s -h -i0.1"

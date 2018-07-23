@@ -21,6 +21,8 @@ import Data.List
   ( union )
 import Data.Maybe
   ( isJust )
+import Data.Foldable
+  ( foldl' )
 import qualified Data.Map as M
 import qualified Data.Set as S
 
@@ -206,7 +208,10 @@ clusterNode mish w = (n, worldInstCount w)
 --   set of Islands whose total reachability set includes every Island in this
 --   World.
 worldCanonicalNodes :: World -> S.Set N
-worldCanonicalNodes w = S.map (show . wi_mod) $ canonicalIslands w
+worldCanonicalNodes w = foldl' f S.empty $! canonicalIslands w
+  where
+    f :: S.Set N -> Island -> S.Set N
+    f set wi = S.insert (show $ wi_mod wi) set
 
 worldAllNodes :: World -> S.Set N
 worldAllNodes w =

@@ -75,7 +75,7 @@ worldDag w = (S.unions nodes_list, S.unions edges_list)
 
   where
     -- The canonical islands of this world.
-    islands = S.toList $ canonicalIslands w
+    islands = eltsUFM $ canonicalIslands w
 
     -- recursively compute DAG for each parent
     (nodes_list, edges_list) = unzip $ map islandDag islands
@@ -88,7 +88,7 @@ islandDag wi = ( S.union my_nodes parent_nodes_merged
 
   where
     -- parent islands
-    parent_wis = S.toList $ wi_exts wi
+    parent_wis = eltsUFM $ wi_exts wi
 
     -- recursively compute DAG for each parent
     (parent_nodes, parent_edges) = unzip $ map islandDag parent_wis

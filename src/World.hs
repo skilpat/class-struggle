@@ -35,7 +35,7 @@ type IslandInstEnv = UniqFM [ClsInst]
 
 -- | The world of a module that extends other worlds and adds at least one
 --   instance.
-data Island = Island { wi_exts   :: !(S.Set Island)
+data Island = Island { wi_exts   :: !Islands -- FOR NOW, ALWAYS EMPTY
                      , wi_mod    :: !Moduleish
                      , wi_ienv   :: !IslandInstEnv
                      , wi_icount :: !Int }
@@ -80,15 +80,13 @@ data World = World { w_wimap  :: !Islands
 -- | Two Worlds are equal if they include the same Moduleishes in their Island
 --   maps.
 instance Eq World where
-  -- UniqFM uses IntMap.keys, which is ordered
+  -- UniqFM uses IntMap.keys, which is ordered, so this will fail fast
   w1 == w2
     | (sizeUFM wimap1) == (sizeUFM wimap2) = keysUFM wimap1 == keysUFM wimap2
     | otherwise = False
     where
       wimap1 = w_wimap w1
       wimap2 = w_wimap w2
-
-
 
 -- | The initial, empty world.
 emptyWorld :: World
@@ -118,15 +116,17 @@ checkMergeList ws mb_mish = do
 
   -- Check if consistent together, updating cache
   mb_wi_clashes <- checkMergeableListBlame ws
+  let origin = MergedWorlds (map (, Nothing) ws) mb_mish mb_wi_clashes
 
   -- If a Module appears in two worlds, then we assume that it points to the
   -- exact same Island in both worlds. So to merge two worlds we simply add
   -- the Island maps and take the RHS in case a Mod is mapped by both (which
   -- is what plusUFM does).
   let wimaps = map w_wimap ws
-  let wimap_all = foldl plusUFM emptyUFM wimaps
+  let wimap_all = foldl' plusUFM emptyUFM wimaps
 
-  let origin = MergedWorlds (map (, Nothing) ws) mb_mish mb_wi_clashes
+  -- Get the canonical islands that covers the whole world
+  -- let wimap_canonical = canonicalIslandsOfMerge ws
 
   return $! World wimap_all
                   origin
@@ -220,7 +220,7 @@ checkIslandImplements wi_impl wi_sig = concatMaybeClashes $! results
               , let cls_nm = is_cls_nm sig_inst ]
 
 mergeableInstEnvs :: IslandInstEnv -> IslandInstEnv -> Maybe PairwiseInstClashes
-mergeableInstEnvs ienv1 ienv2 = foldUFM f Nothing pairs_for_classes
+mergeableInstEnvs ienv1 ienv2 = foldl' f Nothing pairs_for_classes
   where
     -- Gather the insts in each side, but only for classes that have
     -- instances in both sides; other classes' instances are fine.
@@ -228,8 +228,8 @@ mergeableInstEnvs ienv1 ienv2 = foldUFM f Nothing pairs_for_classes
 
     -- Folding function: Given two pairs of instances to check and the previous
     -- clashes, concat any new clashes from checking those pairs.
-    f :: ([ClsInst], [ClsInst]) -> Maybe PairwiseInstClashes -> Maybe PairwiseInstClashes
-    f (is1, is2) mb_clashes = liftA2 (++) mb_clashes $! mergeableInstLists is1 is2
+    f :: Maybe PairwiseInstClashes -> ([ClsInst], [ClsInst]) -> Maybe PairwiseInstClashes
+    f mb_clashes (is1, is2) = liftA2 (++) mb_clashes $! mergeableInstLists is1 is2
 
 
 -- Just check that every pair of instances is mergeable. Each pair comes
@@ -417,10 +417,10 @@ checkNewWorld' anno_worlds mish (local_insts, mb_local_clashes) = do
         -- mb_local_clashes.
         let f :: IslandInstEnv -> ClsInst -> IslandInstEnv
             f ienv inst = addToUFM_C (++) ienv (is_cls inst) [inst]
-        let local_ienv = foldl f emptyUFM local_insts
+        let local_ienv = foldl' f emptyUFM local_insts
 
         -- Create an Island.
-        let island = Island { wi_exts   = canonicalIslands pw
+        let island = Island { wi_exts   = emptyUFM --canonicalIslands pw
                             , wi_mod    = mish
                             , wi_ienv   = local_ienv
                             , wi_icount = length local_insts }
@@ -550,11 +550,25 @@ coveredPkgs w =
   S.fromList [ modulePackageId (mish_mod (wi_mod wi))
                | wi <- eltsUFM (w_wimap w) ]
   
-canonicalIslands :: World -> S.Set Island
+-- | Given a world, extract the canonical Islands, i.e., the smallest Islands
+--   mapping that covers the whole world and whose keys are all modules
+--   introducing new islands. In the case that the world was newly created
+--   with an island, it's just that island. Otherwise it's a merging of all
+--   the recursive canonical islands from the world.
+canonicalIslands :: World -> Islands
 canonicalIslands w = case w_origin w of
-  NewWorld _ wi _ -> S.singleton $ wi
-  MergedWorlds anno_ws _ _ ->
-    S.unions [ canonicalIslands w' | (w', _) <- anno_ws ]
+  -- Singleton Island for this new world.
+  NewWorld _ wi _ -> unitUFM (wi_mod wi) wi
+  -- Recursively get canonical islands of merged worlds and merge them all
+  -- together. No conflict possible since two such mappings will always map
+  -- the same Moduleish to the same Island.
+  MergedWorlds anno_ws _ _ -> canonicalIslandsOfMerge $! map fst anno_ws
+
+canonicalIslandsOfMerge :: [World] -> Islands
+canonicalIslandsOfMerge ws = foldl' f emptyUFM ws
+    where
+      f :: Islands -> World -> Islands
+      f all_islands w = plusUFM all_islands $! canonicalIslands w
 
 -- PRINTING ------------------------------------------------------
 
@@ -616,7 +630,10 @@ worldConsCacheAdd w1 w2 cache = --HS.union cache $! toAllCacheableKeys w1 w2
     Nothing  -> cache
 
 worldConsCacheAddIslands :: Island -> Island -> WorldConsCache -> WorldConsCache
-worldConsCacheAddIslands wi1 wi2 = HS.insert $! toIslandCacheKey wi1 wi2
+worldConsCacheAddIslands wi1 wi2 cache
+  -- only add to cache if the two islands are in the same package
+  | mishSamePkg (wi_mod wi1) (wi_mod wi2) = HS.insert (toIslandCacheKey wi1 wi2) cache
+  | otherwise = cache
 
 -- -- | Return the cache containing all keys derived from mergeable worlds
 -- --   `w1` and `w2`. This includes `(mod(w1), mod(w2))` (the root cache key)

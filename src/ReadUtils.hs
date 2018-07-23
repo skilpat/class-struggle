@@ -182,10 +182,10 @@ readInstsFromIface iface = do
   liftIO $ putStrLn $ "+ getting session"
   flush
   hsc_env <- getSession
-  liftIO $ putStrLn $ "+ reading " ++ (show $ mkModuleish $ mi_module iface)
+  liftIO $ putStrLn $ "+ reading " ++ (show $ mkModuleishImpl $ mi_module iface)
   flush
   mod_details <- liftIO $ initTcForLookup hsc_env $ typecheckIface iface
-  liftIO $ putStrLn $ "+ done reading " ++ (show $ mkModuleish $ mi_module iface)
+  liftIO $ putStrLn $ "+ done reading " ++ (show $ mkModuleishImpl $ mi_module iface)
   flush
   return $ md_insts mod_details
 
