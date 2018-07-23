@@ -8,6 +8,8 @@ import qualified Data.HashSet as HS
 import qualified Data.Foldable as F
 import Data.Maybe
   ( mapMaybe )
+import Data.List
+  ( partition )
 
 import DynFlags
 import GHC
@@ -119,13 +121,13 @@ lookupOrProcess depth mish = do
   ctx <- get
   entry <- case lookupUFM (ctx_map ctx) mish of
     Just r  -> do
-      lift $ printSDoc $ brackets $ int depth <+> text ": " <+> ppr mish <+> text ": looked up"
+      -- lift $ printSDoc $ brackets $ int depth <+> text ": " <+> ppr mish <+> text ": looked up"
       return r
     Nothing -> do
-      lift $ printSDoc $ brackets $ int depth <+> text ": " <+> ppr mish <+> text ": processing new"
+      -- lift $ printSDoc $ brackets $ int depth <+> text ": " <+> ppr mish <+> text ": processing new"
       processMod depth mish
 
-  lift flush
+  -- lift flush
   return $! entry
 
 
@@ -145,128 +147,13 @@ runCacheCtx cache_ctx_comp = do
   cons_cache <- get >>= return . ctx_cache
 
   -- Run the computation using that cache and get a value
-  let (value, cons_cache') = runState cache_ctx_comp cons_cache
+  (value, cons_cache') <- lift $ runStateT cache_ctx_comp cons_cache
 
   -- Update the WorldCtx's cache with that result
   modify $! \ctx -> ctx { ctx_cache = cons_cache' }
 
   -- Return the value
   return value
-
--- processMod :: Int -> Moduleish -> CtxM CtxEntry
--- processMod depth mish = do
-
---   -- Print everything at recursive depth, and flush output buffer
-
---   let p sdoc = do
---         lift $ printSDoc $ text (replicate depth '>') <+> sdoc
---         lift flush
-
---   -- Print module name
---   p $ text "-" <+> ppr mish
-
---   let modsToPrint = ["Vectorise.Exp"]
---   let maybeDo m
---         | mishModStr mish `elem` modsToPrint = m
---         | otherwise                          = return ()
-
---   -- Read the interface.
---   p $ text " # reading module interface"
---   iface <- lift $ readIfaceForMish mish
-
---   -- Get the worlds of imports, after recursively processing them first.
---   let imp_mishes = importedMishes (mish_mod mish) iface
---   p $ text " # found" <+> int (length imp_mishes) <+> text "imports: " <+> ppr imp_mishes
---   p $ text " # processing imports"
---   imp_results <- mapM (lookupOrProcess $ depth + 1) imp_mishes
---   p $ text " # done processing imports"
---   let imports = [(m,w) | (m,_,w,_) <- imp_results ]
-
---   -- Type check the interface so that the instances are in the right format.
---   p $ text " # reading instances from interface"
---   local_insts <- lift $ readInstsFromIface iface
---   p $ text " # found" <+> int (length local_insts) <+> text "instances"
-
---   -- Print instances found.
---   maybeDo $ do
---     F.forM_ local_insts $ \inst ->
---       p $ text " -" <+> ppr inst
-
---   -- TODO: family instances!
-
---   -- Get consistency cache
---   cons_cache <- get >>= return . ctx_cache
-
---   --when (isJust mb_bad_island) $ do
---   --  p $ text "! warning: created inconsistent world for" <+> ppr mish
-
---     -- Just w  -> do
---     --   -- maybeDo $ do
---     --   --   p $ text "new world's island ..."
---     --   --   let island = fromJust $ lookupIsland w mish
---     --   --   p $ ppr island
---     --   --   F.forM_ (islandInsts island) $ \inst ->
---     --   --     p $ text "    -" <+> pprInstanceHdr inst
-
---   -- Are any imported worlds inconsistent?
---   let imp_inconss = S.unions [ c | (_,_,_,c) <- imp_results]
---   --unless (S.null imp_inconss) $ do
---   --  p $ text "! warning: inheriting inconsistency from:"
---   --                     <+> hsep (map ppr (S.toAscList imp_inconss))
-
---   n <- getNumProcessed
---   when (n >= 690) $ do
---     p $ text " # new world:" <+> pprIslands (w_wimap w)
---     p $ text " # maybe bad island:" <+> ppr mb_bad_island
-
---   -- Check for inconsistency among imports
---   p $ text " # checking inconsistency among " <+> ppr (length imports) <+> text " imports"
---   mb_bad_islands <- runCacheCtx $! checkMergeableListBlame (map snd imports)
-
---   -- Check for locals consistency
---   p $ text " # checking inconsistency among " <+> ppr (length local_insts) <+> text " locals"
---   let bad_locals = localInconsistentInstances local_insts
-
---   -- Try to create a new world.
---   p $ text " # newWorldFromImports... "
---   (w, mb_bad_island) <- runCacheCtx $! newWorldFromImports imports mish local_insts
-
---   unless (null bad_locals) $ do -- inconsistency among locals
---     p $ text "! warning: creating inconsistency @ locals:"
---     -- p $ text "    inconsistent pairs:" <+> ppr bad_locals
---     forM_ bad_locals $ \bad_pair -> do
---       p $ text "    * between:" <+> ppr (fst bad_pair)
---       p $ text "          and:" <+> ppr (snd bad_pair)
-
---   when (isJust mb_bad_islands) $ do -- inconsistency among imports
---     p $ text "! warning: creating inconsistency @ imports:"
---     p $ text "    island 1:" <+> ppr (fst (fromJust mb_bad_islands))
---     p $ text "    island 2:" <+> ppr (snd (fromJust mb_bad_islands))
---     p $ text "    island 1 instances:" <+> ppr (islandInsts (fst (fromJust mb_bad_islands)))
---     p $ text "    island 2 instances:" <+> ppr (islandInsts (snd (fromJust mb_bad_islands)))
-
---   when (isJust mb_bad_island) $ do -- inconsistency btw imports & locals
---     p $ text "! warning: creating inconsistency @ imports+locals:"
---     p $ text "    parent island:" <+> ppr (fromJust mb_bad_island)
---     p $ text "    parent island instances:" <+> ppr (islandInsts (fromJust mb_bad_island))
---     p $ text "    local instances:" <+> sep (map ppr local_insts)
-
---   -- Record all inherited and created inconsistencies
---   let inconss
---         | isJust mb_bad_islands || isJust mb_bad_island || not (null bad_locals) = S.insert mish imp_inconss
---         | otherwise = imp_inconss
-      
---   -- Store the iface and newly created world for this module.
---   p $ text " # updating context"
---   updateCtxMap mish iface w inconss
---   p $ text " # done with module " <+> ppr mish
-
---   num <- getNumProcessed
---   cache_size <- getCacheSize
---   p $ text " # processed:" <+> int num
---   p $ text " # cache size:" <+> int cache_size
-
---   return (mish, iface, w, inconss)
 
 
 processMod :: Int -> Moduleish -> CtxM CtxEntry
@@ -283,7 +170,7 @@ processMod depth mish = do
   -- Print module name
   p $ text "-" <+> ppr mish
 
-  let modsToPrint = ["Vectorise.Exp"]
+  let modsToPrint = [] --["CmmNode", "Vectorise.Exp"]
   let maybeDo m
         | mishModStr mish `elem` modsToPrint = m
         | otherwise                          = return ()
@@ -370,8 +257,11 @@ printWorldNewInconsistencies p mish w = case w_origin w of
           p $ text "          and:" <+> ppr inst2
     printNWI (BetweenImportsAndLocals clashes) = do
         warn $ text "creating inconsistency @ imports+locals:"
-        forM_ clashes $ \(mish, inst) ->
-          p $ text " -" <+> ppr mish <+> ppr inst
+        -- Separate the clashes for this local mod and for the imports.
+        let (loc_clashes, imps_clashes) = partition ((== mish) . fst) clashes
+        p $ text " - local instance(s):" <+> ppr (map snd loc_clashes)
+        forM_ imps_clashes $ \(imp_mish, imp_inst) ->
+          p $ text " - imported" <+> ppr imp_mish <+> text "instance:" <+> ppr imp_inst
 
 
 getNumProcessed :: CtxM Int

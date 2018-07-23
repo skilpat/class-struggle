@@ -179,8 +179,6 @@ readIfaceForMish mish = do
 --   in the right format. So do that.
 readInstsFromIface :: ModIface -> Ghc [ClsInst]
 readInstsFromIface iface = do
-  liftIO $ putStrLn $ "+ getting session"
-  flush
   hsc_env <- getSession
   liftIO $ putStrLn $ "+ reading " ++ (show $ mkModuleishImpl $ mi_module iface)
   flush

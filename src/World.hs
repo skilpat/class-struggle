@@ -4,6 +4,8 @@ module World where
 import Control.Applicative
   ( (<|>), liftA2 )
 import Control.Monad
+import Control.Monad.IO.Class
+  ( liftIO )
 import Control.Monad.State
 import Data.List
   ( sort, find )
@@ -15,6 +17,10 @@ import Data.Foldable
   ( foldl' )
 
 -- GHC imports
+import GHC
+  ( Ghc )
+import GhcMonad
+  ( getSessionDynFlags )
 import InstEnv
 import Module
 import Name
@@ -68,6 +74,7 @@ data NewWorldInconsistency
   = AmongLocals PairwiseInstClashes
   | AmongImports IslandClashes
   | BetweenImportsAndLocals IslandClashes
+
 
 type IslandClashes = [(Moduleish, ClsInst)]
 type PairwiseInstClashes = [(ClsInst, ClsInst)]
@@ -220,16 +227,21 @@ checkIslandImplements wi_impl wi_sig = concatMaybeClashes $! results
               , let cls_nm = is_cls_nm sig_inst ]
 
 mergeableInstEnvs :: IslandInstEnv -> IslandInstEnv -> Maybe PairwiseInstClashes
-mergeableInstEnvs ienv1 ienv2 = foldl' f Nothing pairs_for_classes
+mergeableInstEnvs ienv1 ienv2 | null clashes = Nothing
+                              | otherwise    = Just clashes
   where
+    clashes = foldl' f [] pairs_for_classes
+
     -- Gather the insts in each side, but only for classes that have
     -- instances in both sides; other classes' instances are fine.
     pairs_for_classes = intersectUFM_C (,) ienv1 ienv2
 
     -- Folding function: Given two pairs of instances to check and the previous
     -- clashes, concat any new clashes from checking those pairs.
-    f :: Maybe PairwiseInstClashes -> ([ClsInst], [ClsInst]) -> Maybe PairwiseInstClashes
-    f mb_clashes (is1, is2) = liftA2 (++) mb_clashes $! mergeableInstLists is1 is2
+    f :: PairwiseInstClashes -> ([ClsInst], [ClsInst]) -> PairwiseInstClashes
+    f clashes_prev (is1, is2) = clashes_prev ++ clashes_next
+      where
+        clashes_next = maybe [] id $! mergeableInstLists is1 is2
 
 
 -- Just check that every pair of instances is mergeable. Each pair comes
@@ -438,6 +450,15 @@ checkNewWorld' anno_worlds mish (local_insts, mb_local_clashes) = do
               [ toImpsInconsis mb_imps_clashes
               , toLocsInconsis mb_local_clashes
               , toImpsLocsInconsis mb_implocal_clashes ]
+
+        -- when (mishModStr mish `elem` ["CmmNode", "CmmExpr"]) $ lift $ do
+        --   dflags <- getSessionDynFlags
+        --   liftIO $ putStrLn $ showSDoc dflags $ text "****" <+> ppr annos
+        --   liftIO $ putStrLn $ showSDoc dflags $ text "****" <+> ppr island
+        --   liftIO $ putStrLn $ showSDoc dflags $ text "****" <+> ppr (eltsUFM wimap_new)
+        --   liftIO $ putStrLn $ showSDoc dflags $ text "****" <+> ppr mb_imps_clashes
+        --   liftIO $ putStrLn $ showSDoc dflags $ text "****" <+> ppr mb_local_clashes
+        --   liftIO $ putStrLn $ showSDoc dflags $ text "****" <+> ppr mb_implocal_clashes
         
         return $! World wimap_new
                         (NewWorld anno_worlds island nwis)
@@ -590,6 +611,13 @@ pprIslands wimap = sep [ braces listSDoc
     listSDoc = sep $ punctuate (text ", ") $ islandSDocs
 
 
+
+instance Outputable NewWorldInconsistency where
+  ppr (AmongLocals inst_clashes) = text "AmongLocals:" <+> ppr inst_clashes
+  ppr (AmongImports wi_clashes) = text "AmongImports:" <+> ppr wi_clashes
+  ppr (BetweenImportsAndLocals wi_clashes) = text "BetweenImportsAndLocals:" <+> ppr wi_clashes
+
+
 ---------------------------------------------------------------
 
 
@@ -669,7 +697,7 @@ toRootCacheKey w1 w2 = case (moduleOfWorld w1, moduleOfWorld w2) of
   _ -> Nothing
 
 
-type WorldConsCtx = State WorldConsCache
+type WorldConsCtx = StateT WorldConsCache Ghc
 
 -- | Given a function to compute mergeability between worlds and return blame,
 --   return a new function on two worlds that will first check the cache on
