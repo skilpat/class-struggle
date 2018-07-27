@@ -1,7 +1,7 @@
 module ReadWorlds where
 
 import Control.Monad.State hiding (liftIO)
-import Data.Monoid
+import Data.Monoid hiding ((<>))
 import qualified Data.Map.Strict as M
 import qualified Data.Set as S
 import qualified Data.HashSet as HS
@@ -107,10 +107,10 @@ processPkg pname (pid, mods) = do
   -- Record this package's world
   pkg_world <- runCacheCtx $ checkMergeList [ w | (_,_,w,_) <- results ] Nothing
   let consis_str = if w_consis pkg_world then "consistent" else "inconsistent"
-  lift $ printSDoc $ text "* finished package" <+> ppr pid <+> colon
+  lift $ printSDoc $ text "* finished package" <+> ppr pid <> colon
     <+> text "world:" <+> text consis_str
-    <+> text "; islands:" <+> int (worldIslandCount pkg_world)
-    <+> text "; instances:" <+> int (worldInstCount pkg_world)
+    <> text "; islands:" <+> int (worldIslandCount pkg_world)
+    <> text "; instances:" <+> int (worldInstCount pkg_world)
 
   updateCtxPkg pid pkg_world $ S.unions [ c | (_,_,_,c) <- results]
 
@@ -164,8 +164,9 @@ processMod depth mish = do
         lift $ printSDoc $ space <+> sdoc
         lift flush
 
-  let debug sdoc = return () --p $ text "#" <+> sdoc
-  let warn sdoc = p $ text "! warning:" <+> ppr mish <+> text ":" <+> sdoc
+  -- let debug sdoc = p $ text "#" <+> sdoc
+  let debug sdoc = return ()
+  let warn sdoc = p $ text "! warning:" <+> ppr mish <> text ":" <+> sdoc
 
 
   -- Print module name
@@ -243,7 +244,7 @@ printWorldNewInconsistencies p mish w = case w_origin w of
     MergedWorlds _ _ (Just clashes) -> printImpClashes clashes
     NewWorld _ _ nw_inconss -> forM_ nw_inconss printNWI
   where
-    warn sdoc = p $ text "! warning:" <+> ppr mish <+> text ":" <+> sdoc
+    warn sdoc = p $ text "! warning:" <+> ppr mish <> text ":" <+> sdoc
 
     printImpClashes clashes = do
       warn $ text "creating inconsistency @ imports:"

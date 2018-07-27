@@ -30,8 +30,8 @@ containers-0.5.5.1:Data.Map -> {...}
 ```
 
 Note that this `base` is version `4.7.0.2`; due to an implementation oddity,
-the program does not show the version of the `base` package but does for every
-other.
+the program does not show the version of the packages built-in to GHC, like
+`base`.
 
 ### Results
 

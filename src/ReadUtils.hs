@@ -1,6 +1,6 @@
 module ReadUtils where
 
-import Control.Monad
+import Control.Monad hiding ( (<>) )
 import Data.Char
   ( isDigit, isAlpha )
 import Data.List
@@ -53,8 +53,11 @@ currentPkgModMap :: [String] -> Ghc (PkgModMap, PkgModMap)
 currentPkgModMap req_pkgs = do
   dflags <- getSessionDynFlags
 
-  -- Installed packages
-  let ipis = eltsUFM $ pkgIdMap $ pkgState dflags
+  -- Installed packages, ordered by name
+  let o ipi1 ipi2 =
+        compare (pkgIdName $ pkgIdFromIpi ipi1)
+                (pkgIdName $ pkgIdFromIpi ipi2)
+  let ipis = sortBy o $ eltsUFM $ pkgIdMap $ pkgState dflags
 
   let keep pid | null req_pkgs = True
                | otherwise     = pkgIdName pid `elem` req_pkgs
@@ -64,8 +67,9 @@ currentPkgModMap req_pkgs = do
   let mkEntry ipi = do
         let pid = pkgIdFromIpi ipi
         let mods = map (mkMod ipi) (allModsFromIpi ipi)
+        let mods_sdoc = parens $ int (length mods) <+> text "module" <> plural mods
         let keepstr = if not (null req_pkgs) && keep pid then "> " else "  "
-        printSDoc $ text keepstr <> ppr pid <+> parens (int (length mods))
+        printSDoc $ text keepstr <> ppr pid <+> mods_sdoc
         return (pkgIdName pid, (pid, mods, keep pid))
   assocs <- mapM mkEntry ipis
   let pkg_mod_map_with_keep = M.fromList assocs
@@ -125,7 +129,9 @@ printPkgs = do
   let pkgIdFromIpi ipi   = mkPackageId $ sourcePackageId ipi
   let pkgNameFromIpi ipi = pkgIdName $ pkgIdFromIpi ipi
   let ipis = eltsUFM $ pkgIdMap $ pkgState dflags
-  let pids = sortBy stablePackageIdCmp $ map pkgIdFromIpi ipis
+
+  let o pid1 pid2 = compare (pkgIdName pid1) (pkgIdName pid2)
+  let pids = sortBy o $ map pkgIdFromIpi ipis
 
   forM_ pids (printSDoc . ppr)  
 
@@ -206,12 +212,17 @@ getPackageConfig hsc_env mod = lookupPackage pkg_map pkg_id
 
 readPkgList :: IO [String]
 readPkgList = do
-  pkgs_as_lines <- liftM (filter is_pkg . lines) getContents
+  pkgs_as_lines <- liftM (filter is_pkg . (map strip) . lines) getContents
   case pkgs_as_lines of
     [line] -> return $ words line
     _      -> return pkgs_as_lines
   where
     is_pkg line = not (null line) && head line /= '#'
+
+    -- from Simon Michael <https://stackoverflow.com/a/6615272>
+    strip = lstrip . rstrip
+    lstrip = dropWhile (`elem` " \t")
+    rstrip = reverse . lstrip . reverse
 
 
 readSandboxPath :: IO FilePath

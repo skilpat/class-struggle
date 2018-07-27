@@ -609,7 +609,7 @@ pprWorld w = sep [ braces listSDoc
     wimap = w_wimap w
     islandSDocs = map ppr $ sort $ eltsUFM $ wimap
     listSDoc = sep $ punctuate (text ", ") $ islandSDocs
-    stats = int (calcIslandsInstCount wimap) <+> semi <+> text consis_str
+    stats = int (calcIslandsInstCount wimap) <> semi <+> text consis_str
     consis_str | w_consis w = "consistent"
                | otherwise  = "inconsistent"
 
