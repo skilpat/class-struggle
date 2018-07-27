@@ -122,7 +122,7 @@ pprCtxEntries ctx mods_to_print print_islands =
     maybeEntryDocs = [ pprEntry mish w | (mish, _, w, _) <- eltsUFM (ctx_map ctx) ]
     
     pprEntry mish w
-      | shouldPrint mish = Just $ ppr mish <+> text "->" <+> pprIslands (w_wimap w)
+      | shouldPrint mish = Just $ ppr mish <+> text "->" <+> pprWorld w
       | otherwise        = Nothing
 
     shouldPrint mish
@@ -130,17 +130,16 @@ pprCtxEntries ctx mods_to_print print_islands =
       | mishModStr mish `elem` mods_to_print = True
       | otherwise                            = False
 
-    mbPprIslands wimap
-      | print_islands = pprIslands wimap
+    mbPprWorld w
+      | print_islands = pprWorld w
       | otherwise     = Outputable.empty
 
-    pkgEntryDocs = [ ppr pid <+> text "=>" <+> mbPprIslands (w_wimap w) <+> pprCons c
+    pkgEntryDocs = [ ppr pid <+> text "=>" <+> mbPprWorld w <+> pprCons c <+> parens (int $ w_icount w)
                    | (pid, w, c) <- eltsUFM (ctx_pkg_map ctx) ]
 
     pprCons c
       | S.null c  = text "consistent"
       | otherwise = text "inconsistent!" <+> braces (pprWithCommas ppr (S.toList c))
-
 
 -- | Given a list of module names and a Ctx, print out the World of any modules
 --   whose names occur in the list.

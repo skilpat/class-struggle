@@ -602,14 +602,16 @@ instance Outputable Island where
               | otherwise      = ppr mish
 
 
-
-pprIslands :: Islands -> SDoc
-pprIslands wimap = sep [ braces listSDoc
-                       , parens (int (calcIslandsInstCount wimap)) ]
+pprWorld :: World -> SDoc
+pprWorld w = sep [ braces listSDoc
+                 , parens stats ]
   where
-    islandSDocs = map ppr $ sort $ eltsUFM wimap
+    wimap = w_wimap w
+    islandSDocs = map ppr $ sort $ eltsUFM $ wimap
     listSDoc = sep $ punctuate (text ", ") $ islandSDocs
-
+    stats = int (calcIslandsInstCount wimap) <+> semi <+> text consis_str
+    consis_str | w_consis w = "consistent"
+               | otherwise  = "inconsistent"
 
 
 instance Outputable NewWorldInconsistency where

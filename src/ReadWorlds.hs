@@ -75,10 +75,10 @@ processAllPkgs :: (PkgModMap, PkgModMap) -> CtxM ()
 processAllPkgs (pkg_mod_map_selected, pkg_mod_map_unselected) = do
   -- Process each of the selected packages.
   lift $ printSDoc $
-    text "Processing selected packages:" <+>
+    text "== Processing selected packages" <+>
     hsep (map (ppr . fst) (M.elems pkg_mod_map_selected))
   F.sequence_ $ M.mapWithKey processPkg pkg_mod_map_selected
-  lift $ printSDoc $ text "Done processing selected packages!"
+  lift $ printSDoc $ text "== Done processing selected packages"
 
   -- Get all depended-upon packages.
   depended_pids <- get >>= return . ctx_pkgs
@@ -88,10 +88,10 @@ processAllPkgs (pkg_mod_map_selected, pkg_mod_map_unselected) = do
   let pkg_mod_map_depended = M.filter depended pkg_mod_map_unselected
 
   lift $ printSDoc $
-    text "Processing unselected but depended-upon packages:" <+>
+    text "== Processing unselected (but depended-upon) packages:" <+>
     hsep (map (ppr . fst) (M.elems pkg_mod_map_depended))
   F.sequence_ $ M.mapWithKey processPkg pkg_mod_map_depended
-  lift $ printSDoc $ text "Done processing unselected packages!"
+  lift $ printSDoc $ text "== Done processing unselected (but depended-upon) packages"
 
   return ()
 
@@ -103,15 +103,14 @@ processPkg pname (pid, mods) = do
   -- hence the `mkModuleishImpl` call.
   lift $ printSDoc $ text "*" <+> ppr pid
   results <- mapM ((lookupOrProcess 0) . mkModuleishImpl) mods
-  lift $ printSDoc $ text " finished processing " <+> ppr pid
 
   -- Record this package's world
   pkg_world <- runCacheCtx $ checkMergeList [ w | (_,_,w,_) <- results ] Nothing
-  case (w_consis pkg_world) of
-    False -> lift $ printSDoc $ text "! warning: failed to merge pkg world for" <+> ppr pid
-    True -> lift $ printSDoc $ text " okay world; islands: "
-              <+> ppr (worldIslandCount pkg_world) <+> text "; insts: "
-              <+> ppr (worldInstCount pkg_world)
+  let consis_str = if w_consis pkg_world then "consistent" else "inconsistent"
+  lift $ printSDoc $ text "* finished package" <+> ppr pid <+> colon
+    <+> text "world:" <+> text consis_str
+    <+> text "; islands:" <+> int (worldIslandCount pkg_world)
+    <+> text "; instances:" <+> int (worldInstCount pkg_world)
 
   updateCtxPkg pid pkg_world $ S.unions [ c | (_,_,_,c) <- results]
 
@@ -161,11 +160,13 @@ processMod depth mish = do
 
   -- Print everything at recursive depth, and flush output buffer
   let p sdoc = do
-        lift $ printSDoc $ text (replicate depth '>') <+> sdoc
+        -- lift $ printSDoc $ text (replicate depth '>') <+> sdoc
+        lift $ printSDoc $ space <+> sdoc
         lift flush
 
-  let debug sdoc = p $ text "#" <+> sdoc
-  let warn sdoc = p $ text "! WARNING:" <+> ppr mish <+> text ":" <+> sdoc
+  let debug sdoc = return () --p $ text "#" <+> sdoc
+  let warn sdoc = p $ text "! warning:" <+> ppr mish <+> text ":" <+> sdoc
+
 
   -- Print module name
   p $ text "-" <+> ppr mish
@@ -205,7 +206,7 @@ processMod depth mish = do
   let imp_inconss = S.unions [ c | (_,_,_,c) <- imp_results]
   unless (S.null imp_inconss) $ do
     warn $ text "inheriting inconsistency from:"
-                      <+> hsep (map ppr (S.toAscList imp_inconss))
+                      <+> (braces $ hcat $ punctuate (text ", ") $ map ppr (S.toAscList imp_inconss))
 
   -- Check for locals consistency
   debug $ text "checking inconsistency among" <+> int (length local_insts) <+> text "locals"
@@ -242,7 +243,7 @@ printWorldNewInconsistencies p mish w = case w_origin w of
     MergedWorlds _ _ (Just clashes) -> printImpClashes clashes
     NewWorld _ _ nw_inconss -> forM_ nw_inconss printNWI
   where
-    warn sdoc = p $ text "! WARNING:" <+> ppr mish <+> text ":" <+> sdoc
+    warn sdoc = p $ text "! warning:" <+> ppr mish <+> text ":" <+> sdoc
 
     printImpClashes clashes = do
       warn $ text "creating inconsistency @ imports:"

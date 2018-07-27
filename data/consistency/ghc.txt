@@ -1,556 +1,1079 @@
-Processing selected packages: ghc-7.8.4
-* ghc-7.8.4
-  - ghc-prim:GHC.Prim
-  - ghc-prim:GHC.Types
-  - base:GHC.Exception[boot]
-  - ghc-prim:GHC.CString
-  - ghc-prim:GHC.Magic
-  - ghc-prim:GHC.Tuple
-  - ghc-prim:GHC.Classes
-  - integer-gmp:GHC.Integer.GMP.Prim
-  - integer-gmp:GHC.Integer.Type
-  - integer-gmp:GHC.Integer
-  - base:GHC.Err
-  - base:GHC.IO[boot]
-  - base:GHC.Base
-  - base:Data.Maybe
-  - base:GHC.List
-  - base:Control.Monad
-  - base:Data.Bool
-  - base:Data.Type.Bool
-  - base:GHC.Num
-  - base:GHC.Show
-  - base:GHC.Char
-  - base:GHC.Enum
-  - integer-gmp:GHC.Integer.GMP.Internals
-  - base:GHC.Real
-  - base:GHC.ST
-  - base:GHC.Arr
-  - base:Data.Bits
-  - base:GHC.Float.ConversionUtils
-  - base:GHC.Float.RealFracMethods
-  - integer-gmp:GHC.Integer.Logarithms.Internals
-  - integer-gmp:GHC.Integer.Logarithms
-  - base:GHC.Float
-  - base:GHC.Unicode[boot]
-  - base:Text.ParserCombinators.ReadP
-  - base:Text.ParserCombinators.ReadPrec
-  - base:Text.Read.Lex
-  - base:GHC.Read
-  - base:Data.Type.Equality
-  - base:Data.Proxy
-  - base:Data.Type.Coercion
-  - base:GHC.Word
-  - base:Numeric
-  - base:GHC.Fingerprint.Type
-  - base:GHC.Fingerprint[boot]
-  - base:GHC.Ptr
-  - base:GHC.STRef
-  - base:Data.Typeable.Internal
-  - base:Unsafe.Coerce
-  - base:Data.Typeable
-  - base:Data.Either
-  - base:GHC.Int
-  - base:Data.Int
-  - base:Data.Word
-  - base:GHC.Stable
-  - base:GHC.Storable
-  - base:Foreign.Storable
-  - base:Foreign.C.Types
-  - base:GHC.Unicode
-  - base:Data.Char
-  - base:Data.List
-  - base:Data.Tuple
-  - base:GHC.Exception
-  - base:Data.Dynamic
-  - base:Foreign.Ptr
-  - base:GHC.IO.Exception[boot]
-  - base:GHC.IO
-  - base:GHC.IORef
-  - base:GHC.ForeignPtr
-  - base:Foreign.ForeignPtr.Imp
-  - base:Foreign.ForeignPtr.Safe
-  - base:Foreign.ForeignPtr
-  - base:GHC.IO.Buffer
-  - base:GHC.IO.Device
-  - base:GHC.IO.BufferedIO
-  - base:GHC.IO.Encoding.Types
-  - base:GHC.MVar
-  - base:GHC.IO.Handle.Types
-  - base:GHC.IO.Exception
-  - base:Foreign.Marshal.Alloc
-  - base:Foreign.Marshal.Utils
-  - base:Foreign.Marshal.Array
-  - base:Foreign.Marshal.Error
-  - base:Foreign.Marshal.Pool
-  - base:Foreign.Marshal.Safe
-  - base:Foreign.Marshal
-  - base:Foreign.StablePtr
-  - base:Foreign
-  - ghc-prim:GHC.Debug
-  - base:GHC.Foreign
-  - base:GHC.IO.Encoding[boot]
-  - base:Foreign.C.String
-  - base:Foreign.C.Error
-  - base:Foreign.C
-  - base:GHC.IO.Encoding.Failure
-  - base:GHC.IO.Encoding.UTF8
-  - base:GHC.IO.Handle[boot]
-  - base:GHC.IO.Handle.FD[boot]
-  - base:GHC.Weak
-  - base:GHC.Conc.Sync
-  - base:Control.Exception.Base
-  - base:Data.IORef
-  - base:Foreign.Safe
-  - base:Control.Exception
-  - base:System.IO.Unsafe
-  - base:GHC.IO.IOMode
-  - base:System.Posix.Types
-  - base:System.Posix.Internals
-  - base:GHC.IO.Encoding.Iconv
-  - base:GHC.IO.Encoding.Latin1
-  - base:GHC.IO.Encoding.UTF16
-  - base:GHC.IO.Encoding.UTF32
-  - base:GHC.IO.Encoding
-  - base:GHC.Generics
-  - base:Data.Monoid
-  - base:GHC.Event.Internal
-  - base:Control.Concurrent.MVar
-  - base:GHC.IOArray
-  - base:GHC.Conc.Signal
-  - base:GHC.Event.Control
-  - base:GHC.Event.Arr
-  - base:GHC.Event.IntTable
-  - base:GHC.Event.Array
-  - base:GHC.Event.KQueue
-  - base:GHC.Event.Unique
-  - base:GHC.Event.Manager
-  - base:GHC.Event.Clock
-  - base:GHC.Event.PSQ
-  - base:GHC.Event.Poll
-  - base:GHC.Event.TimerManager
-  - base:GHC.Event.Thread
-  - base:GHC.Conc.IO
-  - base:GHC.IO.FD
-  - base:GHC.IO.Handle.Internals
-  - base:Text.Show
-  - base:System.IO.Error
-  - base:GHC.IO.Handle.Text
-  - base:GHC.IO.Handle
-  - base:GHC.IO.Handle.FD
-  - base:Text.Read
-  - base:System.IO
-  - base:Prelude
-  - base:Data.Ix
-  - array-0.5.0.0:Data.Array
-  - base:GHC.Fingerprint
-  - base:Foreign.ForeignPtr.Unsafe
-  - base:Data.Version
-  - base:Data.Data
-  - base:Data.String
-  - base:Data.Complex
-  - base:Data.Fixed
-  - base:Data.Ratio
-  - deepseq-1.3.0.2:Control.DeepSeq
-  - bytestring-0.10.4.0:Data.ByteString.Internal
-  - base:Foreign.Concurrent
-  - bytestring-0.10.4.0:Data.ByteString.Unsafe
-  - bytestring-0.10.4.0:Data.ByteString
-  - base:Data.Function
-  - base:Data.Coerce
-  - base:Data.Ord
-  - base:GHC.Stack
-  - base:Debug.Trace
-  - base:GHC.Exts
-  - bytestring-0.10.4.0:Data.ByteString.Char8
-  - ghc-7.8.4:ExtsCompat46
-  - ghc-7.8.4:Encoding
-  - ghc-7.8.4:FastTypes
-  - ghc-7.8.4:FastFunctions
-  - base:Control.Concurrent.Chan
-  - base:Control.Concurrent.QSem
-  - base:Control.Concurrent.QSemN
-  - base:GHC.Conc
-  - base:Control.Concurrent
-  - base:System.Environment.ExecutablePath
-  - base:System.Environment
-  - base:System.Exit
-  - base:System.Mem.Weak
-  - ghc-7.8.4:Config
-  - transformers-0.3.0.0:Control.Monad.IO.Class
-  - ghc-7.8.4:Exception
-  - ghc-7.8.4:Outputable[boot]
-  - base:GHC.TopHandler
-  - unix-2.7.0.1:System.Posix.Process.Internals
-  - unix-2.7.0.1:System.Posix.Process.Common
-  - unix-2.7.0.1:System.Posix.Process
-  - unix-2.7.0.1:System.Posix.Signals
-  - ghc-7.8.4:Panic
-  - base:Control.Category
-  - base:Control.Monad.Fix
-  - base:Control.Arrow
-  - base:Control.Monad.ST.Imp
-  - base:Control.Monad.ST.Safe
-  - base:Control.Monad.ST.Unsafe
-  - base:Control.Monad.ST.Lazy.Imp
-  - base:Control.Monad.ST.Lazy.Safe
-  - base:Data.Functor
-  - base:Control.Applicative
-  - base:Data.Foldable
-  - base:Data.Traversable
-  - containers-0.5.5.1:Data.BitUtil
-  - containers-0.5.5.1:Data.StrictPair
-  - containers-0.5.5.1:Data.IntSet.Base
-  - containers-0.5.5.1:Data.IntMap.Base
-  - containers-0.5.5.1:Data.IntMap.Lazy
-  - containers-0.5.5.1:Data.IntMap.Strict
-  - containers-0.5.5.1:Data.IntMap
-  - filepath-1.3.0.2:System.FilePath.Posix
-  - filepath-1.3.0.2:System.FilePath
-  - time-1.4.2:Data.Time.Calendar.Days
-  - time-1.4.2:Data.Time.Calendar.Private
-  - time-1.4.2:Data.Time.Calendar.MonthDay
-  - time-1.4.2:Data.Time.Calendar.OrdinalDate
-  - time-1.4.2:Data.Time.Calendar.Gregorian
-  - time-1.4.2:Data.Time.Calendar
-  - time-1.4.2:Data.Time.Clock.CTimeval
-  - time-1.4.2:Data.Time.Clock.Scale
-  - time-1.4.2:Data.Time.Clock.UTC
-  - time-1.4.2:Data.Time.Clock.POSIX
-  - time-1.4.2:Data.Time.Clock.UTCDiff
-  - time-1.4.2:Data.Time.Clock
-  - old-locale-1.0.0.6:System.Locale
-  - time-1.4.2:Data.Time.Calendar.WeekDate
-  - time-1.4.2:Data.Time.LocalTime.TimeZone
-  - time-1.4.2:Data.Time.LocalTime.TimeOfDay
-  - time-1.4.2:Data.Time.LocalTime.LocalTime
-  - time-1.4.2:Data.Time.LocalTime
-  - time-1.4.2:Data.Time.Format.Parse
-  - time-1.4.2:Data.Time.Format
-  - time-1.4.2:Data.Time
-  - unix-2.7.0.1:System.Posix.Directory.Common
-  - unix-2.7.0.1:System.Posix.Error
-  - unix-2.7.0.1:System.Posix.Directory
-  - unix-2.7.0.1:System.Posix.DynamicLinker.Prim
-  - unix-2.7.0.1:System.Posix.DynamicLinker.Common
-  - unix-2.7.0.1:System.Posix.DynamicLinker
-  - unix-2.7.0.1:System.Posix.Env
-  - unix-2.7.0.1:System.Posix.Files.Common
-  - unix-2.7.0.1:System.Posix.Files
-  - unix-2.7.0.1:System.Posix.IO.Common
-  - unix-2.7.0.1:System.Posix.IO
-  - unix-2.7.0.1:System.Posix.Resource
-  - unix-2.7.0.1:System.Posix.Semaphore
-  - unix-2.7.0.1:System.Posix.SharedMem
-  - unix-2.7.0.1:System.Posix.Temp
-  - unix-2.7.0.1:System.Posix.Terminal.Common
-  - unix-2.7.0.1:System.Posix.Terminal
-  - unix-2.7.0.1:System.Posix.Time
-  - unix-2.7.0.1:System.Posix.Unistd
-  - unix-2.7.0.1:System.Posix.User
-  - unix-2.7.0.1:System.Posix
-  - directory-1.2.1.0:System.Directory
-  - ghc-7.8.4:Util
-  - ghc-7.8.4:FastString
-  - base:Text.Printf
-  - containers-0.5.5.1:Data.Set.Base
-  - containers-0.5.5.1:Data.Map.Base
-  - containers-0.5.5.1:Data.Map.Lazy
-  - containers-0.5.5.1:Data.Map.Strict
-  - containers-0.5.5.1:Data.Map
-  - containers-0.5.5.1:Data.Set
-  - ghc-7.8.4:Platform
-  - ghc-7.8.4:DynFlags[boot]
-  - ghc-7.8.4:Module[boot]
-  - ghc-7.8.4:OccName[boot]
-  - ghc-7.8.4:FastMutInt
-  - ghc-7.8.4:BufWrite
-  - ghc-7.8.4:Pretty
-  - ghc-7.8.4:StaticFlags[boot]
-  - ghc-7.8.4:Outputable
-  - ghc-7.8.4:BasicTypes
-  - ghc-7.8.4:Fingerprint
-  - ghc-7.8.4:Name[boot]
-  - ghc-7.8.4:Unique
-  - hoopl-3.10.0.1:Compiler.Hoopl.Block
-  - hoopl-3.10.0.1:Compiler.Hoopl.Checkpoint
-  - hoopl-3.10.0.1:Compiler.Hoopl.Collections
-  - containers-0.5.5.1:Data.IntSet
-  - hoopl-3.10.0.1:Compiler.Hoopl.Unique
-  - hoopl-3.10.0.1:Compiler.Hoopl.Fuel
-  - hoopl-3.10.0.1:Compiler.Hoopl.Label
-  - hoopl-3.10.0.1:Compiler.Hoopl.Graph
-  - hoopl-3.10.0.1:Compiler.Hoopl.Dataflow
-  - hoopl-3.10.0.1:Compiler.Hoopl.Combinators
-  - hoopl-3.10.0.1:Compiler.Hoopl.Show
-  - hoopl-3.10.0.1:Compiler.Hoopl.Debug
-  - hoopl-3.10.0.1:Compiler.Hoopl.MkGraph
-  - hoopl-3.10.0.1:Compiler.Hoopl.Pointed
-  - hoopl-3.10.0.1:Compiler.Hoopl.XUtil
-  - hoopl-3.10.0.1:Compiler.Hoopl
-  - ghc-7.8.4:UniqFM
-  - ghc-7.8.4:Binary
-  - ghc-7.8.4:Maybes
-  - ghc-7.8.4:MonadUtils
-  - ghc-7.8.4:Bag
-  - ghc-7.8.4:SrcLoc
-  - ghc-7.8.4:CmdLineParser
-  - ghc-7.8.4:Constants
-  - ghc-7.8.4:DriverPhases
-  - ghc-7.8.4:ErrUtils[boot]
-  - ghc-7.8.4:Hooks[boot]
-  - ghc-7.8.4:FiniteMap
-  - ghc-7.8.4:Module
-  - Cabal-1.18.1.5:Distribution.Compat.ReadP
-  - pretty-1.1.1.1:Text.PrettyPrint.HughesPJ
-  - pretty-1.1.1.1:Text.PrettyPrint
-  - Cabal-1.18.1.5:Distribution.Text
-  - Cabal-1.18.1.5:Distribution.Version
-  - Cabal-1.18.1.5:Distribution.License
-  - Cabal-1.18.1.5:Distribution.ModuleName
-  - Cabal-1.18.1.5:Distribution.Package
-  - base:System.Info
-  - Cabal-1.18.1.5:Distribution.Compiler
-  - Cabal-1.18.1.5:Distribution.ReadE
-  - Cabal-1.18.1.5:Distribution.Compat.Exception
-  - Cabal-1.18.1.5:Distribution.Compat.TempFile
-  - Cabal-1.18.1.5:Distribution.Compat.CopyFile
-  - Cabal-1.18.1.5:Distribution.Verbosity
-  - Cabal-1.18.1.5:Paths_Cabal
-  - bytestring-0.10.4.0:Data.ByteString.Lazy.Internal
-  - bytestring-0.10.4.0:Data.ByteString.Lazy
-  - bytestring-0.10.4.0:Data.ByteString.Lazy.Char8
-  - process-1.2.0.0:System.Process.Internals
-  - process-1.2.0.0:System.Process
-  - Cabal-1.18.1.5:Distribution.Simple.Utils
-  - Cabal-1.18.1.5:Language.Haskell.Extension
-  - containers-0.5.5.1:Data.Sequence
-  - containers-0.5.5.1:Data.Tree
-  - Cabal-1.18.1.5:Distribution.ParseUtils
-  - Cabal-1.18.1.5:Distribution.InstalledPackageInfo
-  - ghc-7.8.4:PackageConfig
-  - ghc-7.8.4:Packages[boot]
-  - ghc-7.8.4:PlatformConstants
-  - ghc-7.8.4:PrelNames[boot]
-  - ghc-7.8.4:DynFlags
-  - ghc-7.8.4:UniqSet
-  - ghc-7.8.4:OccName
-  - ghc-7.8.4:TypeRep[boot]
-  - ghc-7.8.4:Name
-  - base:Control.Monad.ST.Lazy
-  - array-0.5.0.0:Data.Array.Base
-  - array-0.5.0.0:Data.Array.MArray
-  - base:Control.Monad.ST
-  - array-0.5.0.0:Data.Array.ST
-  - ghc-7.8.4:Digraph
-  - ghc-7.8.4:NameEnv
-  - ghc-7.8.4:NameSet
-  - ghc-7.8.4:Avail
-  - ghc-7.8.4:TyCon[boot]
-  - ghc-7.8.4:DataCon[boot]
-  - ghc-7.8.4:PatSyn[boot]
-  - ghc-7.8.4:ConLike
-  - ghc-7.8.4:BooleanFormula
-  - ghc-7.8.4:Pair
-  - ghc-7.8.4:IdInfo[boot]
-  - ghc-7.8.4:TcType[boot]
-  - ghc-7.8.4:Var
-  - ghc-7.8.4:CoAxiom
-  - ghc-7.8.4:Class
-  - ghc-7.8.4:StaticFlags
-  - ghc-7.8.4:RdrName
-  - ghc-7.8.4:PrelNames
-  - ghc-7.8.4:ForeignCall
-  - ghc-7.8.4:TyCon
-  - ghc-7.8.4:Type[boot]
-  - ghc-7.8.4:VarSet
-  - ghc-7.8.4:VarEnv
-  - ghc-7.8.4:TypeRep
-  - ghc-7.8.4:TysPrim
-  - ghc-7.8.4:Kind
-  - ghc-7.8.4:TysWiredIn[boot]
-  - ghc-7.8.4:Type
-  - ghc-7.8.4:Unify
-  - ghc-7.8.4:Coercion
-  - ghc-7.8.4:ListSetOps
-  - ghc-7.8.4:PrimOp[boot]
-  - ghc-7.8.4:MkId[boot]
-  - ghc-7.8.4:DataCon
-  - ghc-7.8.4:CostCentre
-  - ghc-7.8.4:Literal
-  - ghc-7.8.4:CoreSyn
-  - ghc-7.8.4:HsPat[boot]
-  - ghc-7.8.4:HsExpr[boot]
-  - ghc-7.8.4:HsLit
-  - ghc-7.8.4:HsDoc
-  - ghc-7.8.4:HsTypes
-  - ghc-7.8.4:Demand
-  - ghc-7.8.4:IdInfo
-  - ghc-7.8.4:UniqSupply
-  - ghc-7.8.4:Id
-  - ghc-7.8.4:PprCore
-  - ghc-7.8.4:TysWiredIn
-  - ghc-7.8.4:TcType
-  - ghc-7.8.4:TcEvidence
-  - ghc-7.8.4:HsBinds
-  - ghc-7.8.4:PatSyn
-  - ghc-7.8.4:ErrUtils
-  - ghc-7.8.4:Serialized
-  - ghc-7.8.4:Annotations
-  - ghc-7.8.4:BreakArray
-  - array-0.5.0.0:Data.Array.IArray
-  - array-0.5.0.0:Data.Array.Unboxed
-  - array-0.5.0.0:Data.Array.IO.Internals
-  - array-0.5.0.0:Data.Array.Storable.Internals
-  - array-0.5.0.0:Data.Array.Unsafe
-  - binary-0.7.1.0:Data.Binary.Get.Internal
-  - binary-0.7.1.0:Data.Binary.Get
-  - binary-0.7.1.0:Data.Binary.Builder.Base
-  - binary-0.7.1.0:Data.Binary.Builder
-  - binary-0.7.1.0:Data.Binary.Put
-  - binary-0.7.1.0:Data.Binary.Class
-  - binary-0.7.1.0:Data.Binary.Generic
-  - binary-0.7.1.0:Data.Binary
-  - bin-package-db-0.0.0.0:Distribution.InstalledPackageInfo.Binary
-  - ghc-7.8.4:Packages
-  - ghc-7.8.4:CmmType
-  - ghc-7.8.4:PrimOp
-  - ghc-7.8.4:CLabel
-  - hoopl-3.10.0.1:Compiler.Hoopl.Internals
-  - ghc-7.8.4:BlockId
-  - ghc-7.8.4:CmmMachOp
-  - ghc-7.8.4:CmmExpr
-  - ghc-7.8.4:FastBool
-  - ghc-7.8.4:RegClass
-  - ghc-7.8.4:Reg
-  - ghc-7.8.4:CodeGen.Platform.ARM
-  - ghc-7.8.4:CodeGen.Platform.NoRegs
-  - ghc-7.8.4:CodeGen.Platform.PPC
-  - ghc-7.8.4:CodeGen.Platform.PPC_Darwin
-  - ghc-7.8.4:CodeGen.Platform.SPARC
-  - ghc-7.8.4:CodeGen.Platform.X86
-  - ghc-7.8.4:CodeGen.Platform.X86_64
-  - ghc-7.8.4:CodeGen.Platform
-  - ghc-7.8.4:SMRep
-  - ghc-7.8.4:CmmNode
-! warning: creating inconsistency @ imports+locals:
-    parent island: ghc-7.8.4:CmmExpr (26)
-    parent island instances: [instance GHC.Classes.Eq CmmExpr.Area
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Eq CmmExpr.CmmExpr
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Eq CmmExpr.CmmLit
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Eq CmmExpr.CmmReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Eq CmmExpr.GlobalReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Eq CmmExpr.LocalReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Eq CmmExpr.VGcPtr
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Ord CmmExpr.Area
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Ord CmmExpr.CmmReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Ord CmmExpr.GlobalReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Ord CmmExpr.LocalReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Show.Show CmmExpr.GlobalReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Show.Show CmmExpr.VGcPtr
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance Unique.Uniquable CmmExpr.LocalReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance CmmExpr.UserOfRegs CmmExpr.GlobalReg CmmExpr.CmmReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance CmmExpr.UserOfRegs CmmExpr.LocalReg CmmExpr.CmmReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance CmmExpr.UserOfRegs r CmmExpr.CmmReg =>
-                                       CmmExpr.UserOfRegs r CmmExpr.CmmExpr
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance CmmExpr.UserOfRegs r a =>
-                                       CmmExpr.UserOfRegs r (Data.Maybe.Maybe a)
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Ord r =>
-                                       CmmExpr.UserOfRegs r (CmmExpr.RegSet r)
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance CmmExpr.UserOfRegs r a => CmmExpr.UserOfRegs r [a]
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Ord r => CmmExpr.UserOfRegs r r
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance CmmExpr.DefinerOfRegs CmmExpr.GlobalReg CmmExpr.CmmReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance CmmExpr.DefinerOfRegs CmmExpr.LocalReg CmmExpr.CmmReg
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance CmmExpr.DefinerOfRegs r a =>
-                                       CmmExpr.DefinerOfRegs r (Data.Maybe.Maybe a)
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance CmmExpr.DefinerOfRegs r a => CmmExpr.DefinerOfRegs r [a]
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’,
-                              instance GHC.Classes.Ord r => CmmExpr.DefinerOfRegs r r
-                                -- Defined in ‘ghc-7.8.4:CmmExpr’]
-    local instances: instance CmmExpr.DefinerOfRegs
-                                CmmExpr.GlobalReg (CmmNode.CmmNode e x)
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-                     instance CmmExpr.DefinerOfRegs
-                                CmmExpr.LocalReg (CmmNode.CmmNode e x)
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-                     instance GHC.Classes.Eq (CmmNode.CmmNode e x)
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-                     instance GHC.Classes.Eq CmmNode.CmmReturnInfo
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-                     instance GHC.Classes.Eq CmmNode.Convention
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-                     instance GHC.Classes.Eq CmmNode.ForeignConvention
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-                     instance GHC.Classes.Eq CmmNode.ForeignTarget
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-                     instance Compiler.Hoopl.Graph.NonLocal CmmNode.CmmNode
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-                     instance CmmExpr.UserOfRegs CmmExpr.GlobalReg (CmmNode.CmmNode e x)
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-                     instance CmmExpr.UserOfRegs CmmExpr.LocalReg (CmmNode.CmmNode e x)
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-                     instance CmmExpr.UserOfRegs r CmmExpr.CmmExpr =>
-                              CmmExpr.UserOfRegs r CmmNode.ForeignTarget
-                       -- Defined in ‘ghc-7.8.4:CmmNode’
-  - ghc-7.8.4:Cmm
-  - ghc-7.8.4:Bitmap
-  - ghc-7.8.4:Hoopl.Dataflow
-  - ghc-7.8.4:Hoopl
-  - ghc-7.8.4:CmmUtils
-  - ghc-7.8.4:Stream
-  - ghc-7.8.4:CmmInfo
-  - ghc-7.8.4:PprCmmExpr
-  - ghc-7.8.4:PprCmmDecl
-  - ghc-7.8.4:PprCmm
-  - ghc-7.8.4:CmmCallConv
-  - ghc-7.8.4:OrdList
-  - ghc-7.8.4:MkGraph
-  - ghc-7.8.4:StgSyn
-  - ghc-7.8.4:StgCmmClosure
-  - ghc-7.8.4:StgCmmArgRep
-  - ghc-7.8.4:StgCmmMonad
-  - ghc-7.8.4:StgCmmUtils
-  - ghc-7.8.4:StgCmmEnv
-  - ghc-7.8.4:StgCmmProf
-  - ghc-7.8.4:StgCmmTicky
-  - ghc-7.8.4:StgCmmLayout
-  - transformers-0.3.0.0:Control.Monad.Trans.Class
-  - transformers-0.3.0.0:Data.Functor.Identity
-  - transformers-0.3.0.0:Control.Monad.Trans.State.Strict
-  - ghc-7.8.4:ByteCodeItbls
-  - ghc-7.8.4:ByteCodeInstr
-  - ghc-7.8.4:ByteCodeAsm
-  - ghc-7.8.4:InstEnv
-  - ghc-7.8.4:TrieMap
-  - ghc-7.8.4:FamInstEnv
-  - ghc-7.8.4:HsImpExp
-  - ghc-7.8.4:HsPat
-  - ghc-7.8.4:HsDecls
-  - ghc-7.8.4:HsExpr
-  - ghc-7.8.4:HsUtils
-  - ghc-7.8.4:IfaceType
-  - ghc-7.8.4:If
+# Modules processed for package ghc-7.8.4:
+
+- ghc-7.8.4:Avail
+- base:GHC.Base
+- base:GHC.Err
+- base:GHC.Exception[boot]
+- ghc-prim:GHC.Types
+- ghc-prim:GHC.Prim
+- ghc-prim:GHC.CString
+- integer-gmp:GHC.Integer
+- integer-gmp:GHC.Integer.Type
+- ghc-prim:GHC.Classes
+- ghc-prim:GHC.Magic
+- ghc-prim:GHC.Tuple
+- integer-gmp:GHC.Integer.GMP.Prim
+- base:GHC.IO[boot]
+- base:GHC.List
+- base:Data.Maybe
+- base:Prelude
+- base:Control.Monad
+- base:Data.Either
+- base:Data.Type.Equality
+- base:Data.Type.Bool
+- base:Data.Bool
+- base:GHC.Enum
+- base:GHC.Char
+- base:GHC.Show
+- base:GHC.Num
+- base:GHC.Read
+- base:GHC.Arr
+- base:GHC.Real
+- integer-gmp:GHC.Integer.GMP.Internals
+- base:GHC.ST
+- base:GHC.Float
+- base:Data.Bits
+- base:GHC.Float.ConversionUtils
+- base:GHC.Float.RealFracMethods
+- integer-gmp:GHC.Integer.Logarithms
+- integer-gmp:GHC.Integer.Logarithms.Internals
+- base:GHC.Unicode[boot]
+- base:Text.ParserCombinators.ReadP
+- base:Text.ParserCombinators.ReadPrec
+- base:Text.Read.Lex
+- base:Data.Typeable
+- base:Data.Proxy
+- base:Data.Typeable.Internal
+- base:Data.Type.Coercion
+- base:GHC.Fingerprint[boot]
+- base:GHC.Fingerprint.Type
+- base:GHC.Word
+- base:Numeric
+- base:GHC.Ptr
+- base:GHC.STRef
+- base:Unsafe.Coerce
+- base:Data.List
+- base:Data.Char
+- base:GHC.Unicode
+- base:Foreign.C.Types
+- base:Data.Int
+- base:GHC.Int
+- base:Data.Word
+- base:Foreign.Storable
+- base:GHC.Stable
+- base:GHC.Storable
+- base:Data.Tuple
+- base:System.IO
+- base:Control.Exception.Base
+- base:Data.Dynamic
+- base:GHC.Exception
+- base:GHC.Conc.Sync
+- base:Foreign
+- base:Foreign.ForeignPtr
+- base:Foreign.ForeignPtr.Safe
+- base:Foreign.ForeignPtr.Imp
+- base:Foreign.Ptr
+- base:GHC.ForeignPtr
+- base:GHC.IORef
+- base:GHC.IO
+- base:GHC.IO.Exception[boot]
+- base:Foreign.Marshal
+- base:Foreign.Marshal.Safe
+- base:Foreign.Marshal.Alloc
+- base:GHC.IO.Exception
+- base:GHC.IO.Handle.Types
+- base:GHC.IO.Buffer
+- base:GHC.IO.BufferedIO
+- base:GHC.IO.Device
+- base:GHC.IO.Encoding.Types
+- base:GHC.MVar
+- base:Foreign.Marshal.Array
+- base:Foreign.Marshal.Utils
+- base:Foreign.Marshal.Error
+- base:Foreign.Marshal.Pool
+- base:Foreign.StablePtr
+- base:Foreign.C
+- base:Foreign.C.Error
+- base:Foreign.C.String
+- base:GHC.Foreign
+- ghc-prim:GHC.Debug
+- base:GHC.IO.Encoding[boot]
+- base:GHC.IO.Encoding.UTF8
+- base:GHC.IO.Encoding.Failure
+- base:GHC.IO.Handle[boot]
+- base:GHC.IO.Handle.FD[boot]
+- base:GHC.Weak
+- base:GHC.IO.Encoding
+- base:Data.IORef
+- base:GHC.IO.Encoding.Iconv
+- base:Foreign.Safe
+- base:System.IO.Unsafe
+- base:Control.Exception
+- base:System.Posix.Internals
+- base:GHC.IO.IOMode
+- base:System.Posix.Types
+- base:GHC.IO.Encoding.Latin1
+- base:GHC.IO.Encoding.UTF16
+- base:GHC.IO.Encoding.UTF32
+- base:GHC.IO.FD
+- base:GHC.Conc.IO
+- base:GHC.Event.Thread
+- base:GHC.Event.Internal
+- base:Data.Monoid
+- base:GHC.Generics
+- base:GHC.Event.Manager
+- base:Control.Concurrent.MVar
+- base:GHC.Conc.Signal
+- base:GHC.IOArray
+- base:GHC.Event.Control
+- base:GHC.Event.IntTable
+- base:GHC.Event.Arr
+- base:GHC.Event.KQueue
+- base:GHC.Event.Array
+- base:GHC.Event.Unique
+- base:GHC.Event.TimerManager
+- base:GHC.Event.Clock
+- base:GHC.Event.PSQ
+- base:GHC.Event.Poll
+- base:GHC.IO.Handle
+- base:GHC.IO.Handle.Internals
+- base:GHC.IO.Handle.Text
+- base:System.IO.Error
+- base:Text.Show
+- base:GHC.IO.Handle.FD
+- base:Text.Read
+- ghc-7.8.4:Binary
+- array-0.5.0.0:Data.Array
+- base:Data.Ix
+- base:GHC.Fingerprint
+- bytestring-0.10.4.0:Data.ByteString
+- base:Foreign.ForeignPtr.Unsafe
+- bytestring-0.10.4.0:Data.ByteString.Internal
+- base:Data.Data
+- base:Data.Version
+- base:Data.String
+- deepseq-1.3.0.2:Control.DeepSeq
+- base:Data.Complex
+- base:Data.Fixed
+- base:Data.Ratio
+- bytestring-0.10.4.0:Data.ByteString.Unsafe
+- base:Foreign.Concurrent
+- ghc-7.8.4:BasicTypes
+- base:Data.Function
+- base:GHC.Exts
+- base:Data.Coerce
+- base:Data.Ord
+- base:Debug.Trace
+- base:GHC.Stack
+- ghc-7.8.4:FastString
+- bytestring-0.10.4.0:Data.ByteString.Char8
+- ghc-7.8.4:Encoding
+- ghc-7.8.4:ExtsCompat46
+- ghc-7.8.4:FastFunctions
+- ghc-7.8.4:FastTypes
+- ghc-7.8.4:Panic
+- base:Control.Concurrent
+- base:Control.Concurrent.Chan
+- base:Control.Concurrent.QSem
+- base:Control.Concurrent.QSemN
+- base:GHC.Conc
+- base:System.Environment
+- base:System.Environment.ExecutablePath
+- base:System.Exit
+- base:System.Mem.Weak
+- ghc-7.8.4:Config
+- ghc-7.8.4:Exception
+- transformers-0.3.0.0:Control.Monad.IO.Class
+- ghc-7.8.4:Outputable[boot]
+- unix-2.7.0.1:System.Posix.Signals
+- unix-2.7.0.1:System.Posix.Process
+- unix-2.7.0.1:System.Posix.Process.Common
+- base:GHC.TopHandler
+- unix-2.7.0.1:System.Posix.Process.Internals
+- ghc-7.8.4:Util
+- containers-0.5.5.1:Data.IntMap
+- containers-0.5.5.1:Data.IntMap.Base
+- base:Control.Applicative
+- base:Control.Arrow
+- base:Control.Category
+- base:Control.Monad.Fix
+- base:Control.Monad.ST.Lazy.Imp
+- base:Control.Monad.ST.Safe
+- base:Control.Monad.ST.Imp
+- base:Control.Monad.ST.Unsafe
+- base:Control.Monad.ST.Lazy.Safe
+- base:Data.Functor
+- base:Data.Foldable
+- base:Data.Traversable
+- containers-0.5.5.1:Data.BitUtil
+- containers-0.5.5.1:Data.IntSet.Base
+- containers-0.5.5.1:Data.StrictPair
+- containers-0.5.5.1:Data.IntMap.Lazy
+- containers-0.5.5.1:Data.IntMap.Strict
+- directory-1.2.1.0:System.Directory
+- filepath-1.3.0.2:System.FilePath
+- filepath-1.3.0.2:System.FilePath.Posix
+- time-1.4.2:Data.Time
+- time-1.4.2:Data.Time.Calendar
+- time-1.4.2:Data.Time.Calendar.Days
+- time-1.4.2:Data.Time.Calendar.Gregorian
+- time-1.4.2:Data.Time.Calendar.MonthDay
+- time-1.4.2:Data.Time.Calendar.Private
+- time-1.4.2:Data.Time.Calendar.OrdinalDate
+- time-1.4.2:Data.Time.Clock
+- time-1.4.2:Data.Time.Clock.POSIX
+- time-1.4.2:Data.Time.Clock.CTimeval
+- time-1.4.2:Data.Time.Clock.UTC
+- time-1.4.2:Data.Time.Clock.Scale
+- time-1.4.2:Data.Time.Clock.UTCDiff
+- time-1.4.2:Data.Time.Format
+- old-locale-1.0.0.6:System.Locale
+- time-1.4.2:Data.Time.Calendar.WeekDate
+- time-1.4.2:Data.Time.Format.Parse
+- time-1.4.2:Data.Time.LocalTime
+- time-1.4.2:Data.Time.LocalTime.LocalTime
+- time-1.4.2:Data.Time.LocalTime.TimeOfDay
+- time-1.4.2:Data.Time.LocalTime.TimeZone
+- unix-2.7.0.1:System.Posix
+- unix-2.7.0.1:System.Posix.Directory
+- unix-2.7.0.1:System.Posix.Directory.Common
+- unix-2.7.0.1:System.Posix.Error
+- unix-2.7.0.1:System.Posix.DynamicLinker
+- unix-2.7.0.1:System.Posix.DynamicLinker.Common
+- unix-2.7.0.1:System.Posix.DynamicLinker.Prim
+- unix-2.7.0.1:System.Posix.Env
+- unix-2.7.0.1:System.Posix.Files
+- unix-2.7.0.1:System.Posix.Files.Common
+- unix-2.7.0.1:System.Posix.IO
+- unix-2.7.0.1:System.Posix.IO.Common
+- unix-2.7.0.1:System.Posix.Resource
+- unix-2.7.0.1:System.Posix.Semaphore
+- unix-2.7.0.1:System.Posix.SharedMem
+- unix-2.7.0.1:System.Posix.Temp
+- unix-2.7.0.1:System.Posix.Terminal
+- unix-2.7.0.1:System.Posix.Terminal.Common
+- unix-2.7.0.1:System.Posix.Time
+- unix-2.7.0.1:System.Posix.Unistd
+- unix-2.7.0.1:System.Posix.User
+- ghc-7.8.4:Outputable
+- base:Text.Printf
+- containers-0.5.5.1:Data.Map
+- containers-0.5.5.1:Data.Map.Base
+- containers-0.5.5.1:Data.Set.Base
+- containers-0.5.5.1:Data.Map.Lazy
+- containers-0.5.5.1:Data.Map.Strict
+- containers-0.5.5.1:Data.Set
+- ghc-7.8.4:DynFlags[boot]
+- ghc-7.8.4:Platform
+- ghc-7.8.4:Module[boot]
+- ghc-7.8.4:OccName[boot]
+- ghc-7.8.4:Pretty
+- ghc-7.8.4:BufWrite
+- ghc-7.8.4:FastMutInt
+- ghc-7.8.4:StaticFlags[boot]
+- ghc-7.8.4:Fingerprint
+- ghc-7.8.4:Name[boot]
+- ghc-7.8.4:UniqFM
+- ghc-7.8.4:Unique
+- hoopl-3.10.0.1:Compiler.Hoopl
+- hoopl-3.10.0.1:Compiler.Hoopl.Block
+- hoopl-3.10.0.1:Compiler.Hoopl.Checkpoint
+- hoopl-3.10.0.1:Compiler.Hoopl.Collections
+- hoopl-3.10.0.1:Compiler.Hoopl.Combinators
+- hoopl-3.10.0.1:Compiler.Hoopl.Dataflow
+- hoopl-3.10.0.1:Compiler.Hoopl.Fuel
+- hoopl-3.10.0.1:Compiler.Hoopl.Unique
+- containers-0.5.5.1:Data.IntSet
+- hoopl-3.10.0.1:Compiler.Hoopl.Graph
+- hoopl-3.10.0.1:Compiler.Hoopl.Label
+- hoopl-3.10.0.1:Compiler.Hoopl.Debug
+- hoopl-3.10.0.1:Compiler.Hoopl.Show
+- hoopl-3.10.0.1:Compiler.Hoopl.MkGraph
+- hoopl-3.10.0.1:Compiler.Hoopl.Pointed
+- hoopl-3.10.0.1:Compiler.Hoopl.XUtil
+- ghc-7.8.4:Name
+- ghc-7.8.4:DynFlags
+- ghc-7.8.4:CmdLineParser
+- ghc-7.8.4:Bag
+- ghc-7.8.4:MonadUtils
+- ghc-7.8.4:Maybes
+- ghc-7.8.4:SrcLoc
+- ghc-7.8.4:Constants
+- ghc-7.8.4:DriverPhases
+- ghc-7.8.4:ErrUtils[boot]
+- ghc-7.8.4:Hooks[boot]
+- ghc-7.8.4:Module
+- ghc-7.8.4:FiniteMap
+- ghc-7.8.4:PackageConfig
+- Cabal-1.18.1.5:Distribution.InstalledPackageInfo
+- Cabal-1.18.1.5:Distribution.License
+- Cabal-1.18.1.5:Distribution.Compat.ReadP
+- Cabal-1.18.1.5:Distribution.Text
+- pretty-1.1.1.1:Text.PrettyPrint
+- pretty-1.1.1.1:Text.PrettyPrint.HughesPJ
+- Cabal-1.18.1.5:Distribution.Version
+- Cabal-1.18.1.5:Distribution.ModuleName
+- Cabal-1.18.1.5:Distribution.Package
+- Cabal-1.18.1.5:Distribution.ParseUtils
+- Cabal-1.18.1.5:Distribution.Compiler
+- base:System.Info
+- Cabal-1.18.1.5:Distribution.ReadE
+- Cabal-1.18.1.5:Distribution.Simple.Utils
+- Cabal-1.18.1.5:Distribution.Compat.CopyFile
+- Cabal-1.18.1.5:Distribution.Compat.Exception
+- Cabal-1.18.1.5:Distribution.Compat.TempFile
+- Cabal-1.18.1.5:Distribution.Verbosity
+- Cabal-1.18.1.5:Paths_Cabal
+- bytestring-0.10.4.0:Data.ByteString.Lazy
+- bytestring-0.10.4.0:Data.ByteString.Lazy.Internal
+- bytestring-0.10.4.0:Data.ByteString.Lazy.Char8
+- process-1.2.0.0:System.Process
+- process-1.2.0.0:System.Process.Internals
+- Cabal-1.18.1.5:Language.Haskell.Extension
+- containers-0.5.5.1:Data.Tree
+- containers-0.5.5.1:Data.Sequence
+- ghc-7.8.4:Packages[boot]
+- ghc-7.8.4:PlatformConstants
+- ghc-7.8.4:PrelNames[boot]
+- ghc-7.8.4:OccName
+- ghc-7.8.4:UniqSet
+- ghc-7.8.4:TypeRep[boot]
+- ghc-7.8.4:NameEnv
+- ghc-7.8.4:Digraph
+- array-0.5.0.0:Data.Array.Base
+- base:Control.Monad.ST.Lazy
+- array-0.5.0.0:Data.Array.ST
+- array-0.5.0.0:Data.Array.MArray
+- base:Control.Monad.ST
+- ghc-7.8.4:NameSet
+- ghc-7.8.4:ConLike
+- ghc-7.8.4:DataCon[boot]
+- ghc-7.8.4:TyCon[boot]
+- ghc-7.8.4:PatSyn[boot]
+- ghc-7.8.4:DataCon
+- ghc-7.8.4:Class
+- ghc-7.8.4:BooleanFormula
+- ghc-7.8.4:CoAxiom
+- ghc-7.8.4:Pair
+- ghc-7.8.4:Var
+- ghc-7.8.4:IdInfo[boot]
+- ghc-7.8.4:TcType[boot]
+- ghc-7.8.4:Coercion
+- ghc-7.8.4:PrelNames
+- ghc-7.8.4:RdrName
+- ghc-7.8.4:StaticFlags
+- ghc-7.8.4:TyCon
+- ghc-7.8.4:ForeignCall
+- ghc-7.8.4:Type
+- ghc-7.8.4:Kind
+- ghc-7.8.4:Type[boot]
+- ghc-7.8.4:TypeRep
+- ghc-7.8.4:VarEnv
+- ghc-7.8.4:VarSet
+- ghc-7.8.4:TysPrim
+- ghc-7.8.4:TysWiredIn[boot]
+- ghc-7.8.4:Unify
+- ghc-7.8.4:ListSetOps
+- ghc-7.8.4:MkId[boot]
+- ghc-7.8.4:PrimOp[boot]
+- ghc-7.8.4:PatSyn
+- ghc-7.8.4:HsBinds
+- ghc-7.8.4:CoreSyn
+- ghc-7.8.4:CostCentre
+- ghc-7.8.4:Literal
+- ghc-7.8.4:HsExpr[boot]
+- ghc-7.8.4:HsPat[boot]
+- ghc-7.8.4:HsLit
+- ghc-7.8.4:HsTypes
+- ghc-7.8.4:HsDoc
+- ghc-7.8.4:PprCore
+- ghc-7.8.4:Demand
+- ghc-7.8.4:Id
+- ghc-7.8.4:IdInfo
+- ghc-7.8.4:UniqSupply
+- ghc-7.8.4:TcEvidence
+- ghc-7.8.4:TcType
+- ghc-7.8.4:TysWiredIn
+- ghc-7.8.4:GhcMonad
+- ghc-7.8.4:ErrUtils
+- ghc-7.8.4:HscTypes
+- ghc-7.8.4:Annotations
+- ghc-7.8.4:Serialized
+- ghc-7.8.4:BreakArray
+- ghc-7.8.4:ByteCodeAsm
+- array-0.5.0.0:Data.Array.Unboxed
+- array-0.5.0.0:Data.Array.IArray
+- array-0.5.0.0:Data.Array.Unsafe
+- array-0.5.0.0:Data.Array.IO.Internals
+- array-0.5.0.0:Data.Array.Storable.Internals
+- ghc-7.8.4:ByteCodeInstr
+- ghc-7.8.4:ByteCodeItbls
+- ghc-7.8.4:StgCmmLayout
+- ghc-7.8.4:CLabel
+- ghc-7.8.4:Packages
+- bin-package-db-0.0.0.0:Distribution.InstalledPackageInfo.Binary
+- binary-0.7.1.0:Data.Binary
+- binary-0.7.1.0:Data.Binary.Class
+- binary-0.7.1.0:Data.Binary.Get
+- binary-0.7.1.0:Data.Binary.Get.Internal
+- binary-0.7.1.0:Data.Binary.Put
+- binary-0.7.1.0:Data.Binary.Builder
+- binary-0.7.1.0:Data.Binary.Builder.Base
+- binary-0.7.1.0:Data.Binary.Generic
+- ghc-7.8.4:PrimOp
+- ghc-7.8.4:CmmType
+- ghc-7.8.4:Cmm
+- ghc-7.8.4:BlockId
+- hoopl-3.10.0.1:Compiler.Hoopl.Internals
+- ghc-7.8.4:CmmExpr
+- ghc-7.8.4:CmmMachOp
+! warning: ghc-7.8.4:CmmExpr : creating inconsistency @ locals:
+    - between: instance CmmExpr.DefinerOfRegs r a =>
+                        CmmExpr.DefinerOfRegs r (Data.Maybe.Maybe a)
+                 -- Defined in ‘ghc-7.8.4:CmmExpr’
+          and: instance GHC.Classes.Ord r =>
+                        CmmExpr.DefinerOfRegs r r
+                 -- Defined in ‘ghc-7.8.4:CmmExpr’
+    - between: instance CmmExpr.DefinerOfRegs r a =>
+                        CmmExpr.DefinerOfRegs r [a]
+                 -- Defined in ‘ghc-7.8.4:CmmExpr’
+          and: instance GHC.Classes.Ord r =>
+                        CmmExpr.DefinerOfRegs r r
+                 -- Defined in ‘ghc-7.8.4:CmmExpr’
+    - between: instance CmmExpr.UserOfRegs r CmmExpr.CmmReg =>
+                        CmmExpr.UserOfRegs r CmmExpr.CmmExpr
+                 -- Defined in ‘ghc-7.8.4:CmmExpr’
+          and: instance GHC.Classes.Ord r =>
+                        CmmExpr.UserOfRegs r r
+                 -- Defined in ‘ghc-7.8.4:CmmExpr’
+    - between: instance CmmExpr.UserOfRegs r a =>
+                        CmmExpr.UserOfRegs r (Data.Maybe.Maybe a)
+                 -- Defined in ‘ghc-7.8.4:CmmExpr’
+          and: instance GHC.Classes.Ord r =>
+                        CmmExpr.UserOfRegs r r
+                 -- Defined in ‘ghc-7.8.4:CmmExpr’
+    - between: instance CmmExpr.UserOfRegs r a =>
+                        CmmExpr.UserOfRegs r [a]
+                 -- Defined in ‘ghc-7.8.4:CmmExpr’
+          and: instance GHC.Classes.Ord r =>
+                        CmmExpr.UserOfRegs r r
+                 -- Defined in ‘ghc-7.8.4:CmmExpr’
+- ghc-7.8.4:CmmNode
+- ghc-7.8.4:CodeGen.Platform
+- ghc-7.8.4:CodeGen.Platform.ARM
+- ghc-7.8.4:FastBool
+- ghc-7.8.4:Reg
+- ghc-7.8.4:RegClass
+! warning: ghc-7.8.4:CodeGen.Platform.ARM : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+- ghc-7.8.4:CodeGen.Platform.NoRegs
+! warning: ghc-7.8.4:CodeGen.Platform.NoRegs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+- ghc-7.8.4:CodeGen.Platform.PPC
+! warning: ghc-7.8.4:CodeGen.Platform.PPC : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+- ghc-7.8.4:CodeGen.Platform.PPC_Darwin
+! warning: ghc-7.8.4:CodeGen.Platform.PPC_Darwin : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+- ghc-7.8.4:CodeGen.Platform.SPARC
+! warning: ghc-7.8.4:CodeGen.Platform.SPARC : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+- ghc-7.8.4:CodeGen.Platform.X86
+! warning: ghc-7.8.4:CodeGen.Platform.X86 : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+- ghc-7.8.4:CodeGen.Platform.X86_64
+! warning: ghc-7.8.4:CodeGen.Platform.X86_64 : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+! warning: ghc-7.8.4:CodeGen.Platform : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+- ghc-7.8.4:SMRep
+! warning: ghc-7.8.4:CmmNode : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+! warning: ghc-7.8.4:CmmNode : creating inconsistency @ imports+locals:
+ - local instance(s): [instance CmmExpr.UserOfRegs
+                                  r CmmExpr.CmmExpr =>
+                                CmmExpr.UserOfRegs r CmmNode.ForeignTarget
+                         -- Defined in ‘ghc-7.8.4:CmmNode’]
+ - imported ghc-7.8.4:CmmExpr instance: instance GHC.Classes.Ord r =>
+                                                 CmmExpr.UserOfRegs r r
+                                          -- Defined in ‘ghc-7.8.4:CmmExpr’
+! warning: ghc-7.8.4:Cmm : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CmmInfo
+- ghc-7.8.4:Bitmap
+- ghc-7.8.4:CmmUtils
+- ghc-7.8.4:Hoopl
+- ghc-7.8.4:Hoopl.Dataflow
+! warning: ghc-7.8.4:CmmUtils : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Stream
+! warning: ghc-7.8.4:CmmInfo : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:MkGraph
+- ghc-7.8.4:CmmCallConv
+- ghc-7.8.4:PprCmm
+- ghc-7.8.4:PprCmmDecl
+- ghc-7.8.4:PprCmmExpr
+! warning: ghc-7.8.4:PprCmmExpr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+! warning: ghc-7.8.4:PprCmmDecl : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:PprCmm : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:CmmCallConv : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:OrdList
+! warning: ghc-7.8.4:MkGraph : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmArgRep
+- ghc-7.8.4:StgCmmClosure
+- ghc-7.8.4:StgSyn
+! warning: ghc-7.8.4:StgCmmClosure : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:StgCmmArgRep : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmEnv
+- ghc-7.8.4:StgCmmMonad
+! warning: ghc-7.8.4:StgCmmMonad : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmUtils
+! warning: ghc-7.8.4:StgCmmUtils : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:StgCmmEnv : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmProf
+! warning: ghc-7.8.4:StgCmmProf : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmTicky
+! warning: ghc-7.8.4:StgCmmTicky : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:StgCmmLayout : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- transformers-0.3.0.0:Control.Monad.Trans.Class
+- transformers-0.3.0.0:Control.Monad.Trans.State.Strict
+- transformers-0.3.0.0:Data.Functor.Identity
+! warning: ghc-7.8.4:ByteCodeItbls : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:ByteCodeInstr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:ByteCodeAsm : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:FamInstEnv
+- ghc-7.8.4:InstEnv
+- ghc-7.8.4:TrieMap
+- ghc-7.8.4:HsImpExp
+- ghc-7.8.4:HsSyn
+- ghc-7.8.4:HsDecls
+- ghc-7.8.4:HsPat
+- ghc-7.8.4:HsExpr
+- ghc-7.8.4:HsUtils
+- ghc-7.8.4:IfaceSyn
+- ghc-7.8.4:IfaceType
+- ghc-7.8.4:InteractiveEvalTypes
+! warning: ghc-7.8.4:InteractiveEvalTypes : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Rules
+- ghc-7.8.4:CoreFVs
+- ghc-7.8.4:CoreSubst
+- ghc-7.8.4:CoreUtils
+- ghc-7.8.4:OccurAnal
+- ghc-7.8.4:OptCoercion
+- ghc-7.8.4:CoreTidy
+- ghc-7.8.4:CoreArity
+- ghc-7.8.4:StringBuffer
+! warning: ghc-7.8.4:HscTypes : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:GhcMonad : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Hooks
+- ghc-7.8.4:DsMonad[boot]
+- ghc-7.8.4:TcRnTypes
+- ghc-7.8.4:IOEnv
+- template-haskell:Language.Haskell.TH
+- template-haskell:Language.Haskell.TH.Lib
+- template-haskell:Language.Haskell.TH.Syntax
+- template-haskell:Language.Haskell.TH.Ppr
+- template-haskell:Language.Haskell.TH.PprLib
+! warning: ghc-7.8.4:TcRnTypes : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:DsMonad[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:PipelineMonad
+! warning: ghc-7.8.4:PipelineMonad : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Hooks : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Llvm
+- ghc-7.8.4:Llvm.AbsSyn
+- ghc-7.8.4:Llvm.MetaData
+- ghc-7.8.4:Llvm.Types
+- ghc-7.8.4:PprBase
+- ghc-7.8.4:Llvm.PpLlvm
+- ghc-7.8.4:LlvmCodeGen
+- ghc-7.8.4:CgUtils
+! warning: ghc-7.8.4:CgUtils : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:LlvmCodeGen.Base
+- ghc-7.8.4:LlvmCodeGen.Regs
+! warning: ghc-7.8.4:LlvmCodeGen.Regs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+! warning: ghc-7.8.4:LlvmCodeGen.Base : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:LlvmCodeGen.CodeGen
+! warning: ghc-7.8.4:LlvmCodeGen.CodeGen : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:LlvmCodeGen.Data
+! warning: ghc-7.8.4:LlvmCodeGen.Data : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:LlvmCodeGen.Ppr
+! warning: ghc-7.8.4:LlvmCodeGen.Ppr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:LlvmMangler
+! warning: ghc-7.8.4:LlvmMangler : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SysTools
+! warning: ghc-7.8.4:LlvmCodeGen : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:MkId
+- ghc-7.8.4:CoreUnfold
+- ghc-7.8.4:MkCore
+! warning: ghc-7.8.4:MkCore : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:PrelRules
+! warning: ghc-7.8.4:PrelRules : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:MkId : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CmmBuildInfoTables
+! warning: ghc-7.8.4:CmmBuildInfoTables : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CmmPipeline
+- ghc-7.8.4:CmmCommonBlockElim
+- ghc-7.8.4:CmmContFlowOpt
+! warning: ghc-7.8.4:CmmContFlowOpt : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:CmmCommonBlockElim : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CmmLayoutStack
+- ghc-7.8.4:CmmLive
+! warning: ghc-7.8.4:CmmLive : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CmmProcPoint
+! warning: ghc-7.8.4:CmmProcPoint : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmForeign
+! warning: ghc-7.8.4:StgCmmForeign : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:CmmLayoutStack : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CmmLint
+! warning: ghc-7.8.4:CmmLint : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CmmSink
+- ghc-7.8.4:CmmOpt
+! warning: ghc-7.8.4:CmmOpt : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:CmmSink : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:CmmPipeline : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CmmLex
+- ghc-7.8.4:Ctype
+- ghc-7.8.4:Lexer
+! warning: ghc-7.8.4:CmmLex : inheriting inconsistency from: {ghc-7.8.4:CmmExpr}
+- ghc-7.8.4:CmmParse
+- ghc-7.8.4:StgCmmBind
+- ghc-7.8.4:StgCmmCon
+- ghc-7.8.4:PrelInfo
+- ghc-7.8.4:TcTypeNats[boot]
+! warning: ghc-7.8.4:PrelInfo : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmHeap
+! warning: ghc-7.8.4:StgCmmHeap : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:StgCmmCon : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmExpr
+- ghc-7.8.4:StgCmmBind[boot]
+! warning: ghc-7.8.4:StgCmmBind[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmHpc
+! warning: ghc-7.8.4:StgCmmHpc : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmPrim
+! warning: ghc-7.8.4:StgCmmPrim : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:StgCmmExpr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:StgCmmBind : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmmExtCode
+! warning: ghc-7.8.4:StgCmmExtCode : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:CmmParse : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CmmRewriteAssignments
+! warning: ghc-7.8.4:CmmRewriteAssignments : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:PprC
+- ghc-7.8.4:CPrim
+! warning: ghc-7.8.4:PprC : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:StgCmm
+! warning: ghc-7.8.4:StgCmm : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CoreLint
+- ghc-7.8.4:CorePrep
+- ghc-7.8.4:CoreMonad
+- ghc-7.8.4:Linker
+- ghc-7.8.4:ByteCodeLink
+- ghc-7.8.4:ObjLink
+! warning: ghc-7.8.4:ByteCodeLink : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Finder
+! warning: ghc-7.8.4:Finder : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:LoadIface
+- ghc-7.8.4:BinIface
+- ghc-7.8.4:IfaceEnv
+- ghc-7.8.4:TcRnMonad
+! warning: ghc-7.8.4:TcRnMonad : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:IfaceEnv : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:BinIface : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcIface[boot]
+! warning: ghc-7.8.4:TcIface[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:LoadIface : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Linker : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcEnv
+- ghc-7.8.4:TcIface
+- ghc-7.8.4:BuildTyCl
+! warning: ghc-7.8.4:BuildTyCl : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcTypeNats
+! warning: ghc-7.8.4:TcTypeNats : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcIface : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcMType
+! warning: ghc-7.8.4:TcMType : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcEnv : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcSplice[boot]
+! warning: ghc-7.8.4:TcSplice[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:CoreMonad : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:CorePrep : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:ExternalCore
+- ghc-7.8.4:MkExternalCore
+- ghc-7.8.4:PprExternalCore
+! warning: ghc-7.8.4:MkExternalCore : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Check
+- ghc-7.8.4:DsMonad
+! warning: ghc-7.8.4:DsMonad : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:DsUtils
+- ghc-7.8.4:DsExpr[boot]
+! warning: ghc-7.8.4:DsExpr[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Match[boot]
+! warning: ghc-7.8.4:Match[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcHsSyn
+! warning: ghc-7.8.4:TcHsSyn : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:DsUtils : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:MatchLit
+! warning: ghc-7.8.4:MatchLit : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Check : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Coverage
+- hpc-0.6.0.1:Trace.Hpc.Mix
+- hpc-0.6.0.1:Trace.Hpc.Tix
+- hpc-0.6.0.1:Trace.Hpc.Util
+! warning: ghc-7.8.4:Coverage : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Desugar
+- ghc-7.8.4:DsBinds
+- ghc-7.8.4:DsGRHSs
+! warning: ghc-7.8.4:DsGRHSs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:DsBinds : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:DsExpr
+- ghc-7.8.4:DsArrows
+- ghc-7.8.4:Match
+- ghc-7.8.4:MatchCon
+! warning: ghc-7.8.4:MatchCon : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Match : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:DsArrows : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:DsListComp
+! warning: ghc-7.8.4:DsListComp : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:DsMeta
+! warning: ghc-7.8.4:DsMeta : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:DsExpr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:DsForeign
+- ghc-7.8.4:DsCCall
+! warning: ghc-7.8.4:DsCCall : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:DsForeign : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:MkIface
+- ghc-7.8.4:FlagChecker
+! warning: ghc-7.8.4:FlagChecker : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:MkIface : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Desugar : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CodeOutput
+- ghc-7.8.4:AsmCodeGen
+- ghc-7.8.4:GraphBase
+- ghc-7.8.4:GraphColor
+- ghc-7.8.4:GraphOps
+- ghc-7.8.4:GraphPpr
+- ghc-7.8.4:Instruction
+! warning: ghc-7.8.4:Instruction : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:NCGMonad
+- ghc-7.8.4:Size
+! warning: ghc-7.8.4:Size : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TargetReg
+- ghc-7.8.4:PPC.Regs
+! warning: ghc-7.8.4:PPC.Regs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SPARC.Regs
+! warning: ghc-7.8.4:SPARC.Regs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:X86.RegInfo
+- ghc-7.8.4:X86.Regs
+! warning: ghc-7.8.4:X86.Regs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:X86.RegInfo : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TargetReg : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:NCGMonad : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:PIC
+- ghc-7.8.4:PPC.Instr
+- ghc-7.8.4:PPC.Cond
+! warning: ghc-7.8.4:PPC.Instr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:X86.Instr
+- ghc-7.8.4:X86.Cond
+! warning: ghc-7.8.4:X86.Instr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:PIC : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:PPC.CodeGen
+! warning: ghc-7.8.4:PPC.CodeGen : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:PPC.Ppr
+! warning: ghc-7.8.4:PPC.Ppr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:PPC.RegInfo
+! warning: ghc-7.8.4:PPC.RegInfo : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Graph.Main
+- ghc-7.8.4:RegAlloc.Graph.Spill
+- ghc-7.8.4:RegAlloc.Liveness
+- ghc-7.8.4:State
+! warning: ghc-7.8.4:RegAlloc.Liveness : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RegAlloc.Graph.Spill : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Graph.SpillClean
+! warning: ghc-7.8.4:RegAlloc.Graph.SpillClean : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Graph.SpillCost
+! warning: ghc-7.8.4:RegAlloc.Graph.SpillCost : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Graph.Stats
+- ghc-7.8.4:RegAlloc.Graph.TrivColorable
+! warning: ghc-7.8.4:RegAlloc.Graph.Stats : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RegAlloc.Graph.Main : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Linear.Base
+- ghc-7.8.4:RegAlloc.Linear.StackMap
+! warning: ghc-7.8.4:RegAlloc.Linear.Base : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Linear.Main
+- ghc-7.8.4:RegAlloc.Linear.FreeRegs
+- ghc-7.8.4:RegAlloc.Linear.PPC.FreeRegs
+! warning: ghc-7.8.4:RegAlloc.Linear.PPC.FreeRegs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Linear.SPARC.FreeRegs
+! warning: ghc-7.8.4:RegAlloc.Linear.SPARC.FreeRegs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Linear.X86.FreeRegs
+! warning: ghc-7.8.4:RegAlloc.Linear.X86.FreeRegs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Linear.X86_64.FreeRegs
+! warning: ghc-7.8.4:RegAlloc.Linear.X86_64.FreeRegs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SPARC.Instr
+- ghc-7.8.4:SPARC.AddrMode
+- ghc-7.8.4:SPARC.Base
+- ghc-7.8.4:SPARC.Imm
+! warning: ghc-7.8.4:SPARC.Imm : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:SPARC.AddrMode : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SPARC.Cond
+- ghc-7.8.4:SPARC.Stack
+! warning: ghc-7.8.4:SPARC.Stack : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:SPARC.Instr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RegAlloc.Linear.FreeRegs : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Linear.JoinToTargets
+- ghc-7.8.4:RegAlloc.Linear.State
+- ghc-7.8.4:RegAlloc.Linear.Stats
+! warning: ghc-7.8.4:RegAlloc.Linear.Stats : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RegAlloc.Linear.State : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RegAlloc.Linear.JoinToTargets : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RegAlloc.Linear.Main : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SPARC.CodeGen
+- ghc-7.8.4:SPARC.CodeGen.Amode
+- ghc-7.8.4:SPARC.CodeGen.Base
+! warning: ghc-7.8.4:SPARC.CodeGen.Base : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SPARC.CodeGen.Gen32[boot]
+! warning: ghc-7.8.4:SPARC.CodeGen.Gen32[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:SPARC.CodeGen.Amode : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SPARC.CodeGen.CondCode
+! warning: ghc-7.8.4:SPARC.CodeGen.CondCode : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SPARC.CodeGen.Gen32
+- ghc-7.8.4:SPARC.CodeGen.Gen64
+- ghc-7.8.4:SPARC.Ppr
+! warning: ghc-7.8.4:SPARC.Ppr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:SPARC.CodeGen.Gen64 : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:SPARC.CodeGen.Gen32 : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SPARC.CodeGen.Sanity
+! warning: ghc-7.8.4:SPARC.CodeGen.Sanity : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:SPARC.CodeGen : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SPARC.CodeGen.Expand
+! warning: ghc-7.8.4:SPARC.CodeGen.Expand : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SPARC.ShortcutJump
+! warning: ghc-7.8.4:SPARC.ShortcutJump : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:X86.CodeGen
+! warning: ghc-7.8.4:X86.CodeGen : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:X86.Ppr
+! warning: ghc-7.8.4:X86.Ppr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:AsmCodeGen : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:CodeOutput : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:DriverMkDepend
+- ghc-7.8.4:GHC
+- ghc-7.8.4:DriverPipeline
+- ghc-7.8.4:HeaderInfo
+- ghc-7.8.4:Parser
+- ghc-7.8.4:HaddockUtils
+- ghc-7.8.4:RdrHsSyn
+! warning: ghc-7.8.4:Parser : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:HeaderInfo : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:HscMain
+- ghc-7.8.4:ByteCodeGen
+- ghc-7.8.4:LibFFI
+! warning: ghc-7.8.4:ByteCodeGen : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:CoreToStg
+! warning: ghc-7.8.4:CoreToStg : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:HscStats
+- ghc-7.8.4:ProfInit
+- ghc-7.8.4:SimplCore
+- ghc-7.8.4:CSE
+- ghc-7.8.4:DmdAnal
+- ghc-7.8.4:WwLib
+! warning: ghc-7.8.4:WwLib : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:DmdAnal : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:DynamicLoading
+- ghc-7.8.4:RnNames
+- ghc-7.8.4:RnEnv
+! warning: ghc-7.8.4:RnEnv : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RnHsDoc
+! warning: ghc-7.8.4:RnHsDoc : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RnNames : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:DynamicLoading : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:FloatIn
+! warning: ghc-7.8.4:FloatIn : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:FloatOut
+- ghc-7.8.4:SetLevels
+! warning: ghc-7.8.4:SetLevels : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:FloatOut : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:LiberateCase
+- ghc-7.8.4:SAT
+- ghc-7.8.4:SimplEnv
+- ghc-7.8.4:SimplMonad
+! warning: ghc-7.8.4:SimplMonad : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:SimplEnv : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SimplUtils
+! warning: ghc-7.8.4:SimplUtils : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Simplify
+! warning: ghc-7.8.4:Simplify : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SpecConstr
+! warning: ghc-7.8.4:SpecConstr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Specialise
+! warning: ghc-7.8.4:Specialise : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise
+- ghc-7.8.4:Vectorise.Convert
+- ghc-7.8.4:Vectorise.Builtins
+- ghc-7.8.4:Vectorise.Builtins.Base
+- ghc-7.8.4:Vectorise.Builtins.Initialise
+! warning: ghc-7.8.4:Vectorise.Builtins.Initialise : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Builtins : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Monad
+- ghc-7.8.4:Vectorise.Env
+! warning: ghc-7.8.4:Vectorise.Env : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Monad.Base
+! warning: ghc-7.8.4:Vectorise.Monad.Base : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Monad.Global
+! warning: ghc-7.8.4:Vectorise.Monad.Global : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Monad.InstEnv
+! warning: ghc-7.8.4:Vectorise.Monad.InstEnv : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Monad.Local
+! warning: ghc-7.8.4:Vectorise.Monad.Local : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Monad.Naming
+! warning: ghc-7.8.4:Vectorise.Monad.Naming : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Monad : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Type.Type
+- ghc-7.8.4:Vectorise.Utils
+- ghc-7.8.4:Vectorise.Utils.Base
+- ghc-7.8.4:Vectorise.Vect
+! warning: ghc-7.8.4:Vectorise.Utils.Base : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Utils.Closure
+- ghc-7.8.4:Vectorise.Utils.Hoisting
+- ghc-7.8.4:Vectorise.Utils.Poly
+- ghc-7.8.4:Vectorise.Utils.PADict
+! warning: ghc-7.8.4:Vectorise.Utils.PADict : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Utils.Poly : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Utils.Hoisting : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Utils.Closure : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Utils : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Type.Type : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Convert : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Exp
+- ghc-7.8.4:Vectorise.Var
+! warning: ghc-7.8.4:Vectorise.Var : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Exp : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Type.Env
+- ghc-7.8.4:Vectorise.Generic.Description
+! warning: ghc-7.8.4:Vectorise.Generic.Description : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Generic.PADict
+- ghc-7.8.4:Vectorise.Generic.PAMethods
+- ghc-7.8.4:FamInst
+! warning: ghc-7.8.4:FamInst : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Generic.PAMethods : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Generic.PADict : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Generic.PData
+! warning: ghc-7.8.4:Vectorise.Generic.PData : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Vectorise.Type.Classify
+- ghc-7.8.4:Vectorise.Type.TyConDecl
+! warning: ghc-7.8.4:Vectorise.Type.TyConDecl : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise.Type.Env : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Vectorise : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:WorkWrap
+! warning: ghc-7.8.4:WorkWrap : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:SimplCore : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:SimplStg
+- ghc-7.8.4:SCCfinal
+- ghc-7.8.4:StgLint
+- ghc-7.8.4:StgStats
+- ghc-7.8.4:UnariseStg
+! warning: ghc-7.8.4:UnariseStg : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:SimplStg : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcRnDriver
+- ghc-7.8.4:Inst
+- ghc-7.8.4:FunDeps
+- ghc-7.8.4:TcExpr[boot]
+! warning: ghc-7.8.4:TcExpr[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcUnify[boot]
+! warning: ghc-7.8.4:TcUnify[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:Inst : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:PprTyThing
+! warning: ghc-7.8.4:PprTyThing : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RnExpr
+- ghc-7.8.4:RnBinds
+- ghc-7.8.4:RnExpr[boot]
+! warning: ghc-7.8.4:RnExpr[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RnPat
+- ghc-7.8.4:RnSplice[boot]
+! warning: ghc-7.8.4:RnSplice[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RnTypes
+! warning: ghc-7.8.4:RnTypes : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RnPat : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RnBinds : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RnSplice
+- ghc-7.8.4:RnSource
+- ghc-7.8.4:TcAnnotations
+! warning: ghc-7.8.4:TcAnnotations : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RnSource : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RnSplice : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RnExpr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcBinds
+- ghc-7.8.4:TcHsType
+- ghc-7.8.4:TcUnify
+! warning: ghc-7.8.4:TcUnify : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcValidity
+- ghc-7.8.4:TcSimplify
+- ghc-7.8.4:TcErrors
+! warning: ghc-7.8.4:TcErrors : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcInteract
+- ghc-7.8.4:TcCanonical
+- ghc-7.8.4:TcSMonad
+! warning: ghc-7.8.4:TcSMonad : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcCanonical : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcInteract : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcSimplify : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcValidity : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcHsType : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcMatches[boot]
+! warning: ghc-7.8.4:TcMatches[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcPat
+! warning: ghc-7.8.4:TcPat : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcPatSyn[boot]
+! warning: ghc-7.8.4:TcPatSyn[boot] : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcBinds : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcDefaults
+! warning: ghc-7.8.4:TcDefaults : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcExpr
+- ghc-7.8.4:TcArrows
+- ghc-7.8.4:TcMatches
+! warning: ghc-7.8.4:TcMatches : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcArrows : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcExpr : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcForeign
+! warning: ghc-7.8.4:TcForeign : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcInstDcls
+- ghc-7.8.4:TcClassDcl
+! warning: ghc-7.8.4:TcClassDcl : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcDeriv
+- ghc-7.8.4:TcGenDeriv
+! warning: ghc-7.8.4:TcGenDeriv : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcGenGenerics
+! warning: ghc-7.8.4:TcGenGenerics : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcTyClsDecls
+- ghc-7.8.4:TcTyDecls
+! warning: ghc-7.8.4:TcTyDecls : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcTyClsDecls : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcDeriv : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcInstDcls : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcRules
+! warning: ghc-7.8.4:TcRules : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TidyPgm
+! warning: ghc-7.8.4:TidyPgm : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:TcRnDriver : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:HscMain : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:ParserCoreUtils
+! warning: ghc-7.8.4:DriverPipeline : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:GhcMake
+! warning: ghc-7.8.4:GhcMake : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:InteractiveEval
+- ghc-7.8.4:RtClosureInspect
+- ghc-7.8.4:DebuggerUtils
+! warning: ghc-7.8.4:DebuggerUtils : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:RtClosureInspect : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:InteractiveEval : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:GHC : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+! warning: ghc-7.8.4:DriverMkDepend : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:GhcPlugins
+! warning: ghc-7.8.4:GhcPlugins : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:LexCore
+- ghc-7.8.4:ParserCore
+- ghc-7.8.4:TcPatSyn
+! warning: ghc-7.8.4:TcPatSyn : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:TcSplice
+- base:GHC.Desugar
+- ghc-7.8.4:Convert
+! warning: ghc-7.8.4:TcSplice : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:RegAlloc.Graph.ArchBase
+- ghc-7.8.4:RegAlloc.Graph.ArchX86
+- ghc-7.8.4:RegAlloc.Graph.Coalesce
+! warning: ghc-7.8.4:RegAlloc.Graph.Coalesce : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+- ghc-7.8.4:Debugger
+! warning: ghc-7.8.4:Debugger : inheriting inconsistency from: {ghc-7.8.4:CmmExpr, ghc-7.8.4:CmmNode}
+
+# World of entire package, with the two modules creating inconsistency:
+
+ghc-7.8.4 => inconsistent! {ghc-7.8.4:CmmExpr,
+                            ghc-7.8.4:CmmNode} (3921)

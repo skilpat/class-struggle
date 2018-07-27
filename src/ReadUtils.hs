@@ -60,7 +60,7 @@ currentPkgModMap req_pkgs = do
                | otherwise     = pkgIdName pid `elem` req_pkgs
 
   -- Generate association list for map
-  liftIO $ putStrLn "Reading current package mod map..."
+  liftIO $ putStrLn "== Reading current package mod map"
   let mkEntry ipi = do
         let pid = pkgIdFromIpi ipi
         let mods = map (mkMod ipi) (allModsFromIpi ipi)
@@ -82,7 +82,7 @@ currentPkgModMap req_pkgs = do
         | otherwise = Just (pid, mods)
   let pkg_mod_map_unselected = M.mapMaybe f_unselect pkg_mod_map_with_keep
 
-  liftIO $ putStrLn "Done reading current package mod map."
+  liftIO $ putStrLn "== Done reading current package mod map."
   return (pkg_mod_map_selected, pkg_mod_map_unselected)
 
   where
@@ -148,6 +148,11 @@ printSDoc sdoc = do
   liftIO $ putStrLn $ showSDoc dflags sdoc
 
 
+printSDocNoLn :: SDoc -> Ghc ()
+printSDocNoLn sdoc = do
+  dflags <- getSessionDynFlags
+  liftIO $ putStr $ showSDoc dflags sdoc
+
 
 -- Flush any buffered output
 flush :: Ghc ()
@@ -180,11 +185,11 @@ readIfaceForMish mish = do
 readInstsFromIface :: ModIface -> Ghc [ClsInst]
 readInstsFromIface iface = do
   hsc_env <- getSession
-  liftIO $ putStrLn $ "+ reading " ++ (show $ mkModuleishImpl $ mi_module iface)
-  flush
+  -- liftIO $ putStrLn $ "+ reading " ++ (show $ mkModuleishImpl $ mi_module iface)
+  -- flush
   mod_details <- liftIO $ initTcForLookup hsc_env $ typecheckIface iface
-  liftIO $ putStrLn $ "+ done reading " ++ (show $ mkModuleishImpl $ mi_module iface)
-  flush
+  -- liftIO $ putStrLn $ "+ done reading " ++ (show $ mkModuleishImpl $ mi_module iface)
+  -- flush
   return $ md_insts mod_details
 
 
