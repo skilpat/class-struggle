@@ -12,6 +12,27 @@ modules defining instances that are known to any modules in the package. For exa
 
 ```cat data/pkgs/platform.txt | cabal run calc-worlds -- --islands```
 
+To print the entire world of particular modules, pass in those modules, without
+package identifiers, to the `calc-worlds` program. For example,
+
+```echo -e "base\ncontainers" | cabal run calc-worlds -- Prelude Data.Map```
+
+will output worlds for the `Prelude` and `Data.Map` modules defined in
+`base` and `containers` respectively. One will see the entire mapping of
+where their instances come from, along with their consistency and total
+instance count:
+
+```
+base:Prelude -> {...}
+                (1375 ; consistent)
+containers-0.5.5.1:Data.Map -> {...}
+                               (1621 ; consistent)
+```
+
+Note that this `base` is version `4.7.0.2`; due to an implementation oddity,
+the program does not show the version of the `base` package but does for every
+other.
+
 ### Results
 
 See `data/worlds` for the analysis of the type class "worlds" inhabited by modules defined in the

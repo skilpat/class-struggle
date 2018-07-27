@@ -131,8 +131,8 @@ pprCtxEntries ctx pkgs_to_print mods_to_print print_islands =
       | otherwise        = Nothing
 
     shouldPrint mish
-      | null mods_to_print                   = False
-      | mishModStr mish `elem` mods_to_print = True
+      | null mods_to_print = False
+      | otherwise          = mishModStr mish `elem` mods_to_print
 
     -- Print an entry for each package in the context (if it's selected to
     -- print by `pkgs_to_print`), with either a full island mapping or just
