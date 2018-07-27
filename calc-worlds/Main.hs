@@ -26,4 +26,6 @@ main = do
   let modsToPrint = delete "--islands" args
 
   ctx <- buildCtx sandbox pkgs
-  printCtx modsToPrint printIslands ctx
+
+  -- print only the selected packages
+  printCtx pkgs modsToPrint printIslands ctx

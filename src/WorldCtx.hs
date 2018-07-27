@@ -1,6 +1,8 @@
 module WorldCtx where
 
 import Control.Monad.State hiding (liftIO)
+import Data.List
+  ( sortBy )
 import Data.Maybe
   ( catMaybes )
 import Data.Monoid
@@ -112,39 +114,59 @@ updateCtxPkg pid w c = do
 instance Outputable Ctx where
   --ppr ctx = text "ctx saw packages:" <+> ppr (uniqSetToList (ctx_pkgs ctx))
   --          $+$ pprCtxEntries ctx []
-  ppr ctx = pprCtxEntries ctx [] False
+  ppr ctx = pprCtxEntries ctx all_pkgs [] False
+    where
+      all_pkgs = map pkgIdName $ S.toAscList $ ctx_pkgs ctx
 
 
-pprCtxEntries :: Ctx -> [String] -> Bool -> SDoc
-pprCtxEntries ctx mods_to_print print_islands =
-  sep $ catMaybes maybeEntryDocs ++ pkgEntryDocs
+pprCtxEntries :: Ctx -> [String] -> [String] -> Bool -> SDoc
+pprCtxEntries ctx pkgs_to_print mods_to_print print_islands =
+  sep $ catMaybes maybeEntryDocs ++ pkgEntryDocs print_islands ++ summary
   where
-    maybeEntryDocs = [ pprEntry mish w | (mish, _, w, _) <- eltsUFM (ctx_map ctx) ]
+    maybeEntryDocs = [ pprModEntry mish w
+                     | (mish, _, w, _) <- eltsUFM (ctx_map ctx) ]
     
-    pprEntry mish w
+    pprModEntry mish w
       | shouldPrint mish = Just $ ppr mish <+> text "->" <+> pprWorld w
       | otherwise        = Nothing
 
     shouldPrint mish
-      | null mods_to_print                   = True
+      | null mods_to_print                   = False
       | mishModStr mish `elem` mods_to_print = True
-      | otherwise                            = False
 
-    mbPprWorld w
-      | print_islands = pprWorld w
-      | otherwise     = Outputable.empty
+    -- Print an entry for each package in the context (if it's selected to
+    -- print by `pkgs_to_print`), with either a full island mapping or just
+    -- a single-line summary depending on the value of `pr_isl`
+    pkgEntryDocs pr_isl = [ pprPkgEntry pr_isl pid w c
+                          | (pid, w, c) <- pkgEntriesOrdered ]
+    
+    pprPkgEntry pr_isl pid w c
+      -- print the whole island mapping for this pkg
+      | pr_isl    = ppr pid <+> text "=>" <+> pprWorld w
+      -- print only a single-line summary
+      | otherwise = ppr pid <+> text "=>" <+> pprCons c <+> parens (int $ w_icount w)
 
-    pkgEntryDocs = [ ppr pid <+> text "=>" <+> mbPprWorld w <+> pprCons c <+> parens (int $ w_icount w)
-                   | (pid, w, c) <- eltsUFM (ctx_pkg_map ctx) ]
+    pkgEntriesOrdered = sortBy o $ filter shouldPrintEntry $ eltsUFM (ctx_pkg_map ctx)
+      where
+        o (pid1, _, _) (pid2, _, _) = compare (pkgIdName pid1) (pkgIdName pid2)
+        shouldPrintEntry (pid, _, _) = null pkgs_to_print || pkgIdName pid `elem` pkgs_to_print
 
     pprCons c
       | S.null c  = text "consistent"
       | otherwise = text "inconsistent!" <+> braces (pprWithCommas ppr (S.toList c))
 
--- | Given a list of module names and a Ctx, print out the World of any modules
---   whose names occur in the list.
-printCtx :: [String] -> Bool -> Ctx -> IO ()
-printCtx mods print_islands ctx =
+    -- Add an additional summary with the one-liners for each package after
+    -- the islands mapping, if that mapping is being printed.
+    summary
+      | print_islands = pkgEntryDocs False
+      | otherwise     = []
+
+-- | Given a list of package names, a list of module names, and a Ctx, print
+--   out the world of any modules in the list, followed by the worlds of the
+--   packages in the list. If the packages list is null, then all packages in
+--   the context should be printed.
+printCtx :: [String] -> [String] -> Bool -> Ctx -> IO ()
+printCtx pkgs mods print_islands ctx =
   defaultErrorHandler defaultFatalMessager defaultFlushOut $ do
-    runGhc (Just libdir) $ printSDoc $ pprCtxEntries ctx mods print_islands
+    runGhc (Just libdir) $ printSDoc $ pprCtxEntries ctx pkgs mods print_islands
 
