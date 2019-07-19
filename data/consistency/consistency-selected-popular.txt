@@ -1,0 +1,145 @@
+Cabal-1.18.1.5 => consistent (2285)
+HTTP-4000.2.19 => consistent (1974)
+JuicyPixels-3.2.3.1 => consistent (2422)
+QuickCheck-2.7.6 => consistent (2367)
+aeson-0.8.0.2 => inconsistent! {aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                aeson-0.8.0.2:Data.Aeson.Types.Instances,
+                                aeson-0.8.0.2:Data.Aeson.TH} (2850)
+attoparsec-0.12.1.5 => consistent (1797)
+attoparsec-enumerator-0.3.3 => consistent (1836)
+authenticate-1.3.2.11 => inconsistent! {aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                        aeson-0.8.0.2:Data.Aeson.Types.Instances} (4771)
+binary-0.7.1.0 => consistent (1833)
+blaze-html-0.8.0.2 => consistent (1720)
+blaze-markup-0.7.0.2 => consistent (1720)
+case-insensitive-1.2.0.4 => consistent (1618)
+classy-prelude-0.11.0 => inconsistent! {ReadArgs-1.2.2:ReadArgs} (4179)
+comonad-4.2.5 => consistent (2537)
+conduit-1.2.4 => consistent (2663)
+conduit-extra-1.1.7.1 => consistent (3096)
+contravariant-1.3.1 => consistent (2445)
+egison-3.5.6 => inconsistent! {haskeline-0.7.1.2:System.Console.Haskeline.InputT,
+                               haskeline-0.7.1.2:System.Console.Haskeline.Backend.DumbTerm,
+                               haskeline-0.7.1.2:System.Console.Haskeline.Backend.Terminfo,
+                               haskeline-0.7.1.2:System.Console.Haskeline.Monads,
+                               egison-3.5.6:Language.Egison.Types} (2422)
+either-4.3.3.2 => consistent (3168)
+fast-logger-2.3.1 => consistent (1786)
+file-embed-0.0.8.2 => consistent (1886)
+free-4.11 => consistent (3358)
+ghc-mod-5.2.1.2 => inconsistent! {ghc-7.8.4:CmmExpr,
+                                  ghc-7.8.4:CmmNode} (8040)
+haddock-library-1.1.1 => consistent (1668)
+hakyll-4.6.7.1 => inconsistent! {pandoc-citeproc-0.6:Text.CSL.Reference,
+                                 pandoc-citeproc-0.6:Text.CSL.Style,
+                                 pandoc-1.13.2:Text.Pandoc.Writers.Custom,
+                                 pandoc-1.13.2:Text.Pandoc.Readers.HTML,
+                                 pandoc-types-1.12.4.2:Text.Pandoc.JSON,
+                                 pandoc-types-1.12.4.2:Text.Pandoc.Walk,
+                                 aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                 aeson-0.8.0.2:Data.Aeson.Types.Instances} (6927)
+happstack-server-7.4.2 => consistent (3051)
+hashable-1.2.3.2 => consistent (1601)
+haskell-src-exts-1.16.0.1 => consistent (3708)
+highlighting-kate-0.5.12 => consistent (2089)
+hlint-1.9.19 => consistent (4434)
+hoogle-4.2.39 => consistent (5630)
+hscolour-1.22 => consistent (1666)
+hspec-2.1.5 => consistent (2499)
+hspec-core-2.1.5 => consistent (2497)
+http-client-0.4.9 => consistent (2740)
+http-conduit-2.1.5 => consistent (4046)
+lens-4.7.0.1 => consistent (4838)
+monad-control-1.0.0.4 => consistent (1953)
+network-2.6.0.2 => consistent (1574)
+network-uri-2.6.0.1 => consistent (1853)
+optparse-applicative-0.11.0.2 => consistent (2116)
+pandoc-1.13.2 => inconsistent! {pandoc-1.13.2:Text.Pandoc.Writers.Custom,
+                                pandoc-1.13.2:Text.Pandoc.Readers.HTML,
+                                pandoc-types-1.12.4.2:Text.Pandoc.JSON,
+                                pandoc-types-1.12.4.2:Text.Pandoc.Walk,
+                                aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                aeson-0.8.0.2:Data.Aeson.Types.Instances} (5808)
+pandoc-citeproc-0.6 => inconsistent! {pandoc-citeproc-0.6:Text.CSL.Reference,
+                                      pandoc-citeproc-0.6:Text.CSL.Style,
+                                      pandoc-1.13.2:Text.Pandoc.Writers.Custom,
+                                      pandoc-1.13.2:Text.Pandoc.Readers.HTML,
+                                      pandoc-types-1.12.4.2:Text.Pandoc.JSON,
+                                      pandoc-types-1.12.4.2:Text.Pandoc.Walk,
+                                      aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                      aeson-0.8.0.2:Data.Aeson.Types.Instances} (6352)
+pandoc-types-1.12.4.2 => inconsistent! {pandoc-types-1.12.4.2:Text.Pandoc.JSON,
+                                        pandoc-types-1.12.4.2:Text.Pandoc.Walk,
+                                        aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                        aeson-0.8.0.2:Data.Aeson.Types.Instances} (2866)
+parsec-3.1.9 => consistent (1843)
+persistent-2.1.2 => inconsistent! {persistent-2.1.2:Database.Persist.Class.PersistField,
+                                   persistent-2.1.2:Database.Persist.Sql.Class,
+                                   aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                   aeson-0.8.0.2:Data.Aeson.Types.Instances} (3878)
+persistent-postgresql-2.1.3 => inconsistent! {persistent-2.1.2:Database.Persist.Class.PersistField,
+                                              persistent-2.1.2:Database.Persist.Sql.Class,
+                                              aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                              aeson-0.8.0.2:Data.Aeson.Types.Instances} (4367)
+persistent-sqlite-2.1.4 => inconsistent! {persistent-2.1.2:Database.Persist.Class.PersistField,
+                                          persistent-2.1.2:Database.Persist.Sql.Class,
+                                          aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                          aeson-0.8.0.2:Data.Aeson.Types.Instances} (3890)
+persistent-template-2.1.1 => inconsistent! {persistent-template-2.1.1:Database.Persist.TH,
+                                            persistent-2.1.2:Database.Persist.Class.PersistField,
+                                            persistent-2.1.2:Database.Persist.Sql.Class,
+                                            aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                            aeson-0.8.0.2:Data.Aeson.Types.Instances} (3902)
+primitive-0.6 => consistent (1690)
+resourcet-1.1.4.1 => consistent (2173)
+scientific-0.3.3.8 => consistent (1764)
+semigroupoids-4.3 => consistent (2876)
+semigroups-0.16.2.2 => consistent (2062)
+shake-0.15 => consistent (2442)
+shelly-1.6.1.2 => inconsistent! {shelly-1.6.1.2:Shelly,
+                                 shelly-1.6.1.2:Shelly.Lifted, shelly-1.6.1.2:Shelly.Pipe} (2470)
+snap-0.14.0.1 => inconsistent! {aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                aeson-0.8.0.2:Data.Aeson.Types.Instances} (5809)
+snap-core-0.9.7.0 => consistent (2687)
+snap-server-0.9.5.0 => consistent (2414)
+streaming-commons-0.1.10.0 => consistent (1981)
+system-filepath-0.4.13.2 => consistent (1672)
+tagged-0.7.3 => consistent (1557)
+texmath-0.8.0.2 => inconsistent! {aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                  aeson-0.8.0.2:Data.Aeson.Types.Instances} (3036)
+text-1.2.0.4 => consistent (1731)
+tls-1.2.16 => consistent (2736)
+transformers-compat-0.4.0.3 => consistent (1908)
+vector-0.10.12.3 => consistent (1886)
+vector-algorithms-0.6.0.4 => consistent (1879)
+vector-instances-3.3.0.1 => consistent (3479)
+wai-app-static-3.0.1 => consistent (3787)
+wai-extra-3.0.6.1 => consistent (2937)
+warp-3.0.11 => consistent (2249)
+xml-conduit-1.2.3.3 => consistent (3198)
+yaml-0.8.10.1 => inconsistent! {yaml-0.8.10.1:Data.Yaml.Builder,
+                                aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                aeson-0.8.0.2:Data.Aeson.Types.Instances} (3380)
+yesod-1.4.1.4 => inconsistent! {yesod-1.4.1.4:Yesod,
+                                yesod-persistent-1.4.0.2:Yesod.Persist,
+                                persistent-template-2.1.1:Database.Persist.TH,
+                                persistent-2.1.2:Database.Persist.Class.PersistField,
+                                persistent-2.1.2:Database.Persist.Sql.Class,
+                                aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                aeson-0.8.0.2:Data.Aeson.Types.Instances} (5244)
+yesod-auth-1.4.4 => inconsistent! {yesod-persistent-1.4.0.2:Yesod.Persist,
+                                   persistent-template-2.1.1:Database.Persist.TH,
+                                   persistent-2.1.2:Database.Persist.Class.PersistField,
+                                   persistent-2.1.2:Database.Persist.Sql.Class,
+                                   aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                   aeson-0.8.0.2:Data.Aeson.Types.Instances} (6271)
+yesod-core-1.4.9.1 => inconsistent! {aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                     aeson-0.8.0.2:Data.Aeson.Types.Instances} (4898)
+yesod-form-1.4.4.1 => inconsistent! {yesod-persistent-1.4.0.2:Yesod.Persist,
+                                     persistent-template-2.1.1:Database.Persist.TH,
+                                     persistent-2.1.2:Database.Persist.Class.PersistField,
+                                     persistent-2.1.2:Database.Persist.Sql.Class,
+                                     aeson-0.8.0.2:Data.Aeson.Types.Generic,
+                                     aeson-0.8.0.2:Data.Aeson.Types.Instances} (5204)
+zlib-0.5.4.2 => consistent (1599)
+zlib-bindings-0.1.1.5 => consistent (1606)

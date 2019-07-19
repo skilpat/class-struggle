@@ -3,6 +3,7 @@ GLURaw
 GLUT
 HTTP
 HUnit
+ObjectName
 OpenGL
 OpenGLRaw
 QuickCheck
@@ -29,6 +30,7 @@ hscolour
 html
 integer-gmp
 mtl
+mtl-compat
 multipart
 network
 network-uri

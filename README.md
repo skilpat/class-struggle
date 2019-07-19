@@ -40,15 +40,60 @@ various packages, along with the worlds inhabited by the entire packages themsel
 is a collection of "islands"; an "island" is an upstream module that defines some new instances
 (the number of which is generally specified in parentheses in the data files).
 
-For example, [data/worlds/ghc-pkg-world.txt](data/worlds/ghc-pkg-world.txt) has the output of
-the analysis for the worlds of modules defined in the package `ghc-7.8.4` (i.e., the GHC API).
+The `data/worlds` directory contains files `worlds-<CATEGORY>.txt` and `islands-<CATEGORY>.txt`.
+Each such file contains the output of running the `calc-worlds` program on `CATEGORY`,
+the latter category additionally passed `--islands` to print the islands of each
+package world, i.e., every island in any world inhabited by a module in the package;
+that data is the second to last section of the `islands` files.
+
+For example, [data/worlds/islands-ghc.txt](data/worlds/islands-ghc.txt) has the output of
+the analysis for the worlds of modules defined in the package `ghc-7.8.4` (i.e., the GHC API),
+along with every island in the package's world.
 Notably, this package's world is *inconsistent* because two of the modules it defines inhabit
 inconsistent worlds themselves, i.e., they transitively import conflicting instances, and thus
 so do many other modules in the package.
 
-As another example, check out [data/worlds/popular-pkg-worlds.txt](data/worlds/popular-pkg-worlds.txt)
+As another example, check out [data/worlds/worlds-selected-popular.txt](data/worlds/worlds-selected-popular.txt)
 to see the worlds of "popular" packages (the top 100 most downloaded, from early 2015). Notably,
-several of these have inconsistent worlds stemming from modules defined in five of them.
+21 of 80 of them have inconsistent worlds stemming from modules defined in 11 of them.
+
+```
+$ bin/original-sin.py data/consistency/consistency-selected-popular.txt 
+Found 11 packages among 21 distinct `package:module` references:
+> ReadArgs-1.2.2 (1)
+  - ReadArgs
+> aeson-0.8.0.2 (3)
+  - Data.Aeson.TH
+  - Data.Aeson.Types.Generic
+  - Data.Aeson.Types.Instances
+> egison-3.5.6 (1)
+  - Language.Egison.Types
+> ghc-7.8.4 (2)
+  - CmmExpr
+  - CmmNode
+> haskeline-0.7.1.2 (4)
+  - System.Console.Haskeline.Backend.DumbTerm
+  - System.Console.Haskeline.Backend.Terminfo
+  - System.Console.Haskeline.InputT
+  - System.Console.Haskeline.Monads
+> pandoc-citeproc-0.6 (2)
+  - Text.CSL.Reference
+  - Text.CSL.Style
+> persistent-2.1.2 (2)
+  - Database.Persist.Class.PersistField
+  - Database.Persist.Sql.Class
+> persistent-template-2.1.1 (1)
+  - Database.Persist.TH
+> shelly-1.6.1.2 (3)
+  - Shelly
+  - Shelly.Lifted
+  - Shelly.Pipe
+> yesod-1.4.1.4 (1)
+  - Yesod
+> yesod-persistent-1.4.0.2 (1)
+  - Yesod.Persist
+
+```
 
 ### Worlds file contents description
 
@@ -172,6 +217,3 @@ interface (`.hi`) file for every module in every installed package. (Note that s
 each has been installed, each has been typechecked, and thus we have a binary interface
 file for every module in every package.)
 
-TODO: Use http://www.stackage.org/ to select a consistent cut of packages to locally install.
-TODO: Calculate how many distinct sets of "static knowledge" (i.e., type class instances,
-family instances, and rules) exist among the packages.

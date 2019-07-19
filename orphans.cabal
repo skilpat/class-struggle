@@ -35,8 +35,7 @@ library
                        hashable,
                        hashmap,
                        transformers,
-                       ghc,
-                       test-pkg
+                       ghc
   hs-source-dirs:      src
   default-language:    Haskell2010
   ghc-options:
