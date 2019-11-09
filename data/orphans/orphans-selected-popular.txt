@@ -1,359 +1,309 @@
-Reading current package mod map...
-  haskell2010-1.1.2.0 (31)
-  haskell98-2.0.0.3 (32)
-  old-time-1.1.0.2 (1)
-  ghc-7.8.4 (412)
-  haskeline-0.7.1.2 (27)
-  terminfo-0.4.0.0 (7)
-  xhtml-3000.2.1 (15)
-  transformers-0.3.0.0 (24)
-  hoopl-3.10.0.1 (20)
-  bin-package-db-0.0.0.0 (1)
-> binary-0.7.1.0 (9)
-> Cabal-1.18.1.5 (72)
-  pretty-1.1.1.1 (2)
-  hpc-0.6.0.1 (4)
-  process-1.2.0.0 (3)
-  directory-1.2.1.0 (1)
-  unix-2.7.0.1 (38)
-  time-1.4.2 (24)
-  old-locale-1.0.0.6 (1)
-  containers-0.5.5.1 (17)
-  bytestring-0.10.4.0 (23)
-  deepseq-1.3.0.2 (1)
-  array-0.5.0.0 (15)
-  filepath-1.3.0.2 (3)
-> snap-0.14.0.1 (33)
-  heist-0.14.1 (21)
-  xmlhtml-0.2.3.4 (10)
-  pwstore-fast-2.4.4 (1)
-  map-syntax-0.2 (1)
-  logict-0.6.0.2 (2)
-  directory-tree-0.12.0 (1)
-  configurator-0.3.0.0 (5)
-> persistent-postgresql-2.1.3 (1)
-  postgresql-simple-0.4.10.0 (27)
-  postgresql-libpq-0.9.0.2 (1)
-  blaze-textual-0.2.0.9 (4)
-> hoogle-4.2.39 (50)
-> happstack-server-7.4.2 (38)
-  time-compat-0.1.0.3 (1)
-  threads-0.5.1.3 (3)
-  sendfile-0.7.9 (7)
-  tasty-rerun-1.1.3 (1)
-  tasty-quickcheck-0.8.3.2 (1)
-  tasty-hunit-0.9.2 (3)
-  fdo-notify-0.3.1 (1)
-  yesod-static-1.4.0.4 (7)
-  DAV-1.0.3 (2)
-  uuid-1.3.9 (8)
-  tasty-0.10.1 (18)
-  dbus-0.10.10 (9)
-  hjsmin-0.1.4.7 (2)
-  MissingH-1.3.0.1 (47)
-  reducers-3.10.3.1 (14)
-> wai-app-static-3.0.1 (9)
-  torrent-10000.0.0 (2)
-  yesod-default-1.2.0 (1)
-  xml-hamlet-0.4.0.10 (2)
-  uuid-types-1.0.0 (3)
-  unbounded-delays-0.1.0.9 (2)
-  regex-tdfa-rc-1.1.8.3 (23)
-> persistent-sqlite-2.1.4 (2)
-  network-multicast-0.0.11 (1)
-  network-info-0.2.0.5 (1)
-  libxml-sax-0.7.5 (1)
-  language-javascript-0.5.13.3 (12)
-  json-0.9.1 (7)
-  hslogger-1.2.8 (8)
-  hamlet-1.2.0 (0)
-  gnutls-0.1.5 (3)
-  fingertree-0.1.0.2 (3)
-  esqueleto-2.1.2.2 (4)
-  errors-1.4.7 (5)
-  edit-distance-0.2.1.2 (7)
-  dns-1.4.5 (9)
-  dataenc-0.14.0.7 (14)
-  cryptohash-conduit-0.1.1 (1)
-  bloomfilter-2.0.0.0 (7)
-  bencode-0.5.0.1 (3)
-  aws-0.11.3 (75)
-  SafeSemaphore-0.10.1 (8)
-  IfElse-0.85 (1)
-> classy-prelude-0.11.0 (1)
-  mutable-containers-0.3.0 (8)
-  chunked-data-0.1.0.1 (5)
-  mono-traversable-0.9.1 (7)
-  vector-instances-3.3.0.1 (1)
-  pointed-4.2 (2)
-  kan-extensions-4.2.1 (13)
-  basic-prelude-0.3.12 (2)
-  vector-algorithms-0.6.0.4 (9)
-  keys-3.10.1 (1)
-  dlist-instances-0.1 (1)
-  adjunctions-4.2 (11)
-  ReadArgs-1.2.2 (1)
-  html-1.0.1.2 (2)
-> optparse-applicative-0.11.0.2 (15)
-  warp-tls-3.0.3 (1)
-  tar-0.4.1.0 (8)
-  project-template-0.1.4.2 (1)
-  http-reverse-proxy-0.4.1.2 (2)
-  ansi-wl-pprint-0.6.7.2 (1)
-> shake-0.15 (47)
-  js-jquery-1.11.2 (2)
-  js-flot-0.8.3 (2)
-> egison-3.5.6 (8)
-  strict-io-0.2.1 (3)
-  pattern-arrows-0.0.2 (1)
-  monad-unify-0.2.2 (1)
-  cmdtheline-0.2.3 (12)
-> hspec-2.1.5 (7)
-  hspec-core-2.1.5 (17)
-  quickcheck-io-0.1.1 (1)
-  hspec-expectations-0.6.1.1 (3)
-  hspec-discover-2.1.5 (0)
-> shelly-1.6.1.2 (5)
-  lifted-async-0.7.0 (2)
-> hakyll-4.6.7.1 (47)
-> snap-server-0.9.5.0 (18)
-> snap-core-0.9.7.0 (22)
-  zlib-enum-0.2.3.1 (1)
-  pandoc-citeproc-0.6 (20)
-  MonadCatchIO-transformers-0.3.1.3 (2)
-  fsnotify-0.1.0.3 (7)
-  blaze-builder-enumerator-0.2.1.0 (1)
-  attoparsec-enumerator-0.3.3 (1)
-  zlib-bindings-0.1.1.5 (2)
-  rfc5051-0.1.0.3 (3)
-  regex-tdfa-1.2.0 (23)
-  monads-tf-0.1.0.2 (21)
-  lrucache-1.2.0.0 (4)
-  hs-bibutils-5.5 (1)
-  hinotify-0.3.7 (2)
-  enumerator-0.4.20 (9)
-  bytestring-mmap-0.2.2 (3)
-  aeson-pretty-0.7.2 (1)
-> pandoc-1.13.2 (69)
-> texmath-0.8.0.2 (18)
-> highlighting-kate-0.5.12 (125)
-  zip-archive-0.2.3.7 (1)
-  pandoc-types-1.12.4.2 (5)
-  xml-1.3.14 (7)
-  regex-pcre-builtin-0.94.4.8.8.35 (6)
-  hslua-0.3.13 (2)
-  extensible-exceptions-0.1.1.4 (1)
-  digest-0.0.1.2 (2)
-  deepseq-generics-0.1.1.2 (1)
-  SHA-1.6.4.2 (1)
-> JuicyPixels-3.2.3.1 (24)
-> yesod-1.4.1.4 (6)
-> yesod-auth-1.4.4 (11)
-> authenticate-1.3.2.11 (9)
-> http-conduit-2.1.5 (2)
-  http-client-tls-0.2.2 (1)
-  connection-0.2.4 (3)
-> tls-1.2.16 (50)
-  x509-validation-1.5.1 (5)
-  x509-system-1.5.0 (3)
-  x509-store-1.5.0 (3)
-  x509-1.5.0.1 (12)
-  crypto-pubkey-0.2.8 (16)
-  crypto-pubkey-types-0.4.3 (5)
-  asn1-parse-0.9.0 (1)
-  tagstream-conduit-0.5.5.3 (6)
-> yesod-form-1.4.4.1 (19)
-> http-client-0.4.9 (13)
-  asn1-encoding-0.9.0 (12)
-> xml-conduit-1.2.3.3 (7)
-  xss-sanitize-0.3.5.5 (2)
-  publicsuffixlist-0.1 (4)
-  yesod-persistent-1.4.0.2 (2)
-  asn1-types-0.3.0 (5)
-> yaml-0.8.10.1 (7)
-  xml-types-0.3.4 (1)
-  utf8-string-1 (5)
-  tagsoup-0.13.3 (13)
-  socks-0.5.4 (6)
-> persistent-template-2.1.1 (1)
-  pem-0.2.2 (4)
-  mime-types-0.1.0.6 (1)
-  mime-mail-0.4.8.2 (1)
-  hourglass-0.2.9 (14)
-> file-embed-0.0.8.2 (1)
-  enclosed-exceptions-1.0.1.1 (1)
-  email-validate-2.0.1 (2)
-  css-text-0.1.2.1 (2)
-  cryptohash-0.11.6 (23)
-  crypto-numbers-0.2.7 (7)
-  clock-0.4.1.3 (1)
-  cipher-rc4-0.1.4 (1)
-  cipher-des-0.0.6 (4)
-  base16-bytestring-0.1.1.6 (2)
-> persistent-2.1.2 (23)
-  silently-1.2.4.1 (1)
-  resource-pool-0.2.3.2 (1)
-> ghc-mod-5.2.1.2 (38)
-  monad-journal-0.7 (3)
-  djinn-ghc-0.0.2.3 (1)
-> either-4.3.3.2 (3)
-  io-choice-0.0.5 (5)
-  ghc-syb-utils-0.2.3 (1)
-  djinn-lib-0.0.1.2 (4)
-  MonadRandom-0.3.0.2 (2)
-> yesod-core-1.4.9.1 (31)
-  monad-logger-0.3.13.1 (1)
-> conduit-extra-1.1.7.1 (12)
-  clientsession-0.9.1.1 (2)
-> wai-extra-3.0.6.1 (22)
-> conduit-1.2.4 (8)
-  cprng-aes-0.6.1 (2)
-> resourcet-1.1.4.1 (4)
-  cookie-0.4.1.4 (1)
-  cipher-aes-0.2.10 (1)
-  lifted-base-0.2.3.6 (9)
-  shakespeare-2.0.4.1 (17)
-  skein-1.0.9.2 (2)
-  data-default-0.5.3 (1)
-  wai-logger-2.2.4 (5)
-  crypto-random-0.0.9 (8)
-  crypto-cipher-types-0.0.9 (10)
-> monad-control-1.0.0.4 (1)
-  system-fileio-0.3.16.2 (1)
-  crypto-api-0.13.2 (9)
-  data-default-instances-old-locale-0.0.1 (1)
-  data-default-instances-dlist-0.0.1 (1)
-  data-default-instances-containers-0.0.1 (1)
-  data-default-instances-base-0.0.1 (1)
-> fast-logger-2.3.1 (6)
-  securemem-0.1.7 (1)
-> blaze-html-0.8.0.2 (21)
-  word8-0.1.2 (2)
-  unix-time-0.3.5 (5)
-  transformers-base-0.4.4 (1)
-> system-filepath-0.4.13.2 (4)
-  stringsearch-0.3.6.6 (15)
-  stm-chans-3.0.0.3 (5)
-  setenv-0.1.1.3 (1)
-  path-pieces-0.2.0 (1)
-  mwc-random-0.13.3.2 (3)
-  monad-loops-0.4.2.1 (1)
-  mmorph-1.0.4 (2)
-  entropy-0.3.6 (2)
-  easy-file-0.2.0 (4)
-  data-default-class-0.0.1 (1)
-  cereal-0.4.1.1 (5)
-  bytestring-builder-0.10.4.1.2 (0)
-  byteable-0.1.1 (1)
-> blaze-markup-0.7.0.2 (6)
-  base64-bytestring-1.0.0.1 (5)
-> aeson-0.8.0.2 (13)
-> warp-3.0.11 (24)
-  wai-3.0.2.3 (2)
-  iproute-1.3.2 (7)
-> streaming-commons-0.1.10.0 (18)
-  http-types-0.8.6 (7)
-  vault-0.3.0.4 (5)
-  unix-compat-0.4.1.4 (8)
-  simple-sendfile-0.2.18 (3)
-  http-date-0.0.6 (5)
-  byteorder-1.0.4 (1)
-  blaze-builder-0.4.0.1 (10)
-  auto-update-0.1.2.1 (4)
-  appar-0.1.4 (5)
-> hlint-1.9.19 (45)
-  uniplate-1.6.12 (21)
-> hscolour-1.22 (16)
-  extra-1.1 (15)
-  cmdargs-0.10.12 (25)
-  ansi-terminal-0.6.2.1 (3)
-> lens-4.7.0.1 (83)
-> free-4.11 (14)
-  profunctors-4.4.1 (14)
-  bifunctors-4.2.1 (15)
-> semigroupoids-4.3 (20)
-> comonad-4.2.5 (16)
-> contravariant-1.3.1 (4)
-  distributive-0.4.4 (2)
-  void-0.7 (2)
-> tagged-0.7.3 (1)
-> semigroups-0.16.2.2 (3)
-  reflection-1.5.1.2 (1)
-  prelude-extras-0.4 (1)
-  cgi-3001.2.2.2 (6)
-  multipart-0.1.2 (2)
-  mtl-compat-0.2.1.3 (1)
-  haddock-api-2.15.0.2 (30)
-  haddock-library-1.1.1 (16)
-  regex-compat-0.95.1 (1)
-  regex-posix-0.95.2 (6)
-  regex-base-0.93.2 (4)
-  HUnit-1.2.5.2 (5)
-> HTTP-4000.2.19 (18)
-  network-uri-2.6.0.1 (1)
-> parsec-3.1.9 (25)
-> network-2.6.0.2 (11)
-  GLUT-2.7.0.0 (24)
-  OpenGL-2.12.0.0 (117)
-  GLURaw-1.5.0.0 (6)
-  StateVar-1.1.0.0 (1)
-  OpenGLRaw-2.4.1.0 (520)
-  ObjectName-1.1.0.0 (1)
-> case-insensitive-1.2.0.4 (3)
-> attoparsec-0.12.1.5 (21)
-> scientific-0.3.3.8 (4)
-  async-2.0.2 (1)
-  test-pkg-0.1.0.0 (9)
-  graphviz-2999.17.0.2 (31)
-  temporary-1.2.0.3 (3)
-  exceptions-0.8.0.2 (2)
-  wl-pprint-text-1.1.0.3 (2)
-> transformers-compat-0.4.0.3 (5)
-  stm-2.4.4 (10)
-  fgl-5.5.1.0 (28)
-  dlist-0.7.1.1 (1)
-  colour-2.3.3 (14)
-  dag-0.1.0.2 (4)
-  singletons-1.1.1 (45)
-  th-desugar-1.5.3 (8)
-  th-orphans-0.11.1 (1)
-  th-reify-many-0.1.3 (2)
-  th-expand-syns-0.3.0.6 (1)
-  constraints-0.4.1.3 (3)
-  th-lift-0.7.2 (1)
-  syb-0.4.4 (16)
-  safe-0.3.8 (4)
-  newtype-0.2 (1)
-  nats-1 (1)
-> haskell-src-exts-1.16.0.1 (22)
-  cpphs-1.19 (11)
-  unordered-containers-0.2.5.1 (8)
-  hashtables-1.2.0.2 (12)
-> QuickCheck-2.7.6 (15)
-  polyparse-1.11 (18)
-> hashable-1.2.3.2 (3)
-  boxes-0.1.4 (1)
-  tf-random-0.5 (4)
-> vector-0.10.12.3 (19)
-  equivalence-0.2.5 (2)
-> zlib-0.5.4.2 (5)
-> text-1.2.0.4 (43)
-  strict-0.3.2 (5)
-  split-0.2.2 (2)
-  random-1.1 (1)
-> primitive-0.6 (10)
-  parallel-3.2.0.6 (3)
-  geniplate-0.6.0.5 (1)
-  data-hash-0.2.0.0 (4)
-  STMonadTrans-0.3.3 (2)
-  mtl-2.1.3.1 (21)
-  ghc-paths-0.1.0.9 (1)
-  ghc-prim (9)
-  integer-gmp (6)
-  base (194)
-  rts (0)
-  template-haskell (6)
-Done reading current package mod map.
+Preprocessing library orphans-0.3.0.0...
+In-place registering orphans-0.3.0.0...
+Preprocessing executable 'orphans-stats' for orphans-0.3.0.0...
+Running orphans-stats...
+== Reading current package mod map
+> Cabal-1.18.1.5 (72 modules)
+  GLURaw-1.5.0.0 (6 modules)
+  GLUT-2.7.0.0 (24 modules)
+> HTTP-4000.2.19 (18 modules)
+  HUnit-1.2.5.2 (5 modules)
+> JuicyPixels-3.2.3.1 (24 modules)
+  MonadCatchIO-transformers-0.3.1.3 (2 modules)
+  MonadRandom-0.3.0.2 (2 modules)
+  ObjectName-1.1.0.0 (1 module)
+  OpenGL-2.12.0.0 (117 modules)
+  OpenGLRaw-2.4.1.0 (520 modules)
+> QuickCheck-2.7.6 (15 modules)
+  ReadArgs-1.2.2 (1 module)
+  SHA-1.6.4.2 (1 module)
+  StateVar-1.1.0.0 (1 module)
+  adjunctions-4.2 (11 modules)
+> aeson-0.8.0.2 (13 modules)
+  aeson-pretty-0.7.2 (1 module)
+  ansi-terminal-0.6.2.1 (3 modules)
+  ansi-wl-pprint-0.6.7.2 (1 module)
+  appar-0.1.4 (5 modules)
+  array-0.5.0.0 (15 modules)
+  asn1-encoding-0.9.0 (12 modules)
+  asn1-parse-0.9.0 (1 module)
+  asn1-types-0.3.0 (5 modules)
+  async-2.0.2 (1 module)
+> attoparsec-0.12.1.5 (21 modules)
+> attoparsec-enumerator-0.3.3 (1 module)
+> authenticate-1.3.2.11 (9 modules)
+  auto-update-0.1.2.1 (4 modules)
+  base (194 modules)
+  base16-bytestring-0.1.1.6 (2 modules)
+  base64-bytestring-1.0.0.1 (5 modules)
+  basic-prelude-0.3.12 (2 modules)
+  bifunctors-4.2.1 (15 modules)
+  bin-package-db-0.0.0.0 (1 module)
+> binary-0.7.1.0 (9 modules)
+  blaze-builder-0.4.0.1 (10 modules)
+  blaze-builder-enumerator-0.2.1.0 (1 module)
+> blaze-html-0.8.0.2 (21 modules)
+> blaze-markup-0.7.0.2 (6 modules)
+  blaze-textual-0.2.0.9 (4 modules)
+  byteable-0.1.1 (1 module)
+  byteorder-1.0.4 (1 module)
+  bytestring-0.10.4.0 (23 modules)
+  bytestring-builder-0.10.4.1.2 (0 modules)
+  bytestring-mmap-0.2.2 (3 modules)
+> case-insensitive-1.2.0.4 (3 modules)
+  cereal-0.4.1.1 (5 modules)
+  cgi-3001.2.2.2 (6 modules)
+  chunked-data-0.1.0.1 (5 modules)
+  cipher-aes-0.2.10 (1 module)
+  cipher-des-0.0.6 (4 modules)
+  cipher-rc4-0.1.4 (1 module)
+> classy-prelude-0.11.0 (1 module)
+  clientsession-0.9.1.1 (2 modules)
+  clock-0.4.1.3 (1 module)
+  cmdargs-0.10.12 (25 modules)
+  colour-2.3.3 (14 modules)
+> comonad-4.2.5 (16 modules)
+> conduit-1.2.4 (8 modules)
+> conduit-extra-1.1.7.1 (12 modules)
+  configurator-0.3.0.0 (5 modules)
+  connection-0.2.4 (3 modules)
+  constraints-0.4.1.3 (3 modules)
+  containers-0.5.5.1 (17 modules)
+> contravariant-1.3.1 (4 modules)
+  cookie-0.4.1.4 (1 module)
+  cpphs-1.19 (11 modules)
+  cprng-aes-0.6.1 (2 modules)
+  crypto-api-0.13.2 (9 modules)
+  crypto-cipher-types-0.0.9 (10 modules)
+  crypto-numbers-0.2.7 (7 modules)
+  crypto-pubkey-0.2.8 (16 modules)
+  crypto-pubkey-types-0.4.3 (5 modules)
+  crypto-random-0.0.9 (8 modules)
+  cryptohash-0.11.6 (23 modules)
+  cryptohash-conduit-0.1.1 (1 module)
+  css-text-0.1.2.1 (2 modules)
+  data-default-0.5.3 (1 module)
+  data-default-class-0.0.1 (1 module)
+  data-default-instances-base-0.0.1 (1 module)
+  data-default-instances-containers-0.0.1 (1 module)
+  data-default-instances-dlist-0.0.1 (1 module)
+  data-default-instances-old-locale-0.0.1 (1 module)
+  deepseq-1.3.0.2 (1 module)
+  deepseq-generics-0.1.1.2 (1 module)
+  digest-0.0.1.2 (2 modules)
+  directory-1.2.1.0 (1 module)
+  directory-tree-0.12.0 (1 module)
+  distributive-0.4.4 (2 modules)
+  djinn-ghc-0.0.2.3 (1 module)
+  djinn-lib-0.0.1.2 (4 modules)
+  dlist-0.7.1.1 (1 module)
+  dlist-instances-0.1 (1 module)
+  easy-file-0.2.0 (4 modules)
+> egison-3.5.6 (8 modules)
+> either-4.3.3.2 (3 modules)
+  email-validate-2.0.1 (2 modules)
+  enclosed-exceptions-1.0.1.1 (1 module)
+  entropy-0.3.6 (2 modules)
+  enumerator-0.4.20 (9 modules)
+  errors-1.4.7 (5 modules)
+  exceptions-0.8.0.2 (2 modules)
+  extensible-exceptions-0.1.1.4 (1 module)
+  extra-1.1 (15 modules)
+> fast-logger-2.3.1 (6 modules)
+  fgl-5.5.1.0 (28 modules)
+> file-embed-0.0.8.2 (1 module)
+  filepath-1.3.0.2 (3 modules)
+> free-4.11 (14 modules)
+  fsnotify-0.1.0.3 (7 modules)
+  ghc-7.8.4 (412 modules)
+> ghc-mod-5.2.1.2 (38 modules)
+  ghc-paths-0.1.0.9 (1 module)
+  ghc-prim (9 modules)
+  ghc-syb-utils-0.2.3 (1 module)
+  graphviz-2999.17.0.2 (31 modules)
+> haddock-library-1.1.1 (16 modules)
+> hakyll-4.6.7.1 (47 modules)
+> happstack-server-7.4.2 (38 modules)
+> hashable-1.2.3.2 (3 modules)
+  hashmap-1.3.0.1 (2 modules)
+  haskeline-0.7.1.2 (27 modules)
+> haskell-src-exts-1.16.0.1 (22 modules)
+  haskell2010-1.1.2.0 (31 modules)
+  haskell98-2.0.0.3 (32 modules)
+  heist-0.14.1 (21 modules)
+  hfsevents-0.1.5 (1 module)
+> highlighting-kate-0.5.12 (125 modules)
+> hlint-1.9.19 (45 modules)
+> hoogle-4.2.39 (50 modules)
+  hoopl-3.10.0.1 (20 modules)
+  hourglass-0.2.9 (14 modules)
+  hpc-0.6.0.1 (4 modules)
+  hs-bibutils-5.5 (1 module)
+> hscolour-1.22 (16 modules)
+  hslogger-1.2.8 (8 modules)
+  hslua-0.3.13 (2 modules)
+> hspec-2.1.5 (7 modules)
+> hspec-core-2.1.5 (17 modules)
+  hspec-discover-2.1.5 (0 modules)
+  hspec-expectations-0.6.1.1 (3 modules)
+  html-1.0.1.2 (2 modules)
+> http-client-0.4.9 (13 modules)
+  http-client-tls-0.2.2 (1 module)
+> http-conduit-2.1.5 (2 modules)
+  http-date-0.0.6 (5 modules)
+  http-types-0.8.6 (7 modules)
+  integer-gmp (6 modules)
+  io-choice-0.0.5 (5 modules)
+  iproute-1.3.2 (7 modules)
+  js-flot-0.8.3 (2 modules)
+  js-jquery-1.11.2 (2 modules)
+  kan-extensions-4.2.1 (13 modules)
+  keys-3.10.1 (1 module)
+> lens-4.7.0.1 (83 modules)
+  lifted-async-0.7.0 (2 modules)
+  lifted-base-0.2.3.6 (9 modules)
+  logict-0.6.0.2 (2 modules)
+  lrucache-1.2.0.0 (4 modules)
+  map-syntax-0.2 (1 module)
+  mime-mail-0.4.8.2 (1 module)
+  mime-types-0.1.0.6 (1 module)
+  mmorph-1.0.4 (2 modules)
+> monad-control-1.0.0.4 (1 module)
+  monad-journal-0.7 (3 modules)
+  monad-logger-0.3.13.1 (1 module)
+  monad-loops-0.4.2.1 (1 module)
+  monads-tf-0.1.0.2 (21 modules)
+  mono-traversable-0.9.1 (7 modules)
+  mtl-2.1.3.1 (21 modules)
+  mtl-compat-0.2.1.3 (1 module)
+  multipart-0.1.2 (2 modules)
+  mutable-containers-0.3.0 (8 modules)
+  mwc-random-0.13.3.2 (3 modules)
+  nats-1 (1 module)
+> network-2.6.0.2 (11 modules)
+  network-info-0.2.0.5 (1 module)
+> network-uri-2.6.0.1 (1 module)
+  newtype-0.2 (1 module)
+  old-locale-1.0.0.6 (1 module)
+  old-time-1.1.0.2 (1 module)
+> optparse-applicative-0.11.0.2 (15 modules)
+> pandoc-1.13.2 (69 modules)
+> pandoc-citeproc-0.6 (20 modules)
+> pandoc-types-1.12.4.2 (5 modules)
+  parallel-3.2.0.6 (3 modules)
+> parsec-3.1.9 (25 modules)
+  path-pieces-0.2.0 (1 module)
+  pem-0.2.2 (4 modules)
+> persistent-2.1.2 (23 modules)
+> persistent-postgresql-2.1.3 (1 module)
+> persistent-sqlite-2.1.4 (2 modules)
+> persistent-template-2.1.1 (1 module)
+  pointed-4.2 (2 modules)
+  polyparse-1.11 (18 modules)
+  postgresql-libpq-0.9.0.2 (1 module)
+  postgresql-simple-0.4.10.0 (27 modules)
+  prelude-extras-0.4 (1 module)
+  pretty-1.1.1.1 (2 modules)
+> primitive-0.6 (10 modules)
+  process-1.2.0.0 (3 modules)
+  profunctors-4.4.1 (14 modules)
+  publicsuffixlist-0.1 (4 modules)
+  pwstore-fast-2.4.4 (1 module)
+  quickcheck-io-0.1.1 (1 module)
+  random-1.1 (1 module)
+  reflection-1.5.1.2 (1 module)
+  regex-base-0.93.2 (4 modules)
+  regex-compat-0.95.1 (1 module)
+  regex-pcre-builtin-0.94.4.8.8.35 (6 modules)
+  regex-posix-0.95.2 (6 modules)
+  regex-tdfa-1.2.0 (23 modules)
+  resource-pool-0.2.3.2 (1 module)
+> resourcet-1.1.4.1 (4 modules)
+  rfc5051-0.1.0.3 (3 modules)
+  rts (0 modules)
+  safe-0.3.8 (4 modules)
+> scientific-0.3.3.8 (4 modules)
+  securemem-0.1.7 (1 module)
+> semigroupoids-4.3 (20 modules)
+> semigroups-0.16.2.2 (3 modules)
+  sendfile-0.7.9 (7 modules)
+  setenv-0.1.1.3 (1 module)
+> shake-0.15 (47 modules)
+  shakespeare-2.0.4.1 (17 modules)
+> shelly-1.6.1.2 (5 modules)
+  silently-1.2.4.1 (1 module)
+  simple-sendfile-0.2.18 (4 modules)
+  skein-1.0.9.2 (2 modules)
+> snap-0.14.0.1 (33 modules)
+> snap-core-0.9.7.0 (22 modules)
+> snap-server-0.9.5.0 (18 modules)
+  socks-0.5.4 (6 modules)
+  split-0.2.2 (2 modules)
+  stm-2.4.4 (10 modules)
+  stm-chans-3.0.0.3 (5 modules)
+> streaming-commons-0.1.10.0 (18 modules)
+  strict-io-0.2.1 (3 modules)
+  stringsearch-0.3.6.6 (15 modules)
+  syb-0.4.4 (16 modules)
+  system-fileio-0.3.16.2 (1 module)
+> system-filepath-0.4.13.2 (4 modules)
+> tagged-0.7.3 (1 module)
+  tagsoup-0.13.3 (13 modules)
+  tagstream-conduit-0.5.5.3 (6 modules)
+  template-haskell (6 modules)
+  temporary-1.2.0.3 (3 modules)
+  terminfo-0.4.0.0 (7 modules)
+> texmath-0.8.0.2 (18 modules)
+> text-1.2.0.4 (43 modules)
+  tf-random-0.5 (4 modules)
+  threads-0.5.1.3 (3 modules)
+  time-1.4.2 (24 modules)
+  time-compat-0.1.0.3 (1 module)
+> tls-1.2.16 (50 modules)
+  transformers-0.3.0.0 (24 modules)
+  transformers-base-0.4.4 (1 module)
+> transformers-compat-0.4.0.3 (5 modules)
+  uniplate-1.6.12 (21 modules)
+  unix-2.7.0.1 (38 modules)
+  unix-compat-0.4.1.4 (8 modules)
+  unix-time-0.3.5 (5 modules)
+  unordered-containers-0.2.5.1 (8 modules)
+  utf8-string-1 (5 modules)
+  uuid-1.3.9 (8 modules)
+  uuid-types-1.0.0 (3 modules)
+  vault-0.3.0.4 (5 modules)
+> vector-0.10.12.3 (19 modules)
+> vector-algorithms-0.6.0.4 (9 modules)
+> vector-instances-3.3.0.1 (1 module)
+  void-0.7 (2 modules)
+  wai-3.0.2.3 (2 modules)
+> wai-app-static-3.0.1 (9 modules)
+> wai-extra-3.0.6.1 (22 modules)
+  wai-logger-2.2.4 (5 modules)
+> warp-3.0.11 (24 modules)
+  wl-pprint-text-1.1.0.3 (2 modules)
+  word8-0.1.2 (2 modules)
+  x509-1.5.0.1 (12 modules)
+  x509-store-1.5.0 (3 modules)
+  x509-system-1.5.0 (3 modules)
+  x509-validation-1.5.1 (5 modules)
+  xhtml-3000.2.1 (15 modules)
+  xml-1.3.14 (7 modules)
+> xml-conduit-1.2.3.3 (7 modules)
+  xml-types-0.3.4 (1 module)
+  xmlhtml-0.2.3.4 (10 modules)
+  xss-sanitize-0.3.5.5 (2 modules)
+> yaml-0.8.10.1 (7 modules)
+> yesod-1.4.1.4 (6 modules)
+> yesod-auth-1.4.4 (11 modules)
+> yesod-core-1.4.9.1 (31 modules)
+> yesod-form-1.4.4.1 (19 modules)
+  yesod-persistent-1.4.0.2 (2 modules)
+  zip-archive-0.2.3.7 (1 module)
+> zlib-0.5.4.2 (5 modules)
+> zlib-bindings-0.1.1.5 (2 modules)
+  zlib-enum-0.2.3.1 (1 module)
+== Done reading current package mod map.
 *****************************
 Cabal-1.18.1.5
 *****************************
@@ -850,6 +800,13 @@ Data.Attoparsec.Text.Internal
 
 
 *****************************
+attoparsec-enumerator-0.3.3
+*****************************
+Data.Attoparsec.Enumerator
+  = orphans         :   0 of   5
+
+
+*****************************
 authenticate-1.3.2.11
 *****************************
 Web.Authenticate.Rpxnow
@@ -1257,6 +1214,44 @@ Language.Haskell.GhcMod.Utils
   = orphans         :   0 of   0
 Language.Haskell.GhcMod.World
   = orphans         :   0 of   5
+
+
+*****************************
+haddock-library-1.1.1
+*****************************
+Documentation.Haddock.Parser
+  = orphans         :   0 of   0
+Documentation.Haddock.Types
+  = orphans         :   0 of  16
+Documentation.Haddock.Doc
+  = orphans         :   0 of   0
+Data.Attoparsec
+  = orphans         :   0 of   0
+Data.Attoparsec.ByteString
+  = orphans         :   0 of   0
+Data.Attoparsec.ByteString.Buffer
+  = orphans         :   0 of   2
+Data.Attoparsec.ByteString.Char8
+  * Data.String.IsString [Just Data.Attoparsec.Internal.Types.Parser]
+  = orphans         :   1 of   1
+Data.Attoparsec.ByteString.FastSet
+  = orphans         :   0 of   3
+Data.Attoparsec.ByteString.Internal
+  = orphans         :   0 of   0
+Data.Attoparsec.Combinator
+  = orphans         :   0 of   0
+Data.Attoparsec.Internal
+  = orphans         :   0 of   0
+Data.Attoparsec.Internal.Fhthagn
+  = orphans         :   0 of   0
+Data.Attoparsec.Internal.Types
+  = orphans         :   0 of  17
+Data.Attoparsec.Number
+  = orphans         :   0 of  10
+Documentation.Haddock.Parser.Util
+  = orphans         :   0 of   0
+Documentation.Haddock.Utf8
+  = orphans         :   0 of   0
 
 
 *****************************
@@ -2038,6 +2033,45 @@ Test.Hspec.HUnit
 
 
 *****************************
+hspec-core-2.1.5
+*****************************
+Test.Hspec.Core.Spec
+  = orphans         :   0 of   0
+Test.Hspec.Core.Hooks
+  = orphans         :   0 of   0
+Test.Hspec.Core.Runner
+  = orphans         :   0 of   3
+Test.Hspec.Core.Formatters
+  = orphans         :   0 of   0
+Test.Hspec.Core.QuickCheck
+  = orphans         :   0 of   0
+Test.Hspec.Core.Util
+  = orphans         :   0 of   0
+Test.Hspec.Compat
+  = orphans         :   0 of   0
+Test.Hspec.Core.Example
+  = orphans         :   0 of  12
+Test.Hspec.Core.Tree
+  = orphans         :   0 of   7
+Test.Hspec.Core.Spec.Monad
+  = orphans         :   0 of   3
+Test.Hspec.Core.QuickCheckUtil
+  = orphans         :   0 of   0
+Test.Hspec.Config
+  = orphans         :   0 of   0
+Test.Hspec.Options
+  = orphans         :   0 of   2
+Test.Hspec.FailureReport
+  = orphans         :   0 of   3
+Test.Hspec.Core.Runner.Eval
+  = orphans         :   0 of   0
+Test.Hspec.Core.Formatters.Internal
+  = orphans         :   0 of   4
+Test.Hspec.Timer
+  = orphans         :   0 of   0
+
+
+*****************************
 http-client-0.4.9
 *****************************
 Network.HTTP.Client
@@ -2288,6 +2322,13 @@ Network.Socket.ByteString.MsgHdr
 
 
 *****************************
+network-uri-2.6.0.1
+*****************************
+Network.URI
+  = orphans         :   0 of  10
+
+
+*****************************
 optparse-applicative-0.11.0.2
 *****************************
 Options.Applicative
@@ -2472,6 +2513,66 @@ Text.Pandoc.Compat.Directory
   = orphans         :   0 of   0
 Paths_pandoc
   = orphans         :   0 of   0
+
+
+*****************************
+pandoc-citeproc-0.6
+*****************************
+Text.CSL.Pandoc
+  = orphans         :   0 of   0
+Text.CSL
+  = orphans         :   0 of   0
+Text.CSL.Reference
+  = orphans         :   0 of 178
+Text.CSL.Style
+  = orphans         :   0 of 427
+Text.CSL.Eval
+  = orphans         :   0 of   0
+Text.CSL.Eval.Common
+  = orphans         :   0 of   4
+Text.CSL.Eval.Date
+  = orphans         :   0 of   0
+Text.CSL.Eval.Names
+  = orphans         :   0 of   0
+Text.CSL.Eval.Output
+  = orphans         :   0 of   0
+Text.CSL.Parser
+  = orphans         :   0 of   0
+Text.CSL.Proc
+  = orphans         :   0 of   9
+Text.CSL.Proc.Collapse
+  = orphans         :   0 of   0
+Text.CSL.Proc.Disamb
+  = orphans         :   0 of   2
+Text.CSL.Input.Bibutils
+  = orphans         :   0 of   0
+Text.CSL.Input.Bibtex
+  = orphans         :   0 of   0
+Text.CSL.Output.Pandoc
+  = orphans         :   0 of   0
+Text.CSL.Output.Plain
+  = orphans         :   0 of   0
+Text.CSL.Data
+  = orphans         :   0 of   0
+Text.CSL.Util
+  = orphans         :   0 of   0
+Paths_pandoc_citeproc
+  = orphans         :   0 of   0
+
+
+*****************************
+pandoc-types-1.12.4.2
+*****************************
+Text.Pandoc.Definition
+  = orphans         :   0 of 216
+Text.Pandoc.Generic
+  = orphans         :   0 of   0
+Text.Pandoc.Walk
+  = orphans         :   0 of  17
+Text.Pandoc.Builder
+  = orphans         :   0 of  24
+Text.Pandoc.JSON
+  = orphans         :   0 of   6
 
 
 *****************************
@@ -3032,7 +3133,7 @@ Control.Concurrent.Extended
   = orphans         :   0 of   0
 System.SendFile
   = orphans         :   0 of   0
-System.SendFile.Linux
+System.SendFile.Darwin
   = orphans         :   0 of   0
 
 
@@ -3474,6 +3575,54 @@ Data.Vector
 
 
 *****************************
+vector-algorithms-0.6.0.4
+*****************************
+Data.Vector.Algorithms.Optimal
+  = orphans         :   0 of   0
+Data.Vector.Algorithms.Insertion
+  = orphans         :   0 of   0
+Data.Vector.Algorithms.Intro
+  = orphans         :   0 of   0
+Data.Vector.Algorithms.Merge
+  = orphans         :   0 of   0
+Data.Vector.Algorithms.Radix
+  = orphans         :   0 of  11
+Data.Vector.Algorithms.Search
+  = orphans         :   0 of   0
+Data.Vector.Algorithms.Heap
+  = orphans         :   0 of   0
+Data.Vector.Algorithms.AmericanFlag
+  = orphans         :   0 of  11
+Data.Vector.Algorithms.Common
+  = orphans         :   0 of   0
+
+
+*****************************
+vector-instances-3.3.0.1
+*****************************
+Data.Vector.Instances
+  * Data.Key.Adjustable [Just Data.Vector.Vector]
+  * Data.Functor.Alt.Alt [Just Data.Vector.Vector]
+  * Data.Functor.Bind.Apply [Just Data.Vector.Vector]
+  * Data.Functor.Bind.Bind [Just Data.Vector.Vector]
+  * Data.Functor.Extend.Extend [Just Data.Vector.Vector]
+  * Data.Key.FoldableWithKey [Just Data.Vector.Vector]
+  * Data.Key.Indexable [Just Data.Vector.Vector]
+  * Data.Key.Keyed [Just Data.Vector.Vector]
+  * Data.Key.Lookup [Just Data.Vector.Vector]
+  * Data.Functor.Plus.Plus [Just Data.Vector.Vector]
+  * Data.Pointed.Pointed [Just Data.Vector.Vector]
+  * Data.Semigroup.Semigroup [Just Data.Vector.Primitive.Vector]
+  * Data.Semigroup.Semigroup [Just Data.Vector.Storable.Vector]
+  * Data.Semigroup.Semigroup [Just Data.Vector.Unboxed.Base.Vector]
+  * Data.Semigroup.Semigroup [Just Data.Vector.Vector]
+  * Data.Key.TraversableWithKey [Just Data.Vector.Vector]
+  * Data.Key.Zip [Just Data.Vector.Vector]
+  * Data.Key.ZipWithKey [Just Data.Vector.Vector]
+  = orphans         :  18 of  18
+
+
+*****************************
 wai-app-static-3.0.1
 *****************************
 Network.Wai.Application.Static
@@ -3809,6 +3958,15 @@ Codec.Compression.Zlib.Stream
   = orphans         :   0 of   8
 
 
+*****************************
+zlib-bindings-0.1.1.5
+*****************************
+Codec.Zlib
+  = orphans         :   0 of   3
+Codec.Zlib.Lowlevel
+  = orphans         :   0 of   4
+
+
 ========= TOTALS =========
 
 1) Cabal-1.18.1.5
@@ -3841,332 +3999,377 @@ Codec.Compression.Zlib.Stream
      orphan instances  :   2 of  49
      mods w/o instances:  10 of  21
 
-7) authenticate-1.3.2.11
+7) attoparsec-enumerator-0.3.3
+     orphan modules    :   0 of   1
+     orphan instances  :   0 of   5
+     mods w/o instances:   1 of   1
+
+8) authenticate-1.3.2.11
      orphan modules    :   0 of   9
      orphan instances  :   0 of  25
      mods w/o instances:   5 of   9
 
-8) binary-0.7.1.0
+9) binary-0.7.1.0
      orphan modules    :   1 of   9
      orphan instances  :   6 of  61
      mods w/o instances:   5 of   9
 
-9) blaze-html-0.8.0.2
-     orphan modules    :   0 of  21
-     orphan instances  :   0 of   0
-     mods w/o instances:   0 of  21
+10) blaze-html-0.8.0.2
+      orphan modules    :   0 of  21
+      orphan instances  :   0 of   0
+      mods w/o instances:   0 of  21
 
-10) blaze-markup-0.7.0.2
+11) blaze-markup-0.7.0.2
       orphan modules    :   0 of   6
       orphan instances  :   0 of  46
       mods w/o instances:   2 of   6
 
-11) case-insensitive-1.2.0.4
+12) case-insensitive-1.2.0.4
       orphan modules    :   0 of   3
       orphan instances  :   0 of  17
       mods w/o instances:   1 of   3
 
-12) classy-prelude-0.11.0
+13) classy-prelude-0.11.0
       orphan modules    :   0 of   1
       orphan instances  :   0 of   0
       mods w/o instances:   0 of   1
 
-13) comonad-4.2.5
+14) comonad-4.2.5
       orphan modules    :   0 of  16
       orphan instances  :   0 of  73
       mods w/o instances:  11 of  16
 
-14) conduit-1.2.4
+15) conduit-1.2.4
       orphan modules    :   0 of   8
       orphan instances  :   0 of  44
       mods w/o instances:   3 of   8
 
-15) conduit-extra-1.1.7.1
+16) conduit-extra-1.1.7.1
       orphan modules    :   1 of  12
       orphan instances  :   4 of  37
       mods w/o instances:   4 of  12
 
-16) contravariant-1.3.1
+17) contravariant-1.3.1
       orphan modules    :   0 of   4
       orphan instances  :   0 of  67
       mods w/o instances:   4 of   4
 
-17) egison-3.5.6
+18) egison-3.5.6
       orphan modules    :   0 of   8
       orphan instances  :   0 of  65
       mods w/o instances:   2 of   8
 
-18) either-4.3.3.2
+19) either-4.3.3.2
       orphan modules    :   0 of   3
       orphan instances  :   0 of  44
       mods w/o instances:   2 of   3
 
-19) fast-logger-2.3.1
+20) fast-logger-2.3.1
       orphan modules    :   0 of   6
       orphan instances  :   0 of   8
       mods w/o instances:   1 of   6
 
-20) file-embed-0.0.8.2
+21) file-embed-0.0.8.2
       orphan modules    :   0 of   1
       orphan instances  :   0 of   0
       mods w/o instances:   0 of   1
 
-21) free-4.11
+22) free-4.11
       orphan modules    :   0 of  14
       orphan instances  :   0 of 254
       mods w/o instances:  14 of  14
 
-22) ghc-mod-5.2.1.2
+23) ghc-mod-5.2.1.2
       orphan modules    :   1 of  38
       orphan instances  :   2 of  69
       mods w/o instances:  13 of  38
 
-23) hakyll-4.6.7.1
+24) haddock-library-1.1.1
+      orphan modules    :   1 of  16
+      orphan instances  :   1 of  49
+      mods w/o instances:   6 of  16
+
+25) hakyll-4.6.7.1
       orphan modules    :   1 of  47
       orphan instances  :  17 of 133
       mods w/o instances:  24 of  47
 
-24) happstack-server-7.4.2
+26) happstack-server-7.4.2
       orphan modules    :   0 of  38
       orphan instances  :   0 of 244
       mods w/o instances:  11 of  38
 
-25) hashable-1.2.3.2
+27) hashable-1.2.3.2
       orphan modules    :   1 of   3
       orphan instances  :   6 of  45
       mods w/o instances:   2 of   3
 
-26) haskell-src-exts-1.16.0.1
+28) haskell-src-exts-1.16.0.1
       orphan modules    :   0 of  22
       orphan instances  :   0 of 2170
       mods w/o instances:  14 of  22
 
-27) highlighting-kate-0.5.12
+29) highlighting-kate-0.5.12
       orphan modules    :   0 of 125
       orphan instances  :   0 of  28
       mods w/o instances:   1 of 125
 
-28) hlint-1.9.19
+30) hlint-1.9.19
       orphan modules    :   0 of  45
       orphan instances  :   0 of  88
       mods w/o instances:  14 of  45
 
-29) hoogle-4.2.39
+31) hoogle-4.2.39
       orphan modules    :   1 of  50
       orphan instances  :   3 of 211
       mods w/o instances:  32 of  50
 
-30) hscolour-1.22
+32) hscolour-1.22
       orphan modules    :   1 of  16
       orphan instances  :   1 of  24
       mods w/o instances:   8 of  16
 
-31) hspec-2.1.5
+33) hspec-2.1.5
       orphan modules    :   0 of   7
       orphan instances  :   0 of   2
       mods w/o instances:   1 of   7
 
-32) http-client-0.4.9
+34) hspec-core-2.1.5
+      orphan modules    :   0 of  17
+      orphan instances  :   0 of  34
+      mods w/o instances:   7 of  17
+
+35) http-client-0.4.9
       orphan modules    :   1 of  13
       orphan instances  :   3 of  71
       mods w/o instances:   5 of  13
 
-33) http-conduit-2.1.5
+36) http-conduit-2.1.5
       orphan modules    :   0 of   2
       orphan instances  :   0 of   1
       mods w/o instances:   1 of   2
 
-34) lens-4.7.0.1
+37) lens-4.7.0.1
       orphan modules    :   0 of  83
       orphan instances  :   0 of 1275
       mods w/o instances:  38 of  83
 
-35) monad-control-1.0.0.4
+38) monad-control-1.0.0.4
       orphan modules    :   0 of   1
       orphan instances  :   0 of  33
       mods w/o instances:   1 of   1
 
-36) network-2.6.0.2
+39) network-2.6.0.2
       orphan modules    :   2 of  11
       orphan instances  :   2 of  63
       mods w/o instances:   6 of  11
 
-37) optparse-applicative-0.11.0.2
+40) network-uri-2.6.0.1
+      orphan modules    :   0 of   1
+      orphan instances  :   0 of  10
+      mods w/o instances:   1 of   1
+
+41) optparse-applicative-0.11.0.2
       orphan modules    :   0 of  15
       orphan instances  :   0 of  85
       mods w/o instances:   8 of  15
 
-38) pandoc-1.13.2
+42) pandoc-1.13.2
       orphan modules    :   1 of  69
       orphan instances  :   9 of 165
       mods w/o instances:  27 of  69
 
-39) parsec-3.1.9
+43) pandoc-citeproc-0.6
+      orphan modules    :   0 of  20
+      orphan instances  :   0 of 620
+      mods w/o instances:   5 of  20
+
+44) pandoc-types-1.12.4.2
+      orphan modules    :   0 of   5
+      orphan instances  :   0 of 263
+      mods w/o instances:   4 of   5
+
+45) parsec-3.1.9
       orphan modules    :   0 of  25
       orphan instances  :   0 of  28
       mods w/o instances:   3 of  25
 
-40) persistent-2.1.2
+46) persistent-2.1.2
       orphan modules    :   3 of  23
       orphan instances  :  17 of 193
       mods w/o instances:  10 of  23
 
-41) persistent-postgresql-2.1.3
+47) persistent-postgresql-2.1.3
       orphan modules    :   0 of   1
       orphan instances  :   0 of  11
       mods w/o instances:   1 of   1
 
-42) persistent-sqlite-2.1.4
+48) persistent-sqlite-2.1.4
       orphan modules    :   0 of   2
       orphan instances  :   0 of  12
       mods w/o instances:   2 of   2
 
-43) persistent-template-2.1.1
+49) persistent-template-2.1.1
       orphan modules    :   1 of   1
       orphan instances  :  15 of  24
       mods w/o instances:   1 of   1
 
-44) primitive-0.6
+50) primitive-0.6
       orphan modules    :   0 of  10
       orphan instances  :   0 of  43
       mods w/o instances:   5 of  10
 
-45) resourcet-1.1.4.1
+51) resourcet-1.1.4.1
       orphan modules    :   0 of   4
       orphan instances  :   0 of  51
       mods w/o instances:   2 of   4
 
-46) scientific-0.3.3.8
+52) scientific-0.3.3.8
       orphan modules    :   0 of   4
       orphan instances  :   0 of  12
       mods w/o instances:   1 of   4
 
-47) semigroupoids-4.3
+53) semigroupoids-4.3
       orphan modules    :   0 of  20
       orphan instances  :   0 of 228
       mods w/o instances:  18 of  20
 
-48) semigroups-0.16.2.2
+54) semigroups-0.16.2.2
       orphan modules    :   0 of   3
       orphan instances  :   0 of 208
       mods w/o instances:   3 of   3
 
-49) shake-0.15
+55) shake-0.15
       orphan modules    :   0 of  47
       orphan instances  :   0 of 297
       mods w/o instances:  27 of  47
 
-50) shelly-1.6.1.2
+56) shelly-1.6.1.2
       orphan modules    :   1 of   5
       orphan instances  :   3 of  73
       mods w/o instances:   4 of   5
 
-51) snap-0.14.0.1
+57) snap-0.14.0.1
       orphan modules    :   2 of  33
       orphan instances  :   3 of 118
       mods w/o instances:  13 of  33
 
-52) snap-core-0.9.7.0
+58) snap-core-0.9.7.0
       orphan modules    :   2 of  22
       orphan instances  :  13 of 103
       mods w/o instances:  15 of  22
 
-53) snap-server-0.9.5.0
+59) snap-server-0.9.5.0
       orphan modules    :   0 of  18
       orphan instances  :   0 of  28
       mods w/o instances:   7 of  18
 
-54) streaming-commons-0.1.10.0
+60) streaming-commons-0.1.10.0
       orphan modules    :   0 of  18
       orphan instances  :   0 of  52
       mods w/o instances:  10 of  18
 
-55) system-filepath-0.4.13.2
+61) system-filepath-0.4.13.2
       orphan modules    :   2 of   4
       orphan instances  :   3 of  15
       mods w/o instances:   3 of   4
 
-56) tagged-0.7.3
+62) tagged-0.7.3
       orphan modules    :   0 of   1
       orphan instances  :   0 of  22
       mods w/o instances:   1 of   1
 
-57) texmath-0.8.0.2
+63) texmath-0.8.0.2
       orphan modules    :   0 of  18
       orphan instances  :   0 of  51
       mods w/o instances:   6 of  18
 
-58) text-1.2.0.4
+64) text-1.2.0.4
       orphan modules    :   2 of  43
       orphan instances  :  18 of  63
       mods w/o instances:  13 of  43
 
-59) tls-1.2.16
+65) tls-1.2.16
       orphan modules    :   0 of  50
       orphan instances  :   0 of 188
       mods w/o instances:  21 of  50
 
-60) transformers-compat-0.4.0.3
+66) transformers-compat-0.4.0.3
       orphan modules    :   1 of   5
       orphan instances  :  52 of 159
       mods w/o instances:   3 of   5
 
-61) vector-0.10.12.3
+67) vector-0.10.12.3
       orphan modules    :   2 of  19
       orphan instances  :   8 of 132
       mods w/o instances:  13 of  19
 
-62) wai-app-static-3.0.1
+68) vector-algorithms-0.6.0.4
+      orphan modules    :   0 of   9
+      orphan instances  :   0 of  22
+      mods w/o instances:   2 of   9
+
+69) vector-instances-3.3.0.1
+      orphan modules    :   1 of   1
+      orphan instances  :  18 of  18
+      mods w/o instances:   1 of   1
+
+70) wai-app-static-3.0.1
       orphan modules    :   0 of   9
       orphan instances  :   0 of   3
       mods w/o instances:   1 of   9
 
-63) wai-extra-3.0.6.1
+71) wai-extra-3.0.6.1
       orphan modules    :   0 of  22
       orphan instances  :   0 of  21
       mods w/o instances:   6 of  22
 
-64) warp-3.0.11
+72) warp-3.0.11
       orphan modules    :   0 of  24
       orphan instances  :   0 of  16
       mods w/o instances:   4 of  24
 
-65) xml-conduit-1.2.3.3
+73) xml-conduit-1.2.3.3
       orphan modules    :   0 of   7
       orphan instances  :   0 of  49
       mods w/o instances:   7 of   7
 
-66) yaml-0.8.10.1
+74) yaml-0.8.10.1
       orphan modules    :   0 of   7
       orphan instances  :   0 of  52
       mods w/o instances:   4 of   7
 
-67) yesod-1.4.1.4
+75) yesod-1.4.1.4
       orphan modules    :   0 of   6
       orphan instances  :   0 of   8
       mods w/o instances:   3 of   6
 
-68) yesod-auth-1.4.4
+76) yesod-auth-1.4.4
       orphan modules    :   1 of  11
       orphan instances  :   2 of  55
       mods w/o instances:   5 of  11
 
-69) yesod-core-1.4.9.1
+77) yesod-core-1.4.9.1
       orphan modules    :   0 of  31
       orphan instances  :   0 of 214
       mods w/o instances:   9 of  31
 
-70) yesod-form-1.4.4.1
+78) yesod-form-1.4.4.1
       orphan modules    :   0 of  19
       orphan instances  :   0 of  39
       mods w/o instances:   5 of  19
 
-71) zlib-0.5.4.2
+79) zlib-0.5.4.2
       orphan modules    :   0 of   5
       orphan instances  :   0 of   8
       mods w/o instances:   1 of   5
 
+80) zlib-bindings-0.1.1.5
+      orphan modules    :   0 of   2
+      orphan instances  :   0 of   7
+      mods w/o instances:   2 of   2
+
 TOTAL
-  orphan modules    :  33 of 1386
-  orphan instances  : 326 of 9254
-  mods w/o instances: 569 of 1386
+  orphan modules    :  35 of 1458
+  orphan instances  : 345 of 10282
+  mods w/o instances: 598 of 1458
