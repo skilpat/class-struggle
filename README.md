@@ -10,7 +10,7 @@ to the stdin of the executable in order to analyze those packages' worlds. Pass 
 argument to additionally print, for each such package, the "islands", i.e., a mapping of all the
 modules defining instances that are known to any modules in the package. For example,
 
-```cat data/pkgs/platform.txt | cabal run calc-worlds -- --islands```
+```cat data/pkgs/pkgs-selected-platform.txt | cabal run calc-worlds -- --islands```
 
 To print the entire world of particular modules, pass in those modules, without
 package identifiers, to the `calc-worlds` program. For example,
@@ -177,12 +177,16 @@ ghc-7.8.4 => inconsistent! {ghc-7.8.4:CmmExpr,
 
 ## Orphans
 
-See [most-downloaded.txt](most-downloaded.txt) for stats on
-[Hackage's most downloaded packages](https://hackage.haskell.org/packages/top)
-(all those above 1000 downloads at time of writing).
+The orphan instances defined in packages can be analyzed by running the
+`orphans-stats` executable in this Cabalized package. Send a list of package names, one per file,
+to the stdin of the executable in order to analyze those packages' worlds, just like
+with the `calc-worlds` executable. For example,
 
-See [platform-and-most-downloaded.txt](platform-and-most-downloaded.txt) for stats on the above
-and the packages [included in the Haskell platform](https://github.com/haskell/haskell-platform/blob/74c3a90290f23adfeeb342f4e97122fd735f9c64/hptool/src/Releases2013.hs).
+```cat data/pkgs/pkgs-selected-platform.txt | cabal run orphans-stats```
+
+The results for the various categories of packages are already available in the
+data files in the [`data/orphans`](data/orphans) directory.
+
 
 ### Orphans file contents description
 
